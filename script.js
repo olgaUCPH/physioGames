@@ -8,10 +8,8 @@ function isMobile() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  display("Fail");
-  display(isMobile()? "Yes": "No");
-  highScore = localStorage.getItem('highScore');
-  themeId = localStorage.getItem('themeId');
+  highScore = localStorage.getItem('highScore') || 0;
+  themeId = localStorage.getItem('themeId') || 0;
   setColor(themeId);
   document.getElementById('highScore').textContent = highScore;
 });
