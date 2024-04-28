@@ -8,6 +8,7 @@ function isMobile() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+  display("Fail");
   display(isMobile()? "Yes": "No");
 });
 
