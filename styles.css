@@ -290,7 +290,7 @@ body {
   width: calc(max(3.8vw,8.5vh));
     height: auto;
     text-align: center;
-    font-size: calc(min(2vw,4vh));
+    font-size: 4vh;
     font-weight: 700;
 }
 
