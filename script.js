@@ -10,6 +10,10 @@ function isMobile() {
 document.addEventListener("DOMContentLoaded", function() {
   display("Fail");
   display(isMobile()? "Yes": "No");
+  highScore = localStorage.getItem('highScore');
+  themeId = localStorage.getItem('themeId');
+  setColor(themeId);
+  document.getElementById('highScore').textContent = highScore;
 });
 
 function display(text){
@@ -251,6 +255,7 @@ async function verifyGrid() {
     if (attempt == 2){
       highScore = currentScore > highScore ? currentScore : highScore;
       document.getElementById('highScore').textContent = highScore;
+      localStorage.setItem('highScore', highScore);
       gameOver();
     }
   }
@@ -385,9 +390,14 @@ document.getElementById('colorButton').onclick = colorChange;
 const root = document.documentElement;
 function colorChange(){
   themeId = (themeId+1)%background.length;
-  root.style.setProperty('--background', background[themeId]);
-  root.style.setProperty('--pseudo-black', pseudoBlack[themeId]);
-  root.style.setProperty('--pseudo-white', pseudoWhite[themeId]);
-  root.style.setProperty('--deep-highlight', deepHighlight[themeId]);
-  root.style.setProperty('--light-highlight', lightHighlight[themeId]);
+  localStorage.setItem('themeId',themeId);
+  setColor(themeId);
+}
+
+function setColor(id){
+  root.style.setProperty('--background', background[id]);
+  root.style.setProperty('--pseudo-black', pseudoBlack[id]);
+  root.style.setProperty('--pseudo-white', pseudoWhite[id]);
+  root.style.setProperty('--deep-highlight', deepHighlight[id]);
+  root.style.setProperty('--light-highlight', lightHighlight[id]);
 }
