@@ -253,7 +253,7 @@ body {
 
 .rectangle{
     width: calc(max(12.8vw,26.5vh));
-    height: calc(min(12.8vh, 6.4vw));
+    height: 12.8vh;
     background-color: var(--rectangle-light);
     margin: 5px;
     border-radius: 10px;
@@ -298,7 +298,7 @@ body {
     width: calc(max(12.8vw,26.5vh));
     margin: 0px 11.4px 0 11.4px;
     text-align: center;
-    font-size: calc(min(2vw,4vh));
+    font-size: 4vh;
     font-weight: 700;
 }
 

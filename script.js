@@ -131,7 +131,7 @@ function removeShape(container, smallShape){
 function realignSmallShapes(container) {
     const smallShapes = container.querySelectorAll('.smallShape');
     smallShapes.forEach(shape => {
-        shape.style.width = "calc("+Math.max(0.9 * Math.pow(0.8,smallShapes.length - 1),0.45)+"*min(12.8vh, 6.4vw))";
+        shape.style.width = "calc("+Math.max(0.9 * Math.pow(0.8,smallShapes.length - 1),0.45)+"*12.8vh)";
       });
 }
   
