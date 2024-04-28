@@ -87,6 +87,7 @@ body {
     -o-transition: background-color 0.5s ease-in-out;
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
+    box-shadow: black 3px 3px 5px;
 }
 
 #title{
@@ -118,6 +119,7 @@ body {
     -o-transition: background-color 0.5s ease-in-out;
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
+    box-shadow: black 3px 3px 5px;
 }
 
 .scoreText{
@@ -141,6 +143,7 @@ body {
     -o-transition: background-color 0.5s ease-in-out;
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
+    box-shadow: black 3px 3px 5px;
 }
 
 #instructionsTitle{
@@ -226,6 +229,7 @@ body {
     -o-transition: background-color 0.5s ease-in-out;
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
+    box-shadow: black 3px 3px 5px;
 }
 
 #arsenalContainer{
@@ -245,6 +249,7 @@ body {
     -o-transition: background-color 0.5s ease-in-out;
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
+    box-shadow: black 3px 3px 5px;
 }
 
 .row {

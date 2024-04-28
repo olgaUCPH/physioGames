@@ -255,7 +255,7 @@ async function verifyGrid() {
     if (attempt == 2){
       highScore = currentScore > highScore ? currentScore : highScore;
       document.getElementById('highScore').textContent = highScore;
-      currentTable = 1 ? localStorage.setItem('highScore1', highScore):localStorage.setItem('highScore2', highScore);
+      currentTable == 1 ? localStorage.setItem('highScore1', highScore):localStorage.setItem('highScore2', highScore);
       gameOver();
     }
   }
@@ -284,6 +284,8 @@ function gameOver(){
   gameOverPercent.textContent = Math.round(currentScore/150*100);
   gameOverWindow.style.animation = 'fadeIn 0.5s ease-in-out forwards';
   gameOverWindow.style.display = 'block';
+  resetButton.removeEventListener('click', resetGrid);
+  changeButton.removeEventListener('click', switchTables);
 }
 
 showAnswersButton.onclick = hideGameOverWindow;
@@ -294,6 +296,8 @@ gameOverResetButton.onclick = function(){hideGameOverWindow(); resetGrid()};
 
 function hideGameOverWindow(){
   checkButton.addEventListener('click',verifyGrid);
+  resetButton.addEventListener('click', resetGrid);
+  changeButton.addEventListener('click', switchTables);
   gameOverWindow.style.animation = 'fadeOut 0.5s ease-in-out forwards';
 }
 
@@ -327,8 +331,8 @@ function resetGrid() {
 const changeButton = document.getElementById('changeButton');
 const resetButton = document.getElementById('resetButton');
 
-resetButton.onclick = resetGrid;
-changeButton.onclick = switchTables;
+resetButton.addEventListener('click', resetGrid);
+changeButton.addEventListener('click', switchTables);
 
 let currentTable = 1;
 let validationGrid = validationGrid1;
