@@ -146,7 +146,7 @@ function clickShape(elementImage){
         createSmallShape(selectedRectangle, elementImage);
     }
     else{
-      if (Date.now() - lastCreation > 100){
+      if (Date.now() - lastCreation > 500){
         selectedRectangle.querySelectorAll(`.smallShape`).forEach(element => {if (element.src == elementImage){removeShape(selectedRectangle,element);}});
         realignSmallShapes(selectedRectangle);
       }
