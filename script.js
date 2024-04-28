@@ -8,7 +8,9 @@ function isMobile() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  highScore = localStorage.getItem('highScore') || 0;
+  highScore1 = localStorage.getItem('highScore1') || 0;
+  highScore2 = localStorage.getItem('highScore2') || 0;
+  highScore = highScore1;
   themeId = localStorage.getItem('themeId') || 0;
   setColor(themeId);
   document.getElementById('highScore').textContent = highScore;
@@ -253,7 +255,7 @@ async function verifyGrid() {
     if (attempt == 2){
       highScore = currentScore > highScore ? currentScore : highScore;
       document.getElementById('highScore').textContent = highScore;
-      localStorage.setItem('highScore', highScore);
+      currentTable = 1 ? localStorage.setItem('highScore1', highScore):localStorage.setItem('highScore2', highScore);
       gameOver();
     }
   }
