@@ -405,3 +405,10 @@ function setColor(id){
   root.style.setProperty('--deep-highlight', deepHighlight[id]);
   root.style.setProperty('--light-highlight', lightHighlight[id]);
 }
+
+
+function finalPosition(rectangle, shapeId, shapeNumber){}; //return x y
+function initialPosition(rectangle, userX, userY){}; //return x y
+function createShape(x, y){}; //create shape at IP; animation; FP
+// On Click: create shape with same animation delay (?), fadeIn
+// On Drop: if contact with rectangle, createShape & realign; else, fadeOut

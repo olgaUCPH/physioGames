@@ -65,7 +65,7 @@ body {
     position: absolute;
     left: 0px;
     margin: 1vh;
-    width: 36vh;
+    width: calc(max(17vw,34vh));
     height: 95%;
     flex-wrap:wrap;
     justify-content: center;
@@ -204,9 +204,9 @@ body {
 
 #rightColumn{
     position: absolute;
-    left: 37vh;
+    left: calc(max(17vw,34vh));
     margin: 1vh 5px 1vh 5px;
-    width: calc(max(81.5%,172vh));
+    width: calc(max(82%,165vh));
     height: 95%;
     flex-wrap:wrap;
     justify-content: center;
