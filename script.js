@@ -136,7 +136,6 @@ function realignSmallShapes(container) {
     const smallShapes = container.querySelectorAll('.smallShape');
     const width = container.clientWidth - 2 * Math.min(smallShapes.length,3) * Math.max(0.005*self.innerWidth, 0.01*self.innerHeight);
     const size = Math.min(width/(Math.min(smallShapes.length,3)), container.clientHeight/(smallShapes.length < 4 ? 1:2));
-    display(container.clientWidth/2);
     smallShapes.forEach(shape => {
         shape.style.width = size+'px';
       });
