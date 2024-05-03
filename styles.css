@@ -62,23 +62,22 @@ body {
   }
 
 #leftColumn{
-    position: absolute;
     left: 0px;
-    margin: 1vh;
-    width: calc(max(17vw,34vh));
+    margin: calc(min(1vh,1vw));
+    width: calc(max(16vw,34vh));
     height: 95%;
     flex-wrap:wrap;
     justify-content: center;
     align-items: center;
-    font-size: 3.6vh;
+    font-size: calc(max(1.6vw,3.3vh));
 }
 
 #titleBox{
-    margin: 1vh;
+    margin: calc(min(1vh,1vw));
     background-color: var(--deep-highlight);
     color: var(--pseudo-white);
-    height: 13%;
-    width: auto;
+    height: 13vh;
+    width: 100%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     text-align: center;
@@ -93,9 +92,9 @@ body {
 #title{
     font-size: 1.3em;
     font-weight: 700;
-    margin: 5px;
-    padding-top: 5px;
-    margin-bottom: 10px;
+    margin: calc(min(1vh,1vw));
+    padding-top: calc(min(1vh,1vw));
+    margin-bottom: calc(min(2vh,2vw));
     transform: scaleY(1.35);
     text-shadow: 1px 1px 2px black;
 }
@@ -103,16 +102,15 @@ body {
 #author{
     font-size: 0.6em;
     font-weight: 100;
-    margin: 5px;
-    margin-top: 5px;
+    margin: calc(min(1vh,1vw));
 }
 
 #scoreBox{
-    margin: 1vh;
+    margin: calc(min(1vh,1vw));
     background-color: var(--light-highlight);
     color: var(--pseudo-black);
-    width: auto;
-    height: 10%;
+    width: 100%;
+    height: 10vh;
     position: relative;
     -webkit-transition: background-color 0.5s ease-in-out;
     -moz-transition: background-color 0.5s ease-in-out;
@@ -125,16 +123,16 @@ body {
 .scoreText{
     font-weight: 700;
     font-size: 1em;
-    margin: 4px;
+    margin: calc(min(1vh,1vw));
     position: absolute;
 }
 
 #instructionsBox{
-    margin: 1vh;
+    margin: calc(min(1vh,1vw));
     background-color: var(--pseudo-white);
     color: var(--pseudo-black);
-    width: auto;
-    height: 66%;
+    width: 100%;
+    height: 60vh;
     text-align: justify;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -165,7 +163,7 @@ body {
 
 
 #checkButton {
-  width: 100%;
+  width: 101%;
   appearance: none;
   background-color: var(--deep-highlight);
   border-radius: 10px;
@@ -178,7 +176,7 @@ body {
   font-size: 7vh;
   font-weight: 700;
   letter-spacing: -.24px;
-  margin: 0;
+  margin: 0 1vh 0 1vh;
   outline: none;
   quotes: auto;
   text-align: center;
@@ -203,10 +201,8 @@ body {
 
 
 #rightColumn{
-    position: absolute;
-    left: calc(max(17vw,34vh));
-    margin: 1vh 5px 1vh 5px;
-    width: calc(max(82%,165vh));
+    margin: calc(min(1vh,1vw));
+    width: calc(max(100vw - 17vw,100vh - 50vh));
     height: 95%;
     flex-wrap:wrap;
     justify-content: center;
@@ -215,9 +211,9 @@ body {
 }
 
 #gridContainer{
-    width: auto;
-    height: 69%;
-    margin: 1vh;
+    width: 99%;
+    height: 64vh;
+    margin: calc(min(1vh,1vw));
     background-color: var(--pseudo-white);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -230,13 +226,13 @@ body {
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
     box-shadow: black 3px 3px 5px;
+    font-size: max(2.4vh,1.5vw);
 }
 
 #arsenalContainer{
-    width:auto;
-    height: 30%;
-    margin: 5px;
-    margin-top: 1vh;
+    width:99%;
+    height: 28vh;
+    margin: calc(min(1vh,1vw));
     background-color: var(--light-highlight);
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -250,22 +246,22 @@ body {
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
     box-shadow: black 3px 3px 5px;
+    font-size: max(1.6vh,1vw);
 }
 
 .row {
     display: flex;
-    margin: 0 10px 0 10px;
     height: auto;
     align-items: center;
 }
 
 .rectangle{
-    width: calc(max(12.8vw,26.5vh));
-    height: 12.8vh;
+    width: calc(-5px + 0.2*calc(max(100vw - 17vw,100vh - 50vh) - 7vw - 20*calc(max(0.5vw,1vh)) - 0.07*(max(100vw - 17vw,100vh - 50vh))));
+    height: 12.6vh;
     background-color: var(--rectangle-light);
-    margin: 1vh;
-    border-radius: 10px;
-    border-width: 1vh;
+    margin: calc(max(0.5vw,1vh));
+    border-radius: calc(2*max(0.5vw,1vh));
+    border-width: calc(max(0.5vw,1vh));
     border-style: solid;
     border-color: var(--pseudo-black);
     display: flex;
@@ -295,21 +291,20 @@ body {
 }
 
 .rowLabel{
-  width: calc(max(3.8vw,8.5vh));
-    height: auto;
-    text-align: center;
-    font-size: 4vh;
-    font-weight: 700;
+  width: calc(0.06*(max(100vw - 17vw,100vh - 50vh)));
+  height: auto;
+  text-align: center;
+  font-weight: 700;
 }
 
 .columnLabel{
-    width: calc(max(12.8vw,26.5vh));
-    margin: 1vh;
+  width: calc(-5px + 0.2*calc(max(100vw - 17vw,100vh - 50vh) - 7vw - 20*calc(max(0.5vw,1vh)) - 0.07*(max(100vw - 17vw,100vh - 50vh))));
+  margin: calc(max(0.5vw,1vh));
+  margin-top: 0;
     text-align: center;
-    font-size: 4vh;
     font-weight: 700;
-    border-radius: 10px;
-    border-width: 1vh;
+    border-radius: calc(2*max(0.5vw,1vh));
+    border-width: calc(max(0.5vw,1vh));
     border-style: solid;
     border-color: var(--pseudo-white);
     -webkit-transition: border-color 0.5s ease-in-out;
@@ -330,12 +325,12 @@ body {
 }
 
 .transporterImage{
-    height: 13vh;
+    width: calc(0.075*max(100vw - 17vw,100vh - 50vh));;
     margin: 5px;
     position: absolute;
-    top: 23%;
-    -webkit-filter: drop-shadow(7px 7px 4px black);
-    filter: drop-shadow(7px 7px 4px black);
+    top: calc(45% - 0.04*max(100vw - 21vw,100vh - 50vh));
+    -webkit-filter: drop-shadow(calc(max(0.5vw,1vh)) calc(max(0.5vw,1vh)) 4px black);
+    filter: drop-shadow(calc(max(0.5vw,1vh)) calc(max(0.5vw,1vh)) 4px black);
     cursor: pointer;
     -webkit-transition: scale 0.3s ease-in-out;
     -moz-transition: scale 0.3s ease-in-out;
@@ -367,7 +362,6 @@ body {
 .transporterLabel{
     width: 100%;
     height: 20%;
-    font-size: 2.2vh;
     margin: 0px;
     position: absolute;
 }
@@ -448,8 +442,8 @@ body {
 
 #buttonsColumn{
   position: absolute;
-  right: calc(max(0.6vw,1.2vh));
-  width: calc(max(2.75vw,6.45vh));
+  right: 0.5vw;
+  width: 3vw;
   display: flex;
   flex-wrap: wrap;
 }
@@ -458,7 +452,7 @@ body {
   cursor: pointer;
   width: 75%;
   height: auto;
-  padding: 10px;
+  padding: calc(max(0.5vw,1vh));
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;

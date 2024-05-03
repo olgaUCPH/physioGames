@@ -134,8 +134,11 @@ function removeShape(container, smallShape){
   
 function realignSmallShapes(container) {
     const smallShapes = container.querySelectorAll('.smallShape');
+    const width = container.clientWidth - 20*(Math.min(smallShapes.length,3)-1);
+    const size = Math.min(width/(Math.min(smallShapes.length,3)), container.clientHeight/(smallShapes.length < 4 ? 1:2));
+    display(container.clientWidth/2);
     smallShapes.forEach(shape => {
-        shape.style.width = "calc("+Math.max(0.9 * Math.pow(0.75,smallShapes.length - 1),0.45)+"*12.8vh)";
+        shape.style.width = size+'px';
       });
 }
   
