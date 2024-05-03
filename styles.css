@@ -280,7 +280,7 @@ body {
   }
 
 .smallShape{
-    margin: 0 5px 0 5px;
+    margin: 0 calc(max(0.5vw,1vh)) 0 calc(max(0.5vw,1vh));
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition: all 0.3s ease-in-out;
     -o-transition: all 0.3s ease-in-out;
