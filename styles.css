@@ -69,7 +69,7 @@ body {
     flex-wrap:wrap;
     justify-content: center;
     align-items: center;
-    font-size: calc(max(1.6vw,3.3vh));
+    font-size: calc(max(1.6vw,2.9vh));
 }
 
 #titleBox{
@@ -94,7 +94,7 @@ body {
     font-weight: 700;
     margin: calc(min(1vh,1vw));
     padding-top: calc(min(1vh,1vw));
-    margin-bottom: calc(min(2vh,2vw));
+    margin-bottom: calc(min(1vh,1vw));
     transform: scaleY(1.35);
     text-shadow: 1px 1px 2px black;
 }
@@ -220,6 +220,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     position: relative;
+    justify-content: center;
     -webkit-transition: background-color 0.5s ease-in-out;
     -moz-transition: background-color 0.5s ease-in-out;
     -o-transition: background-color 0.5s ease-in-out;
@@ -253,6 +254,7 @@ body {
     display: flex;
     height: auto;
     align-items: center;
+    margin-right: 4vw;
 }
 
 .rectangle{

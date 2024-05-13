@@ -134,8 +134,14 @@ function removeShape(container, smallShape){
   
 function realignSmallShapes(container) {
     const smallShapes = container.querySelectorAll('.smallShape');
-    const width = container.clientWidth - 2 * Math.min(smallShapes.length,3) * Math.max(0.005*self.innerWidth, 0.01*self.innerHeight);
-    const size = Math.min(width/(Math.min(smallShapes.length,3)), container.clientHeight/(smallShapes.length < 4 ? 1:2));
+    const length = smallShapes.length;
+    const height = container.clientHeight;
+    const width = 0.8*container.clientWidth;
+    let size = 0.9*Math.min(height, width);
+    if (length == 1){size = 0.9*Math.min(height, width);};
+    if (length == 2){size = 0.9*Math.min(height, width/2);};
+    if (length == 3){size = 0.9*Math.min(height, width/3);};
+    if (length >= 4){size = 0.9*Math.min(height/2, width/3);};
     smallShapes.forEach(shape => {
         shape.style.width = size+'px';
       });
