@@ -20,6 +20,13 @@ function display(text){
   document.getElementById('currentScore').textContent = text;
 }
 
+window.onresize = resizeAllSmallShapes;
+window.onfullscreenchange = resizeAllSmallShapes;
+
+function resizeAllSmallShapes(){
+  allRectangles.forEach(rectangle => realignSmallShapes(rectangle));
+}
+
 /// CLICK AND DRAG ////////////////////////////////////////////////////////////////////////////
 
 var userX = 0;
