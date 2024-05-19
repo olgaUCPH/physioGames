@@ -12,35 +12,35 @@
 
   @font-face {
     font-family: 'Avenir';
-    src: url("fonts/AvenirNextLTPro-UltLtCn.otf");
+    src: url("../fonts/AvenirNextLTPro-UltLtCn.otf");
     font-weight: 100;
     font-style: normal;
   }
 
   @font-face {
     font-family: 'Avenir';
-    src: url("fonts/AvenirNextLTPro-MediumCn.otf");
+    src: url("../fonts/AvenirNextLTPro-MediumCn.otf");
     font-weight: 500;
     font-style: normal;
   }
 
   @font-face {
     font-family: 'Avenir';
-    src: url("fonts/AvenirNextLTPro-Cn.otf");
+    src: url("../fonts/AvenirNextLTPro-Cn.otf");
     font-weight: 300;
     font-style: normal;
   }
 
   @font-face {
     font-family: 'Avenir';
-    src: url("fonts/AvenirNextLTPro-DemiCn.otf");
+    src: url("../fonts/AvenirNextLTPro-DemiCn.otf");
     font-weight: 700;
     font-style: normal;
   }
 
   @font-face {
     font-family: 'Avenir';
-    src: url("fonts/AvenirNextLTPro-HeavyCn.otf");
+    src: url("../fonts/AvenirNextLTPro-HeavyCn.otf");
     font-weight: 900;
     font-style: normal;
   }
@@ -60,6 +60,13 @@ body {
     overflow-y: hidden; /* Blocks vertical scrolling */
     overflow-x: auto;
   }
+
+  .no-select {
+    user-select: none; /* For modern browsers */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE 10+ */
+}
 
 #leftColumn{
     left: 0px;
@@ -204,7 +211,7 @@ body {
     margin: calc(min(1vh,1vw));
     width: calc(max(100vw - 17vw,100vh - 50vh));
     height: 95%;
-    flex-wrap:wrap;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     
@@ -239,7 +246,7 @@ body {
     border-bottom-right-radius: 10px;
     display: flex;
     justify-content: center;
-    text-align: center;
+    align-items: center;
     padding-bottom: 5px;
     -webkit-transition: background-color 0.5s ease-in-out;
     -moz-transition: background-color 0.5s ease-in-out;
@@ -257,7 +264,7 @@ body {
     margin-right: 4vw;
 }
 
-.rectangle{
+.box{
     width: calc(-5px + 0.2*calc(max(100vw - 17vw,100vh - 50vh) - 7vw - 20*calc(max(0.5vw,1vh)) - 0.07*(max(100vw - 17vw,100vh - 50vh))));
     height: 12.6vh;
     background-color: var(--rectangle-light);
@@ -270,11 +277,15 @@ body {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    -webkit-transition: all 0.5s ease-in-out;
-    -moz-transition: all 0.5s ease-in-out;
-    -o-transition: all 0.5s ease-in-out;
-    -ms-transition: all 0.5s ease-in-out;
-    transition: all 0.5s ease-in-out;
+    position: absolute;
+}
+
+.rectangle{
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 
 .rectangle:hover {
@@ -292,39 +303,16 @@ body {
     filter: drop-shadow(2px 2px 2px black);
 }
 
-.rowLabel{
-  width: calc(0.06*(max(100vw - 17vw,100vh - 50vh)));
-  height: auto;
-  text-align: center;
-  font-weight: 700;
-}
 
-.columnLabel{
-  width: calc(-5px + 0.2*calc(max(100vw - 17vw,100vh - 50vh) - 7vw - 20*calc(max(0.5vw,1vh)) - 0.07*(max(100vw - 17vw,100vh - 50vh))));
-  margin: calc(max(0.5vw,1vh));
-  margin-top: 0;
-    text-align: center;
-    font-weight: 700;
-    border-radius: calc(2*max(0.5vw,1vh));
-    border-width: calc(max(0.5vw,1vh));
-    border-style: solid;
-    border-color: var(--pseudo-white);
-    -webkit-transition: border-color 0.5s ease-in-out;
-    -moz-transition: border-color 0.5s ease-in-out;
-    -o-transition: border-color 0.5s ease-in-out;
-    -ms-transition: border-color 0.5s ease-in-out;
-    transition: border-color 0.5s ease-in-out;
-}
-
-.transporter{
-    width: 10%;
-    margin: 4px;
+.label{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     text-align: center;
     position: relative;
 }
+
+
 
 .transporterImage{
     width: calc(0.075*max(100vw - 17vw,100vh - 50vh));;
@@ -445,6 +433,7 @@ body {
 #buttonsColumn{
   position: absolute;
   right: 0.5vw;
+  top: 0;
   width: 3vw;
   display: flex;
   flex-wrap: wrap;

@@ -2,6 +2,8 @@ const allRectangles = document.querySelectorAll('.rectangle');
 const allTransporters = document.querySelectorAll('.transporterImage');
 const checkButton = document.getElementById('checkButton');
 
+
+
 function isMobile() {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
   return /android|ipad|iphone|ipod/i.test(userAgent);
