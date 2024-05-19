@@ -228,6 +228,7 @@ body {
     flex-wrap: wrap;
     position: relative;
     justify-content: center;
+    align-items: center;
     -webkit-transition: background-color 0.5s ease-in-out;
     -moz-transition: background-color 0.5s ease-in-out;
     -o-transition: background-color 0.5s ease-in-out;

@@ -95,7 +95,13 @@ function dragFunction(element){
         gridRectangles.forEach(rectangle => {
           const rect = rectangle.getBoundingClientRect();
           if (userX >= rect.left-10 && userX <= rect.right+10 && userY >= rect.top-10 && userY <= rect.bottom+10) {
-            addLabel(rectangle, element);
+            if (rectangle != element.parentNode){
+              addLabel(rectangle, element);
+            }
+            element.style.position = "absolute";
+            element.style.zIndex = 999;
+            element.style.left = "";
+            element.style.top = "";
             boolean = false;
           }
         });
