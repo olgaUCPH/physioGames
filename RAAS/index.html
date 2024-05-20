@@ -29,11 +29,32 @@
 
         <div id="rightColumn">
             <div id="gridContainer">
-                <div class="rectangle box lvl0" id="rec01" style="left: 10vw;"></div>
-                <div class="rectangle box lvl0" id="rec02"></div>
-                <div class="rectangle box lvl0" id="rec03" style="right: 10vw;"></div>
-                <script>new LeaderLine(document.getElementById('rec01'),document.getElementById('rec02'),{color:"var(--pseudo-black)"});</script>
-                <script>new LeaderLine(document.getElementById('rec02'),document.getElementById('rec03'),{color:"var(--pseudo-black)"});</script>
+
+                <div class="rectangle box lvl0" id="rec00" style="left: 10vw;"></div>
+                <div class="rectangle box lvl0" id="rec01"></div>
+                <div class="rectangle box lvl0" id="rec02" style="right: 10vw;"></div>
+                
+                <div class="rectangle box lvl1" id="rec10" style="left: 1vw; bottom: 18vh">
+                    <div class="box lvl1 correctRectangle" id="lab10"><span class = "big arrow down">↓</span><p>Blood Volume</br>Blood Pressure</p></div>
+                </div>
+                <div class="rectangle box lvl1" id="rec11" style="right: 2vw; bottom: 18vh">
+                    <div class="box lvl1 correctRectangle" id="lab11"><p><span class = "arrow up">↑</span>Renin Secretion</br><span class = "arrow up">↑</span>cAMP   Ca<sup>2+</sup><span class = "arrow down">↓</span></p></div>
+                </div>
+                <div class="rectangle box lvl1" id="rec12" style="right: 2vw; bottom: 0.5vh">
+                    <div class="box lvl1 correctRectangle" id="lab12"><span class = "big arrow up">↑</span><p>Blood Volume</br>Blood Pressure</p></div>
+                </div>
+                
+                <div class="rectangle smallBox lvl1" id="rec13" style="left: calc(0.19*max(100vw - 17vw,100vh - 50vh)); top: 8.5vh"></div>
+                <div class="rectangle smallBox lvl1" id="rec14" style="top: 1vh"></div>
+                <div class="rectangle smallBox lvl1" id="rec15" style="top: 16vh"></div>
+                <div class="rectangle smallBox lvl1" id="rec16" style="right: calc(3.5vw + 0.15*max(100vw - 17vw,100vh - 50vh)); top: 8.5vh"></div>
+
+                <div class="rectangle smallBox lvl1" id="rec17" style="left: calc(0.19*max(100vw - 17vw,100vh - 50vh)); bottom: 19.3vh"></div>
+                <div class="rectangle smallBox lvl1" id="rec18" style="bottom: 19.3vh"></div>
+                <div class="rectangle smallBox lvl1" id="rec19" style="right: calc(3.5vw + 0.15*max(100vw - 17vw,100vh - 50vh)); bottom: 19.3vh"></div>
+                
+                <div class="rectangle smallBox lvl1" id="rec110" style="bottom: 1.8vh"></div>
+
                 <div id = "gameOverWindow">
                     <h1>Congratulations !</h1>
                     <span>You got <span id = "gameOverScore">0</span> points ! That's <span id = "gameOverPercent">0</span>% of the maximum score.<br/></span>
@@ -48,9 +69,19 @@
                 </div>
             </div>
             <div id="arsenalContainer">
-                <div class="label box" id="lab01">Test 1</div>
-                <div class="label box" id="lab02">Test 2</div>
-                <div class="label box" id="lab03">Test 3</div>
+                <div class="label box lvl0" id="lab01"><span class = "big arrow down">↓</span><p>Blood Volume</br>Blood Pressure</p></div>
+                <div class="label box lvl0" id="lab02"><p><span class = "arrow up">↑</span>Renin Secretion</br><span class = "arrow up">↑</span>cAMP   Ca<sup>2+</sup><span class = "arrow down">↓</span></p></div>
+                <div class="label box lvl0" id="lab03"><span class = "big arrow up">↑</span><p>Blood Volume</br>Blood Pressure</p></div>
+
+                <div class="label smallBox lvl1" id="lab13"><span class = "big arrow up">↑</span><p>Renal Sympathetic</br>Nerve Activity</p></div>
+                <div class="label smallBox lvl1" id="lab14"><p>Na<sup>+</sup>Reabsorption in PT</br>α-Adrenergic Receptors</p></div>
+                <div class="label smallBox lvl1" id="lab15">Renal Vasoconstriction </br> α1 Receptors AA</p></div>
+                <div class="label smallBox lvl1" id="lab16">ß-Adrenergetic Receptors</br> Justaglomerular Cells</p></div>
+
+                <div class="label smallBox lvl1" id="lab17"><span class = "big arrow down">↓</span><p>Renal Artery</br>Pressure</p></div>
+                <div class="label smallBox lvl1" id="lab18"><p><span class = "arrow down">↓</span>GFR</p></div>
+                <div class="label smallBox lvl1" id="lab19"><span class = "big arrow down">↓</span><p>NaCl load</br>Macula densa</p></div>
+                <div class="label smallBox lvl1" id="lab110">Renal Baroreceptors</br> AA</p></div>
             </div>
         </div>
         <script src="script.js"></script>

@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
   highScore1 = localStorage.getItem('highScore1') || 0;
   highScore2 = localStorage.getItem('highScore2') || 0;
   highScore = highScore1;
-  themeId = localStorage.getItem('themeId') || 0;
+  let themeId = localStorage.getItem('themeId') || 0;
   setColor(themeId);
   document.getElementById('highScore').textContent = highScore;
 });
@@ -293,7 +293,7 @@ let deepHighlight  = ["#C70039","#D77FA1","#0E46A3","#8DB596","#7952B3","#820300
 let lightHighlight = ["#FF7979","#E6B2C6","#9AC8CD","#BEDBBB","#FFC107","#B80000","#EC53B0","#739072","#94FFD8","#A6B1E1"];
 let pseudoWhite    = ["#FFF5E0","#FEF6FB","#E1F7F5","#FFF5E0","#E1E8EB","#FF9800","#FFF5E0","#ECE3CE","#FDFFC2","#F4EEFF"];
 
-let themeId = 0;
+
 
 document.getElementById('colorButton').onclick = colorChange;
 
@@ -313,3 +313,45 @@ function setColor(id){
 }
 
 
+function level0(){
+  new LeaderLine(document.getElementById('rec00'),document.getElementById('rec01'),{color:"var(--pseudo-black)"});
+  new LeaderLine(document.getElementById('rec01'),document.getElementById('rec02'),{color:"var(--pseudo-black)"});
+  document.querySelectorAll('.leader-line').forEach(arrow => {
+    if (!arrow.classList.contains('lvl1') && !arrow.classList.contains('lvl2')){
+      arrow.classList.add('lvl0');
+    }
+  })
+}
+
+function level1(){
+  new LeaderLine(document.getElementById('rec10'),document.getElementById('rec13'),{color:"var(--pseudo-black)", startSocket: 'top', endSocket: 'left'});
+  new LeaderLine(document.getElementById('rec10'),document.getElementById('rec17'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left'});
+  new LeaderLine(document.getElementById('rec10'),document.getElementById('rec110'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left'});
+
+  new LeaderLine(document.getElementById('rec13'),document.getElementById('rec14'),{color:"var(--pseudo-black)", startSocket: 'top', endSocket: 'left', path: 'magnet'});
+  new LeaderLine(document.getElementById('rec13'),document.getElementById('rec15'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', path: 'magnet'});
+  new LeaderLine(document.getElementById('rec13'),document.getElementById('rec16'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left'});
+  new LeaderLine(document.getElementById('rec16'),document.getElementById('rec11'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'top'});
+  new LeaderLine(document.getElementById('rec15'),document.getElementById('rec18'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top'});
+
+  new LeaderLine(document.getElementById('rec17'),document.getElementById('rec18'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left'});
+  new LeaderLine(document.getElementById('rec18'),document.getElementById('rec19'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left'});
+  new LeaderLine(document.getElementById('rec19'),document.getElementById('rec11'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left'});
+
+  new LeaderLine(document.getElementById('rec110'),LeaderLine.pointAnchor(document.getElementById('rec11'), {x: 0, y: 0.85*document.getElementById('rec11').clientHeight}),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: 'magnet'});
+
+  new LeaderLine(document.getElementById('rec11'),document.getElementById('rec12'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top'});
+
+  document.querySelectorAll('.leader-line').forEach(arrow => {
+    if (!arrow.classList.contains('lvl0') && !arrow.classList.contains('lvl2')){
+      arrow.classList.add('lvl1');
+    }
+  })
+}
+
+level0();
+level1();
+
+document.querySelectorAll('.lvl0').forEach(element => {
+  element.style.display = 'none';
+});
