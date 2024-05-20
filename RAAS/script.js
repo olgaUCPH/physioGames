@@ -85,7 +85,7 @@ function dragFunction(element){
       document.removeEventListener('mouseup',onMouseUp);
       document.removeEventListener('touchmove', onMouseMove);
       document.removeEventListener('touchend',onMouseUp);
-      if (Date.now() - lastTrigger > 1){
+      if (Date.now() - lastTrigger > 50){
         parent.appendChild(element);
         let boolean = true;
         lastTrigger = Date.now();

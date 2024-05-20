@@ -271,6 +271,7 @@ body {
     justify-content: center;
     position: absolute;
     font-size: max(2.2vh,1.4vw);
+    z-index: 500;
 }
 
 .smallBox{
@@ -288,6 +289,7 @@ body {
   justify-content: center;
   position: absolute;
   font-size: max(1.6vh,1vw);
+  z-index: 500;
 }
 
 .rectangle{
@@ -310,6 +312,8 @@ body {
     text-align: center;
     position: relative;
     cursor: pointer;
+    margin-left: 2vw;
+    margin-right: 2vw;
 }
 
 
