@@ -284,7 +284,28 @@ const changeButton = document.getElementById('changeButton');
 const resetButton = document.getElementById('resetButton');
 
 //resetButton.addEventListener('click', resetGrid);
-//changeButton.addEventListener('click', switchTables);
+changeButton.addEventListener('click', switchTables);
+
+function switchTables(){
+  if (level == 0){
+    level = 1;
+    document.querySelectorAll('.lvl1').forEach(element => {
+      element.style.display = '';
+    });
+    document.querySelectorAll('.lvl0').forEach(element => {
+      element.style.display = 'none';
+    });
+  }
+  else if (level == 1){
+    level = 0;
+    document.querySelectorAll('.lvl0').forEach(element => {
+      element.style.display = '';
+    });
+    document.querySelectorAll('.lvl1').forEach(element => {
+      element.style.display = 'none';
+    });
+  }
+}
 
 /// COLOR THEMES //////////////////////////////////////////////////////////////////////////
 let background     = ["#141e46","#D6E5FA","#1E0342","#92817A","#343A40","#5F8670","#4D2DB7","#3A4D39","#A3D8FF","#DCD6F7"];
@@ -352,6 +373,6 @@ function level1(){
 level0();
 level1();
 
-document.querySelectorAll('.lvl0').forEach(element => {
+document.querySelectorAll('.lvl1').forEach(element => {
   element.style.display = 'none';
 });
