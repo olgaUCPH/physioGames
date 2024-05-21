@@ -4,7 +4,8 @@ const checkButton = document.getElementById('checkButton');
 const body = document.body;
 const arsenal = document.getElementById('arsenalContainer');
 
-const gridRectangles = allRectangles;
+let level = 0;
+let gridRectangles = document.querySelectorAll('.rectangle.lvl'+level.toString());
 
 
 function isMobile() {
@@ -42,7 +43,6 @@ function removeAllEventListeners(element) {
 
 allLabels.forEach(label => {
   label.onmousedown = dragFunction(label);
-  label.ontouchstart = dragFunction(label);
   label.addEventListener('touchstart', dragFunction(label));
   label.ondragstart = function() {return false;};
 })
@@ -56,12 +56,11 @@ function dragFunction(element){
     const parent = element.parentNode;
     document.body.appendChild(element);
     element.style.pointerEvents = "none";
-    element.style.borderColor = "var(--pseudo-black)";
-    element.style.backgroundColor = "var(--rectangle-light)";
     element.style.position = "fixed";
     element.style.zIndex = 1000;
     document.body.classList.add('no-select');
     moveAt(userX, userY);
+    console.log(1);
     const startTime = Date.now();
   
     function moveAt(pageX, pageY) {
@@ -85,7 +84,7 @@ function dragFunction(element){
       document.removeEventListener('mouseup',onMouseUp);
       document.removeEventListener('touchmove', onMouseMove);
       document.removeEventListener('touchend',onMouseUp);
-      if (Date.now() - lastTrigger > 50){
+      if (Date.now() - lastTrigger > 10){
         parent.appendChild(element);
         let boolean = true;
         lastTrigger = Date.now();
@@ -127,7 +126,6 @@ function addLabel(container, element) {
       }
       let newChild = removeAllEventListeners(child);
       newChild.onmousedown = dragFunction(newChild);
-      newChild.ontouchstart = dragFunction(newChild);
       newChild.addEventListener('touchstart', dragFunction(newChild));
       newChild.ondragstart = function() {return false;};
     }
@@ -143,7 +141,6 @@ function addLabel(container, element) {
     element.style.top = "";
     let newElement = removeAllEventListeners(element);
     newElement.onmousedown = dragFunction(newElement);
-    newElement.ontouchstart = dragFunction(newElement);
     newElement.addEventListener('touchstart', dragFunction(newElement));
     newElement.ondragstart = function() {return false;};
   }
@@ -190,93 +187,123 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-let level = "0";
-
 async function verifyGrid() {
   attempt += 1;
+  let allGood = true;
   gridRectangles.forEach((rectangle,i) => {
     if (rectangle.children.length == 0){
-      rectangle.style.borderColor = attempt == 1 ? "goldenRod": "maroon";
-      rectangle.style.backgroundColor = attempt == 1 ? "khaki": "lightPink";
+      rectangle.style.animation = '';
+      void rectangle.offsetWidth;
+      rectangle.style.animation = 'smallShake 0.5s ease-in-out forwards';
+      allGood = false;
     }
     else{
-      if (rectangle.firstChild.id == "lab"+level+(i+1).toString()){
-        rectangle.firstChild.style.borderColor = "darkGreen";
-        rectangle.firstChild.style.backgroundColor = "darkGreen";
-        rectangle.style.borderColor = "darkGreen";
-        rectangle.style.backgroundColor = "darkGreen";
+      console.log("lab"+level.toString()+i.toString());
+      if (rectangle.firstChild.id == "lab"+level.toString()+i.toString()){
         removeAllEventListeners(rectangle.firstChild);
-        rectangle.firstChild.classList.add('correctRectangle');
-        currentScore += 5;
+        if (!rectangle.firstChild.classList.contains('correctRectangle')){
+          currentScore += (attempt == 1? 10: (attempt == 2? 5 : 1));
+          rectangle.firstChild.classList.add('correctRectangle');
+          rectangle.firstChild.classList.remove('hideColors');
+        }
       }
       else{
-        rectangle.style.borderColor = attempt == 1 ? "goldenRod": "maroon";
-        rectangle.style.backgroundColor = attempt == 1 ? "khaki": "lightPink";
-        rectangle.firstChild.style.borderColor = attempt == 1 ? "goldenRod": "maroon";
-        rectangle.firstChild.style.backgroundColor = attempt == 1 ? "khaki": "lightPink";
+        rectangle.style.animation = '';
+        rectangle.style.animation = 'smallShake 0.5s ease-in-out forwards';
+        addToArsenal(rectangle.firstChild, rectangle.getBoundingClientRect().left);
+        allGood = false;
       }
     }
   });
+  display(currentScore);
+  if (allGood){
+    level++;
+    attempt = 0;
+    loadLevel(level);
+  }
 }
 
 
 
-/// GAME OVER ////////////////////////////////////////////////////////////////////////////////
+/// LEVELS ////////////////////////////////////////////////////////////////////////////////
 
-const gameOverWindow = document.getElementById('gameOverWindow');
-const showAnswersButton = document.getElementById('showAnswers');
-const showCorrectionButton = document.getElementById('showCorrection');
-const gameOverResetButton = document.getElementById('gameOverReset');
-const gameOverScore = document.getElementById('gameOverScore');
-const gameOverPercent = document.getElementById('gameOverPercent');
-
-function gameOver(){
-  checkButton.removeEventListener('click',verifyGrid);
-  gameOverScore.textContent = currentScore;
-  gameOverPercent.textContent = Math.round(currentScore/150*100);
-  gameOverWindow.style.animation = 'fadeIn 0.5s ease-in-out forwards';
-  gameOverWindow.style.display = 'block';
-  resetButton.removeEventListener('click', resetGrid);
-  changeButton.removeEventListener('click', switchTables);
+function congratulations(){
+  const cong = document.getElementById("congratulations");
+  cong.addEventListener('animationend', function () {cong.style.display = "none";})
+  void cong.offsetWidth;
+  cong.style.display = "block";
 }
 
-showAnswersButton.onclick = hideGameOverWindow;
-showCorrectionButton.onclick = showCorrection;
-gameOverResetButton.onclick = function(){hideGameOverWindow(); resetGrid()};
+const rec00 = document.getElementById("rec00");
+const rec01 = document.getElementById("rec01");
+const rec02 = document.getElementById("rec02");
 
+const position00 = [[rec00.offsetTop+'px',offsetRight(rec00) + 'px',offsetBottom(rec00) + 'px',"10vw"], ["","","18vh","1vw"]];
+const position01 = [[rec01.offsetTop+'px',offsetRight(rec01) + 'px',offsetBottom(rec01) + 'px',rec01.offsetLeft+'px'], ["","2vw","18vh",""]];
+const position02 = [[rec02.offsetTop+'px',offsetRight(rec02) + 'px',offsetBottom(rec02) + 'px',rec02.offsetLeft+'px'], ["","2vw","0.5vh",""]];
 
+console.log(position02)
 
-function hideGameOverWindow(){
-  checkButton.addEventListener('click',verifyGrid);
-  resetButton.addEventListener('click', resetGrid);
-  changeButton.addEventListener('click', switchTables);
-  gameOverWindow.style.animation = 'fadeOut 0.5s ease-in-out forwards';
+function offsetRight(element){
+  return element.offsetParent.offsetWidth - (element.offsetLeft + element.offsetWidth);
 }
 
-function showCorrection(){
-  hideGameOverWindow();
-  resetGrid();
-  attempt = 2;
-  gridRectangles.forEach((rectangle,i) => {
-    validationGrid[i].forEach(src => createSmallShape(rectangle,src));
-    rectangle.style.borderColor = 'darkGreen';
-    rectangle.style.backgroundColor = 'darkGreen';
-    rectangle.classList.add('correctRectangle');
-  })
+function offsetBottom(element){
+  return element.offsetParent.offsetHeight - (element.offsetTop + element.offsetHeight);
 }
 
-function resetGrid() {
-  gridRectangles.forEach(rectangle => {
-    rectangle.innerHTML = ''; 
-    rectangle.style = '';
-    selectedRectangle = 'none';
-    rectangle.classList.remove('correctRectangle');
-  });
-  attempt = 0;
-  currentScore = 0;
-  document.getElementById('currentScore').textContent = currentScore;
-  checkButton.addEventListener('click',verifyGrid);
+function baseRecPosition(rec, position){
+  rec.style.top = position[0];
+  rec.style.right = position[1];
+  rec.style.bottom = position[2];
+  rec.style.left = position[3];
 }
+
+baseRecPosition(rec00, position00[0]);
+baseRecPosition(rec01, position01[0]);
+baseRecPosition(rec02, position02[0]);
+
+
+async function loadLevel(lvl){
+  for (const line of lvl0Arrows)
+    {line.hide("draw", {duration: 1000})};
+  await delay(1000);
+  gridRectangles = document.querySelectorAll('.rectangle.lvl'+lvl.toString());
+  rec00.classList.remove("rectangle");
+  rec01.classList.remove("rectangle");
+  rec02.classList.remove("rectangle");
+  rec00.classList.remove("lvl0");
+  rec01.classList.remove("lvl0");
+  rec02.classList.remove("lvl0");
+  rec00.classList.add("lvl1");
+  rec01.classList.add("lvl1");
+  rec02.classList.add("lvl1");
+  rec00.firstChild.classList.remove('lvl0');
+  rec01.firstChild.classList.remove('lvl0');
+  rec02.firstChild.classList.remove('lvl0');
+  baseRecPosition(rec00, position00[1]);
+  baseRecPosition(rec01, position01[1]);
+  baseRecPosition(rec02, position02[1]);
+  await delay(1000);
+  for (let i = 0; i < 2; i++){
+    if (i == lvl){
+      document.querySelectorAll('.lvl'+i.toString()).forEach(element => {
+        element.style.display = '';
+      });
+    }
+    else{
+      document.querySelectorAll('.lvl'+i.toString()).forEach(element => {
+        element.style.display = 'none';
+      });
+    }
+  }
+  await delay(1000);
+  for (const line of lvl1Arrows)
+    {
+      line.position();
+      line.show("draw", {duration: 1000})};
+}
+
 
 /// SIDE BAR ///////////////////////////////////////////////////////////////////////////
 
@@ -335,43 +362,52 @@ function setColor(id){
 
 
 function level0(){
-  new LeaderLine(document.getElementById('rec00'),document.getElementById('rec01'),{color:"var(--pseudo-black)"});
-  new LeaderLine(document.getElementById('rec01'),document.getElementById('rec02'),{color:"var(--pseudo-black)"});
+  let arrows = [];
+  arrows.push(new LeaderLine(document.getElementById('rec00'),document.getElementById('rec01'),{color:"var(--pseudo-black)", path: "straight", hide:true}));
+  arrows.push(new LeaderLine(document.getElementById('rec01'),document.getElementById('rec02'),{color:"var(--pseudo-black)", path: "straight", hide:true}));
   document.querySelectorAll('.leader-line').forEach(arrow => {
     if (!arrow.classList.contains('lvl1') && !arrow.classList.contains('lvl2')){
       arrow.classList.add('lvl0');
     }
   })
+  for (const line of arrows){
+    line.show();
+  }
+  return arrows;
 }
 
 function level1(){
-  new LeaderLine(document.getElementById('rec10'),document.getElementById('rec13'),{color:"var(--pseudo-black)", startSocket: 'top', endSocket: 'left'});
-  new LeaderLine(document.getElementById('rec10'),document.getElementById('rec17'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left'});
-  new LeaderLine(document.getElementById('rec10'),document.getElementById('rec110'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left'});
+  let arrows = [];
+  arrows.push(new LeaderLine(document.getElementById('rec00'),document.getElementById('rec10'),{color:"var(--pseudo-black)", startSocket: 'top', endSocket: 'left', hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec00'),document.getElementById('rec14'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: "straight", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec00'),document.getElementById('rec17'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', hide: true}));
 
-  new LeaderLine(document.getElementById('rec13'),document.getElementById('rec14'),{color:"var(--pseudo-black)", startSocket: 'top', endSocket: 'left', path: 'magnet'});
-  new LeaderLine(document.getElementById('rec13'),document.getElementById('rec15'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', path: 'magnet'});
-  new LeaderLine(document.getElementById('rec13'),document.getElementById('rec16'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left'});
-  new LeaderLine(document.getElementById('rec16'),document.getElementById('rec11'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'top'});
-  new LeaderLine(document.getElementById('rec15'),document.getElementById('rec18'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top'});
+  arrows.push(new LeaderLine(document.getElementById('rec10'),document.getElementById('rec11'),{color:"var(--pseudo-black)", startSocket: 'top', endSocket: 'left', path: 'magnet', hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec10'),document.getElementById('rec12'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', path: 'magnet', hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec10'),document.getElementById('rec13'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec13'),document.getElementById('rec01'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'top', hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec12'),document.getElementById('rec15'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path: "straight", hide: true}));
 
-  new LeaderLine(document.getElementById('rec17'),document.getElementById('rec18'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left'});
-  new LeaderLine(document.getElementById('rec18'),document.getElementById('rec19'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left'});
-  new LeaderLine(document.getElementById('rec19'),document.getElementById('rec11'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left'});
+  arrows.push(new LeaderLine(document.getElementById('rec14'),document.getElementById('rec15'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: "straight", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec15'),document.getElementById('rec16'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: "straight", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec16'),document.getElementById('rec01'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: "straight", hide: true}));
 
-  new LeaderLine(document.getElementById('rec110'),LeaderLine.pointAnchor(document.getElementById('rec11'), {x: 0, y: 0.85*document.getElementById('rec11').clientHeight}),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: 'magnet'});
+  arrows.push(new LeaderLine(document.getElementById('rec17'),LeaderLine.pointAnchor(document.getElementById('rec01'), {x: 0, y: 0.85*document.getElementById('rec01').clientHeight}),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: 'magnet', hide: true}));
 
-  new LeaderLine(document.getElementById('rec11'),document.getElementById('rec12'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top'});
+  arrows.push(new LeaderLine(document.getElementById('rec01'),document.getElementById('rec02'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path: "straight", hide: true}));
 
   document.querySelectorAll('.leader-line').forEach(arrow => {
     if (!arrow.classList.contains('lvl0') && !arrow.classList.contains('lvl2')){
       arrow.classList.add('lvl1');
     }
   })
+  return arrows;
 }
 
-level0();
-level1();
+let lvl0Arrows =level0();
+let lvl1Arrows = level1();
+
+
 
 document.querySelectorAll('.lvl1').forEach(element => {
   element.style.display = 'none';
