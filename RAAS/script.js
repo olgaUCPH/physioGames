@@ -5,8 +5,9 @@ const body = document.body;
 const arsenal = document.getElementById('arsenalContainer');
 
 let level = 0;
+let maxLevel = 0;
 let gridRectangles = document.querySelectorAll('.rectangle.lvl'+level.toString());
-
+let themeId = 0;
 
 function isMobile() {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -14,10 +15,8 @@ function isMobile() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  highScore1 = localStorage.getItem('highScore1') || 0;
-  highScore2 = localStorage.getItem('highScore2') || 0;
-  highScore = highScore1;
-  let themeId = localStorage.getItem('themeId') || 0;
+  highScore = localStorage.getItem('RAAS_highScore') || 0;
+  themeId = parseInt(localStorage.getItem('themeId')) || 0;
   setColor(themeId);
   document.getElementById('highScore').textContent = highScore;
 });
@@ -169,7 +168,6 @@ function addToArsenal(element, x){
   element.style.top = "";
   let label = removeAllEventListeners(element);
   label.onmousedown = dragFunction(label);
-  label.ontouchstart = dragFunction(label);
   label.addEventListener('touchstart', dragFunction(label));
   label.ondragstart = function() {return false;};
 }
@@ -214,9 +212,24 @@ async function verifyGrid() {
     }
   });
   display(currentScore);
+  if (currentScore > highScore){
+    highScore = currentScore;
+    document.getElementById('highScore').textContent = highScore;
+    localStorage.setItem('RAAS_highScore',highScore);
+  }
   if (allGood){
     attempt = 0;
-    loadLevel(level+1);
+    maxLevel = Math.min(level+1, 2);
+    if (level < 2){
+      congratulations();
+      nextButton.style.animation = "shake 2s ease-in-out 0s infinite";
+      nextButton.style.scale = 1.25;
+      nextButton.addEventListener('click',nextLevel);
+      nextButton.classList.add("activeNext");
+    }
+    else{
+      gameOver();
+    }
   }
 }
 
@@ -228,16 +241,20 @@ function congratulations(){
   const cong = document.getElementById("congratulations");
   cong.addEventListener('animationend', function () {cong.style.display = "none";})
   void cong.offsetWidth;
-  cong.style.display = "block";
+  cong.style.display = "flex";
+}
+
+function gameOver(){
+  const goWindow = document.getElementById("gameOverWindow");
+  document.getElementById('gameOverScore').textContent = currentScore;
+  document.getElementById('gameOverPercent').textContent = Math.round(currentScore/180*100);
+  goWindow.addEventListener('animationend', function () {goWindow.style.display = "none";});
+  goWindow.style.display = "flex";
 }
 
 const rec00 = document.getElementById("rec00");
 const rec01 = document.getElementById("rec01");
 const rec02 = document.getElementById("rec02");
-
-//const position00 = [[rec00.offsetTop+'px',offsetRight(rec00) + 'px',offsetBottom(rec00) + 'px',"10vw"], ["","","18vh","1vw"]];
-//const position01 = [[rec01.offsetTop+'px',offsetRight(rec01) + 'px',offsetBottom(rec01) + 'px',rec01.offsetLeft+'px'], ["","2vw","18vh",""]];
-//const position02 = [[rec02.offsetTop+'px',offsetRight(rec02) + 'px',offsetBottom(rec02) + 'px',rec02.offsetLeft+'px'], ["","2vw","0.5vh",""]];
 
 let position00 = [];
 let position01 = [];
@@ -253,6 +270,14 @@ position02.push([offsetTop(rec02)+'px',offsetRight(rec02) + 'px',offsetBottom(re
 
 baseRecPosition(rec00,["","","18vh","1vw"]);
 baseRecPosition(rec01,["","2vw","18vh",""]);
+baseRecPosition(rec02,["","2vw","0.5vh",""]);
+
+position00.push([offsetTop(rec00)+'px',offsetRight(rec00) + 'px',offsetBottom(rec00) + 'px', offsetLeft(rec00)+'px']);
+position01.push([offsetTop(rec01)+'px',offsetRight(rec01) + 'px',offsetBottom(rec01) + 'px', offsetLeft(rec01)+'px']);
+position02.push([offsetTop(rec02)+'px',offsetRight(rec02) + 'px',offsetBottom(rec02) + 'px', offsetLeft(rec02)+'px']);
+
+baseRecPosition(rec00,["0.5vh","","","1vw"]);
+baseRecPosition(rec01,["0.5vh","","","calc(0.185*max(100vw - 17vw,100vh - 50vh))"]);
 baseRecPosition(rec02,["","2vw","0.5vh",""]);
 
 position00.push([offsetTop(rec00)+'px',offsetRight(rec00) + 'px',offsetBottom(rec00) + 'px', offsetLeft(rec00)+'px']);
@@ -286,26 +311,33 @@ function baseRecPosition(rec, position){
   rec.style.left = position[3];
 }
 
-
+function auxLoadLevel(rec){
+  rec.classList.add('smoothTransitions');
+  rec.classList.remove('rectangle');
+  rec.classList.remove('lvl0');
+  rec.firstChild.classList.remove('lvl0');
+}
 
 async function loadLevel(lvl){
-  rec00.classList.add('smoothTransitions');
-  rec01.classList.add('smoothTransitions');
-  rec02.classList.add('smoothTransitions');
+  checkButton.removeEventListener('click', verifyGrid);
   for (const line of allArrows[level])
     {line.hide("draw", {duration: 1000})};
-  rec00.classList.remove("rectangle");
-  rec01.classList.remove("rectangle");
-  rec02.classList.remove("rectangle");
-  rec00.classList.remove("lvl0");
-  rec01.classList.remove("lvl0");
-  rec02.classList.remove("lvl0");
-  rec00.firstChild.classList.remove('lvl0');
-  rec01.firstChild.classList.remove('lvl0');
-  rec02.firstChild.classList.remove('lvl0');
+  auxLoadLevel(rec00);
+  auxLoadLevel(rec01);
+  auxLoadLevel(rec02);
   if (level != 0){await delay(1000);}
   document.querySelectorAll('.lvl'+level.toString()).forEach(element => {
-    element.style.display = 'none';
+    element.style.animation = "fadeOut 1s";
+    element.addEventListener("animationend", () =>{
+      element.style.animation = "";
+      element.style.display = 'none';
+      let label = removeAllEventListeners(element);
+      if (label.id.includes("lab")){
+        label.onmousedown = dragFunction(label);
+        label.addEventListener('touchstart', dragFunction(label));
+        label.ondragstart = function() {return false;};
+      }
+    })
   })
   await delay(1000);
   gridRectangles = document.querySelectorAll('.rectangle.lvl'+lvl.toString());
@@ -315,43 +347,46 @@ async function loadLevel(lvl){
   if (lvl != 0){await delay(1000);}
   document.querySelectorAll('.lvl'+lvl.toString()).forEach(element => {
     element.style.display = '';
+    element.style.animation = "fadeIn 1s";
+    element.addEventListener('animationend', ()=>{element.style.animation = ''});
   });
   await delay(1000);
+  allArrows[lvl] = arrowFunctions[lvl]();
   for (const line of allArrows[lvl])
     {
       line.position();
       line.show("draw", {duration: 1000})};
   level = lvl;
+  if (level < maxLevel){
+    nextButton.addEventListener('click', nextLevel);
+    nextButton.classList.add('activeNext');
+  }
+  if (level > 0){
+    previousButton.addEventListener('click', previousLevel);
+    previousButton.classList.add('activePrevious');
+  }
+  checkButton.addEventListener('click', verifyGrid);
 }
+
 
 
 /// SIDE BAR ///////////////////////////////////////////////////////////////////////////
 
-const changeButton = document.getElementById('changeButton');
-const resetButton = document.getElementById('resetButton');
+const previousButton = document.getElementById('previousLevelButton');
+const nextButton = document.getElementById('nextLevelButton');
 
-//resetButton.addEventListener('click', resetGrid);
-changeButton.addEventListener('click', switchTables);
+function previousLevel(){
+  loadLevel(level - 1);
+  previousButton.removeEventListener('click', previousLevel);
+  previousButton.classList.remove("activePrevious");
+}
 
-function switchTables(){
-  if (level == 0){
-    level = 1;
-    document.querySelectorAll('.lvl1').forEach(element => {
-      element.style.display = '';
-    });
-    document.querySelectorAll('.lvl0').forEach(element => {
-      element.style.display = 'none';
-    });
-  }
-  else if (level == 1){
-    level = 0;
-    document.querySelectorAll('.lvl0').forEach(element => {
-      element.style.display = '';
-    });
-    document.querySelectorAll('.lvl1').forEach(element => {
-      element.style.display = 'none';
-    });
-  }
+function nextLevel(){
+  nextButton.style.animation = '';
+  nextButton.style.scale = '';
+  nextButton.removeEventListener('click', nextLevel);
+  loadLevel(level + 1);
+  nextButton.classList.remove("activeNext");
 }
 
 /// COLOR THEMES //////////////////////////////////////////////////////////////////////////
@@ -381,17 +416,14 @@ function setColor(id){
 }
 
 
-function level0(){
+function level0Arrows(){
   let arrows = [];
   arrows.push(new LeaderLine(document.getElementById('rec00'),document.getElementById('rec01'),{color:"var(--pseudo-black)", path: "straight", hide:true}));
   arrows.push(new LeaderLine(document.getElementById('rec01'),document.getElementById('rec02'),{color:"var(--pseudo-black)", path: "straight", hide:true}));
-  for (const line of arrows){
-    line.show();
-  }
   return arrows;
 }
 
-function level1(){
+function level1Arrows(){
   let arrows = [];
   arrows.push(new LeaderLine(document.getElementById('rec00'),document.getElementById('rec10'),{color:"var(--pseudo-black)", startSocket: 'top', endSocket: 'left', hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec00'),document.getElementById('rec14'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: "straight", hide: true}));
@@ -413,11 +445,33 @@ function level1(){
   return arrows;
 }
 
-let lvl0Arrows =level0();
-let lvl1Arrows = level1();
+function level2Arrows(){
+  let arrows = [];
+  arrows.push(new LeaderLine(document.getElementById('rec00'), document.getElementById('rec01'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path:"straight", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec01'), document.getElementById('rec20'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path:"straight", hide: true}));
+  
+  arrows.push(new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec20'), {x: 0, y: 0.85*document.getElementById('rec20').clientHeight}), document.getElementById('rec21'),{color:"var(--pseudo-black)", startSocket: 'left', endSocket: 'top', path:"magnet", hide: true}));
+  arrows.push(new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec20'), {x: document.getElementById('rec20').clientWidth, y: 0.85*document.getElementById('rec20').clientHeight}), document.getElementById('rec22'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'top', path:"magnet", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec20'), document.getElementById('rec23'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path:"straight", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec21'), document.getElementById('rec23'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', path:"magnet", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec22'), document.getElementById('rec24'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'top', path:"magnet", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec23'), document.getElementById('rec24'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path:"straight", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec24'), document.getElementById('rec02'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'top', path:"magnet", hide: true}));
 
-const allArrows = [lvl0Arrows, lvl1Arrows];
+  arrows.push(new LeaderLine(document.getElementById('rec25'), document.getElementById('rec26'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path:"straight", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec26'), document.getElementById('rec02'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path:"straight", hide: true}));
 
-document.querySelectorAll('.lvl1').forEach(element => {
+  return arrows;
+}
+
+let arrowFunctions = [level0Arrows, level1Arrows, level2Arrows];
+
+const allArrows = [level0Arrows(), level1Arrows(), level2Arrows];
+
+for (const line of allArrows[0]){
+  line.show();
+}
+
+document.querySelectorAll('.lvl1, .lvl2').forEach(element => {
   element.style.display = 'none';
 });

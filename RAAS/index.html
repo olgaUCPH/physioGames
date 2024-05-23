@@ -21,8 +21,12 @@
                 <h3 class="scoreText" style="bottom: 0px; right: 0px" id="highScore">0</h3>
             </div>
             <div id="instructionsBox">
-                <h2 id="instructionsTitle">Level 0</h2>
-                <p class="instructions">Fill the boxes by dragging the correct elements !</p>
+                <h2 class = 'lvl0' id="instructionsTitle">Level 0</h2>
+                <p class="lvl0 instructions">Tutorial : reorder the feedback loop !</p>
+                <h2 class = 'lvl1' id="instructionsTitle">Level 1</h2>
+                <p class="lvl1 instructions">Fill the first half of the RAAS !</p>
+                <h2 class = 'lvl2' id="instructionsTitle">Level 2</h2>
+                <p class="lvl2 instructions">Fill the second half of the RAAS !</p>
             </div>
             <div id="checkButton">Check</div>
         </div>
@@ -34,8 +38,7 @@
                 <div class="rectangle box lvl0" id="rec01"></div>
                 <div class="rectangle box lvl0" id="rec02"></div>
                 
-                
-                
+
                 <div class="rectangle smallBox lvl1" id="rec10" style="left: calc(0.19*max(100vw - 17vw,100vh - 50vh)); top: 8.5vh"></div>
                 <div class="rectangle smallBox lvl1" id="rec11" style="top: 1vh"></div>
                 <div class="rectangle smallBox lvl1" id="rec12" style="top: 16vh"></div>
@@ -47,16 +50,33 @@
                 
                 <div class="rectangle smallBox lvl1" id="rec17" style="bottom: 1.8vh"></div>
 
-                <div id = "gameOverWindow">
+
+                <div class="rectangle smallBox lvl2" id="rec20" style="top: 1.8vh"></div>
+
+                <div class="rectangle smallBox lvl2" id="rec21" style="top: 17.8vh; left: 23vw"></div>
+                <div class="rectangle smallBox lvl2" id="rec22" style="top: 17.8vh; right: 23vw"></div>
+                
+                <div class="rectangle smallBox lvl2" id="rec23" style="top: 33.8vh"></div>
+                <div class="rectangle smallBox lvl2" id="rec24" style="top: 33.8vh; right: calc(0.065*max(100vw - 17vw,100vh - 50vh) + 46vw + 1vh - 50%)"></div>
+
+                <div class="rectangle smallBox lvl2" id="rec25" style="bottom: 1.8vh; left: 23vw"></div>
+                <div class="rectangle smallBox lvl2" id="rec26" style="bottom: 1.8vh; right: 23vw"></div>
+
+                <div class = "endWindow" id="congratulations">
                     <h1>Congratulations !</h1>
-                    <span>You got <span id = "gameOverScore">0</span> points ! That's <span id = "gameOverPercent">0</span>% of the maximum score.<br/></span>
-                    <button id = "showAnswers">Show my answers</button>
-                    <button id = "showCorrection">Show correct answers</button>
-                    <button id = "gameOverReset">Reset grid</button>
+                    <h3>Press the arrow on the top-right of the screen to move on to the next level !</h3>
                 </div>
+
+                <div class = "endWindow" id="gameOverWindow">
+                    <h1>Congratulations !</h1>
+                    <p>You got a score of <span id = "gameOverScore">0</span> points. </p>
+                    <p>That's <span id="gameOverPercent">0</span>% of the maximum score !</p>
+                    <p>Refresh the page to try again !</p>
+                </div>
+
                 <div id = "buttonsColumn">
-                    <img id="changeButton" src="assets/changeIcon.png">
-                    <img id="resetButton" src="assets/resetIcon.png">
+                    <img id="previousLevelButton" src="assets/leftArrow.png">
+                    <img id="nextLevelButton" src="assets/rightArrow.png">
                     <img id="colorButton" src="assets/colorIcon.png">
                 </div>
             </div>
@@ -74,10 +94,15 @@
                 <div class="label smallBox lvl1 green hideColors" id="lab15"><p><span class = "arrow down">↓</span>GFR</p></div>
                 <div class="label smallBox lvl1 green hideColors" id="lab16"><span class = "big arrow down">↓</span><p>NaCl load</br>Macula densa</p></div>
                 <div class="label smallBox lvl1 yellow hideColors" id="lab17">Renal Baroreceptors</br> AA</p></div>
-            </div>
-            <div id="congratulations">
-                <h1>Congratulations !</h1>
-                <h2>Loading Next Level...</h2>
+
+                <div class="label smallBox lvl2 gray hideColors" id="lab20"><p><span class = "arrow up">↑</span>Plasma AngII</p></div>
+                <div class="label smallBox lvl2 gray hideColors" id="lab21"><p><span class = "arrow up">↑</span>Aldosteron Secretion</p></div>
+                <div class="label smallBox lvl2 gray hideColors" id="lab22"><p><span class = "arrow up">↑</span>ADH Thirst Center</p></div>
+                <div class="label smallBox lvl2 gray hideColors" id="lab23"><p><span class = "arrow up">↑</span>Na <sup>+</sup> Renal Reabsorption</p></div>
+                <div class="label smallBox lvl2 gray hideColors" id="lab24"><p><span class = "arrow up">↑</span> ECF Volume</p></div>
+
+                <div class="label smallBox lvl2 gray hideColors" id="lab25"><p>Systemic Vasoconstriction</p></div>
+                <div class="label smallBox lvl2 gray hideColors" id="lab26"><p><span class = "arrow up">↑</span> Total Peripheral Resistance</p></div>
             </div>
         </div>
         <script src="script.js"></script>

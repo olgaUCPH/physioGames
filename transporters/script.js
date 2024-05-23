@@ -10,10 +10,10 @@ function isMobile() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  highScore1 = localStorage.getItem('highScore1') || 0;
-  highScore2 = localStorage.getItem('highScore2') || 0;
+  highScore1 = parseInt(localStorage.getItem('trans_highScore1')) || 0;
+  highScore2 = parseInt(localStorage.getItem('trans_highScore2')) || 0;
   highScore = highScore1;
-  themeId = localStorage.getItem('themeId') || 0;
+  themeId = parseInt(localStorage.getItem('themeId')) || 0;
   setColor(themeId);
   document.getElementById('highScore').textContent = highScore;
 });
@@ -272,7 +272,7 @@ async function verifyGrid() {
     if (attempt == 2){
       highScore = currentScore > highScore ? currentScore : highScore;
       document.getElementById('highScore').textContent = highScore;
-      currentTable == 1 ? localStorage.setItem('highScore1', highScore):localStorage.setItem('highScore2', highScore);
+      currentTable == 1 ? localStorage.setItem('trans_highScore1', highScore):localStorage.setItem('trans_highScore2', highScore);
       gameOver();
     }
   }
@@ -298,7 +298,7 @@ const gameOverPercent = document.getElementById('gameOverPercent');
 function gameOver(){
   checkButton.removeEventListener('click',verifyGrid);
   gameOverScore.textContent = currentScore;
-  gameOverPercent.textContent = Math.round(currentScore/150*100);
+  gameOverPercent.textContent = Math.round(currentScore/maxScore*100);
   gameOverWindow.style.animation = 'fadeIn 0.5s ease-in-out forwards';
   gameOverWindow.style.display = 'block';
   resetButton.removeEventListener('click', resetGrid);
@@ -360,6 +360,7 @@ let highScore1 = 0;
 let highScore2 = 0;
 let attempt1 = 0;
 let attempt2 = 0;
+let maxScore = 150;
 
 function switchTables(){
   if (currentTable == 1){
@@ -373,6 +374,7 @@ function switchTables(){
     currentScore = currentScore2;
     highScore1 = highScore;
     highScore = highScore2;
+    maxScore = 100;
     document.getElementById('currentScore').textContent = currentScore;
     document.getElementById('highScore').textContent = highScore;
     idOrder = idOrder2;
@@ -389,6 +391,7 @@ function switchTables(){
     currentScore = currentScore1;
     highScore2 = highScore;
     highScore = highScore1;
+    maxScore = 150;
     document.getElementById('currentScore').textContent = currentScore;
     document.getElementById('highScore').textContent = highScore;
     idOrder = idOrder1;
