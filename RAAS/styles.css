@@ -237,14 +237,6 @@ body {
     box-shadow: black 3px 3px 5px;
 }
 
-#gridContainer .box{
-  -webkit-transition: all 1s ease-in-out;
-  -moz-transition: all 1s ease-in-out;
-  -o-transition: all 1s ease-in-out;
-  -ms-transition: all 1s ease-in-out;
-  transition: all 1s ease-in-out;
-}
-
 #arsenalContainer{
     width:99%;
     height: 28vh;
@@ -301,7 +293,23 @@ body {
   z-index: 500;
 }
 
-.rectangle{
+#gridContainer .smallBox{
+  -webkit-transition: all 1s ease-in-out;
+  -moz-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out;
+}
+
+.smoothTransitions{
+  -webkit-transition: all 1s ease-in-out;
+  -moz-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out;
+}
+
+.smallBox{
   animation: fadeIn 1s;
 }
 
@@ -311,13 +319,9 @@ body {
   100%{opacity: 1;}
 }
 
-
-.rectangle{
-  -webkit-transition: all 1s ease-in-out;
-  -moz-transition: all 1s ease-in-out;
-  -o-transition: all 1s ease-in-out;
-  -ms-transition: all 1s ease-in-out;
-  transition: all 1s ease-in-out;
+@keyframes fadeOut {
+  0%{opacity: 1;}
+  100%{opacity: 0;}
 }
 
 .rectangle:hover {

@@ -60,7 +60,6 @@ function dragFunction(element){
     element.style.zIndex = 1000;
     document.body.classList.add('no-select');
     moveAt(userX, userY);
-    console.log(1);
     const startTime = Date.now();
   
     function moveAt(pageX, pageY) {
@@ -198,7 +197,6 @@ async function verifyGrid() {
       allGood = false;
     }
     else{
-      console.log("lab"+level.toString()+i.toString());
       if (rectangle.firstChild.id == "lab"+level.toString()+i.toString()){
         removeAllEventListeners(rectangle.firstChild);
         if (!rectangle.firstChild.classList.contains('correctRectangle')){
@@ -217,9 +215,8 @@ async function verifyGrid() {
   });
   display(currentScore);
   if (allGood){
-    level++;
     attempt = 0;
-    loadLevel(level);
+    loadLevel(level+1);
   }
 }
 
@@ -238,18 +235,48 @@ const rec00 = document.getElementById("rec00");
 const rec01 = document.getElementById("rec01");
 const rec02 = document.getElementById("rec02");
 
-const position00 = [[rec00.offsetTop+'px',offsetRight(rec00) + 'px',offsetBottom(rec00) + 'px',"10vw"], ["","","18vh","1vw"]];
-const position01 = [[rec01.offsetTop+'px',offsetRight(rec01) + 'px',offsetBottom(rec01) + 'px',rec01.offsetLeft+'px'], ["","2vw","18vh",""]];
-const position02 = [[rec02.offsetTop+'px',offsetRight(rec02) + 'px',offsetBottom(rec02) + 'px',rec02.offsetLeft+'px'], ["","2vw","0.5vh",""]];
+//const position00 = [[rec00.offsetTop+'px',offsetRight(rec00) + 'px',offsetBottom(rec00) + 'px',"10vw"], ["","","18vh","1vw"]];
+//const position01 = [[rec01.offsetTop+'px',offsetRight(rec01) + 'px',offsetBottom(rec01) + 'px',rec01.offsetLeft+'px'], ["","2vw","18vh",""]];
+//const position02 = [[rec02.offsetTop+'px',offsetRight(rec02) + 'px',offsetBottom(rec02) + 'px',rec02.offsetLeft+'px'], ["","2vw","0.5vh",""]];
 
-console.log(position02)
+let position00 = [];
+let position01 = [];
+let position02 = [];
+
+baseRecPosition(rec00,["","","","10vw"]);
+baseRecPosition(rec01,["","","",""]);
+baseRecPosition(rec02,["","10vw","",""]);
+
+position00.push([offsetTop(rec00)+'px',offsetRight(rec00) + 'px',offsetBottom(rec00) + 'px', offsetLeft(rec00)+'px']);
+position01.push([offsetTop(rec01)+'px',offsetRight(rec01) + 'px',offsetBottom(rec01) + 'px', offsetLeft(rec01)+'px']);
+position02.push([offsetTop(rec02)+'px',offsetRight(rec02) + 'px',offsetBottom(rec02) + 'px', offsetLeft(rec02)+'px']);
+
+baseRecPosition(rec00,["","","18vh","1vw"]);
+baseRecPosition(rec01,["","2vw","18vh",""]);
+baseRecPosition(rec02,["","2vw","0.5vh",""]);
+
+position00.push([offsetTop(rec00)+'px',offsetRight(rec00) + 'px',offsetBottom(rec00) + 'px', offsetLeft(rec00)+'px']);
+position01.push([offsetTop(rec01)+'px',offsetRight(rec01) + 'px',offsetBottom(rec01) + 'px', offsetLeft(rec01)+'px']);
+position02.push([offsetTop(rec02)+'px',offsetRight(rec02) + 'px',offsetBottom(rec02) + 'px', offsetLeft(rec02)+'px']);
+
+baseRecPosition(rec00,position00[0]);
+baseRecPosition(rec01,position01[0]);
+baseRecPosition(rec02,position02[0]);
+
+function offsetTop(element){
+  return element.offsetTop - parseFloat(getComputedStyle(element).borderTopWidth);
+}
 
 function offsetRight(element){
-  return element.offsetParent.offsetWidth - (element.offsetLeft + element.offsetWidth);
+  return element.offsetParent.offsetWidth - (element.offsetLeft + element.offsetWidth) - parseFloat(getComputedStyle(element).borderLeftWidth);
 }
 
 function offsetBottom(element){
-  return element.offsetParent.offsetHeight - (element.offsetTop + element.offsetHeight);
+  return element.offsetParent.offsetHeight - (element.offsetTop + element.offsetHeight) - parseFloat(getComputedStyle(element).borderTopWidth);
+}
+
+function offsetLeft(element){
+  return element.offsetLeft - parseFloat(getComputedStyle(element).borderLeftWidth);
 }
 
 function baseRecPosition(rec, position){
@@ -259,49 +286,42 @@ function baseRecPosition(rec, position){
   rec.style.left = position[3];
 }
 
-baseRecPosition(rec00, position00[0]);
-baseRecPosition(rec01, position01[0]);
-baseRecPosition(rec02, position02[0]);
 
 
 async function loadLevel(lvl){
-  for (const line of lvl0Arrows)
+  rec00.classList.add('smoothTransitions');
+  rec01.classList.add('smoothTransitions');
+  rec02.classList.add('smoothTransitions');
+  for (const line of allArrows[level])
     {line.hide("draw", {duration: 1000})};
-  await delay(1000);
-  gridRectangles = document.querySelectorAll('.rectangle.lvl'+lvl.toString());
   rec00.classList.remove("rectangle");
   rec01.classList.remove("rectangle");
   rec02.classList.remove("rectangle");
   rec00.classList.remove("lvl0");
   rec01.classList.remove("lvl0");
   rec02.classList.remove("lvl0");
-  rec00.classList.add("lvl1");
-  rec01.classList.add("lvl1");
-  rec02.classList.add("lvl1");
   rec00.firstChild.classList.remove('lvl0');
   rec01.firstChild.classList.remove('lvl0');
   rec02.firstChild.classList.remove('lvl0');
-  baseRecPosition(rec00, position00[1]);
-  baseRecPosition(rec01, position01[1]);
-  baseRecPosition(rec02, position02[1]);
+  if (level != 0){await delay(1000);}
+  document.querySelectorAll('.lvl'+level.toString()).forEach(element => {
+    element.style.display = 'none';
+  })
   await delay(1000);
-  for (let i = 0; i < 2; i++){
-    if (i == lvl){
-      document.querySelectorAll('.lvl'+i.toString()).forEach(element => {
-        element.style.display = '';
-      });
-    }
-    else{
-      document.querySelectorAll('.lvl'+i.toString()).forEach(element => {
-        element.style.display = 'none';
-      });
-    }
-  }
+  gridRectangles = document.querySelectorAll('.rectangle.lvl'+lvl.toString());
+  baseRecPosition(rec00, position00[lvl]);
+  baseRecPosition(rec01, position01[lvl]);
+  baseRecPosition(rec02, position02[lvl]);
+  if (lvl != 0){await delay(1000);}
+  document.querySelectorAll('.lvl'+lvl.toString()).forEach(element => {
+    element.style.display = '';
+  });
   await delay(1000);
-  for (const line of lvl1Arrows)
+  for (const line of allArrows[lvl])
     {
       line.position();
       line.show("draw", {duration: 1000})};
+  level = lvl;
 }
 
 
@@ -365,11 +385,6 @@ function level0(){
   let arrows = [];
   arrows.push(new LeaderLine(document.getElementById('rec00'),document.getElementById('rec01'),{color:"var(--pseudo-black)", path: "straight", hide:true}));
   arrows.push(new LeaderLine(document.getElementById('rec01'),document.getElementById('rec02'),{color:"var(--pseudo-black)", path: "straight", hide:true}));
-  document.querySelectorAll('.leader-line').forEach(arrow => {
-    if (!arrow.classList.contains('lvl1') && !arrow.classList.contains('lvl2')){
-      arrow.classList.add('lvl0');
-    }
-  })
   for (const line of arrows){
     line.show();
   }
@@ -395,19 +410,13 @@ function level1(){
   arrows.push(new LeaderLine(document.getElementById('rec17'),LeaderLine.pointAnchor(document.getElementById('rec01'), {x: 0, y: 0.85*document.getElementById('rec01').clientHeight}),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: 'magnet', hide: true}));
 
   arrows.push(new LeaderLine(document.getElementById('rec01'),document.getElementById('rec02'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path: "straight", hide: true}));
-
-  document.querySelectorAll('.leader-line').forEach(arrow => {
-    if (!arrow.classList.contains('lvl0') && !arrow.classList.contains('lvl2')){
-      arrow.classList.add('lvl1');
-    }
-  })
   return arrows;
 }
 
 let lvl0Arrows =level0();
 let lvl1Arrows = level1();
 
-
+const allArrows = [lvl0Arrows, lvl1Arrows];
 
 document.querySelectorAll('.lvl1').forEach(element => {
   element.style.display = 'none';
