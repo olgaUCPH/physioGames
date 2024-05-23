@@ -198,20 +198,20 @@ checkButton.addEventListener('click',verifyGrid);
 
 const validationGrid1 = [];
 //Na+
-validationGrid1.push(['assets/yellowTriangle.png','assets/redSquare.png']);
-validationGrid1.push(['assets/yellowTriangle.png','assets/redSquare.png', 'assets/whitePill.png']);
+validationGrid1.push(['assets/yellowTriangle.png','assets/redSquare.png', 'assets/blackPill.png']);
+validationGrid1.push(['assets/yellowTriangle.png','assets/redSquare.png', 'assets/whitePill.png', 'assets/blackPill.png']);
 validationGrid1.push(['assets/orangeSquare.png','assets/yellowTriangle.png', 'assets/whitePill.png']);
 validationGrid1.push(['assets/purpleSquare.png']);
 validationGrid1.push(['assets/redCircle.png']);
 //Cl-
-validationGrid1.push(['assets/whitePill.png']);
-validationGrid1.push(['assets/orangeTriangle.png','assets/grayPill.png']);
+validationGrid1.push(['assets/whitePill.png', 'assets/blackPill.png']);
+validationGrid1.push(['assets/orangeTriangle.png','assets/grayPill.png', 'assets/blackPill.png']);
 validationGrid1.push(['assets/orangeSquare.png']);
-validationGrid1.push(['assets/purpleSquare.png','assets/whitePill.png']);
+validationGrid1.push(['assets/purpleSquare.png']);
 validationGrid1.push(['assets/whitePill.png']);
 //K+
 validationGrid1.push(['assets/blackPill.png']);
-validationGrid1.push(['assets/whitePill.png']);
+validationGrid1.push(['assets/whitePill.png', 'assets/blackPill.png']);
 validationGrid1.push(['assets/orangeSquare.png','assets/whitePill.png','assets/blueCircle.png']);
 validationGrid1.push([]);
 validationGrid1.push(['assets/yellowDiamond.png','assets/blueCircle.png']);
@@ -220,12 +220,12 @@ const validationGrid2 = [];
 //H+
 validationGrid2.push(['assets/blueTriangle.png','assets/blueDiamond.png']);
 validationGrid2.push(['assets/blueTriangle.png','assets/blueDiamond.png']);
-validationGrid2.push(['assets/blueTriangle.png','assets/blueDiamond.png']);
+validationGrid2.push(['assets/blueTriangle.png']);
 validationGrid2.push([]);
 validationGrid2.push(['assets/blueDiamond.png','assets/cyanDiamond.png','assets/greenDiamond.png']);
 //HCO3-
 validationGrid2.push(['assets/greenSquare.png']);
-validationGrid2.push(['assets/greenSquare.png']);
+validationGrid2.push(['assets/greenSquare.png', 'assets/cyanTriangle.png']);
 validationGrid2.push(['assets/greenSquare.png']);
 validationGrid2.push([]);
 validationGrid2.push(['assets/cyanTriangle.png','assets/greenTriangle.png']);
@@ -268,7 +268,7 @@ async function verifyGrid() {
       document.getElementById('currentScore').textContent = currentScore;
     };
     checkButton.addEventListener('click',verifyGrid);
-    if (currentScore == 150){attempt += 1};
+    if (currentScore == maxScore){attempt += 1};
     if (attempt == 2){
       highScore = currentScore > highScore ? currentScore : highScore;
       document.getElementById('highScore').textContent = highScore;
@@ -427,8 +427,3 @@ function setColor(id){
 }
 
 
-function finalPosition(rectangle, shapeId, shapeNumber){}; //return x y
-function initialPosition(rectangle, userX, userY){}; //return x y
-function createShape(x, y){}; //create shape at IP; animation; FP
-// On Click: create shape with same animation delay (?), fadeIn
-// On Drop: if contact with rectangle, createShape & realign; else, fadeOut
