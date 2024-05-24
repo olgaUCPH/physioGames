@@ -223,7 +223,7 @@ async function verifyGrid() {
     if (level < 2){
       congratulations();
       nextButton.style.animation = "shake 2s ease-in-out 0s infinite";
-      nextButton.style.scale = 1.25;
+      nextButton.style.scale = 1.5;
       nextButton.addEventListener('click',nextLevel);
       nextButton.classList.add("activeNext");
     }
