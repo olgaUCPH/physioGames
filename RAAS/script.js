@@ -246,8 +246,8 @@ function congratulations(){
 
 function gameOver(){
   const goWindow = document.getElementById("gameOverWindow");
-  document.getElementById('gameOverScore').textContent = currentScore;
-  document.getElementById('gameOverPercent').textContent = Math.round(currentScore/180*100);
+  document.getElementById('gameOverScore').textContent = ' '+currentScore+' ';
+  document.getElementById('gameOverPercent').textContent = ' '+Math.round(currentScore/180*100)+' ';
   goWindow.addEventListener('animationend', function () {goWindow.style.display = "none";});
   goWindow.style.display = "flex";
 }
@@ -278,7 +278,7 @@ position02.push([offsetTop(rec02)+'px',offsetRight(rec02) + 'px',offsetBottom(re
 
 baseRecPosition(rec00,["0.5vh","","","1vw"]);
 baseRecPosition(rec01,["0.5vh","","","calc(0.185*max(100vw - 17vw,100vh - 50vh))"]);
-baseRecPosition(rec02,["","2vw","0.5vh",""]);
+baseRecPosition(rec02,["","4vw","0.5vh",""]);
 
 position00.push([offsetTop(rec00)+'px',offsetRight(rec00) + 'px',offsetBottom(rec00) + 'px', offsetLeft(rec00)+'px']);
 position01.push([offsetTop(rec01)+'px',offsetRight(rec01) + 'px',offsetBottom(rec01) + 'px', offsetLeft(rec01)+'px']);
@@ -427,15 +427,16 @@ function level1Arrows(){
   let arrows = [];
   arrows.push(new LeaderLine(document.getElementById('rec00'),document.getElementById('rec10'),{color:"var(--pseudo-black)", startSocket: 'top', endSocket: 'left', hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec00'),document.getElementById('rec14'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: "straight", hide: true}));
-  arrows.push(new LeaderLine(document.getElementById('rec00'),document.getElementById('rec17'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', hide: true}));
 
   arrows.push(new LeaderLine(document.getElementById('rec10'),document.getElementById('rec11'),{color:"var(--pseudo-black)", startSocket: 'top', endSocket: 'left', path: 'magnet', hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec10'),document.getElementById('rec12'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', path: 'magnet', hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec10'),document.getElementById('rec13'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec13'),document.getElementById('rec01'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'top', hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec13'),document.getElementById('rec16'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path:'straight', hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec12'),document.getElementById('rec15'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path: "straight", hide: true}));
 
   arrows.push(new LeaderLine(document.getElementById('rec14'),document.getElementById('rec15'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: "straight", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec14'),document.getElementById('rec17'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec15'),document.getElementById('rec16'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: "straight", hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec16'),document.getElementById('rec01'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: "straight", hide: true}));
 
@@ -454,19 +455,20 @@ function level2Arrows(){
   arrows.push(new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec20'), {x: document.getElementById('rec20').clientWidth, y: 0.85*document.getElementById('rec20').clientHeight}), document.getElementById('rec22'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'top', path:"magnet", hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec20'), document.getElementById('rec23'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path:"straight", hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec21'), document.getElementById('rec23'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', path:"magnet", hide: true}));
-  arrows.push(new LeaderLine(document.getElementById('rec22'), document.getElementById('rec24'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'top', path:"magnet", hide: true}));
-  arrows.push(new LeaderLine(document.getElementById('rec23'), document.getElementById('rec24'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path:"straight", hide: true}));
-  arrows.push(new LeaderLine(document.getElementById('rec24'), document.getElementById('rec02'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'top', path:"magnet", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec22'), document.getElementById('rec24'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path:"straight", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec23'), document.getElementById('rec24'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', path:"magnet", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec24'), document.getElementById('rec02'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path:"straight", hide: true}));
 
-  arrows.push(new LeaderLine(document.getElementById('rec25'), document.getElementById('rec26'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path:"straight", hide: true}));
-  arrows.push(new LeaderLine(document.getElementById('rec26'), document.getElementById('rec02'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path:"straight", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec20'), document.getElementById('rec25'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path:"straight", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec25'), document.getElementById('rec26'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path:"straight", hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec26'), document.getElementById('rec02'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path:"straight", hide: true}));
 
   return arrows;
 }
 
 let arrowFunctions = [level0Arrows, level1Arrows, level2Arrows];
 
-const allArrows = [level0Arrows(), level1Arrows(), level2Arrows];
+const allArrows = [level0Arrows(), level1Arrows(), level2Arrows()];
 
 for (const line of allArrows[0]){
   line.show();
