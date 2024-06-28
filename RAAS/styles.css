@@ -19,6 +19,13 @@
 
   @font-face {
     font-family: 'Avenir';
+    src: url("../fonts/AvenirNextLTPro-MediumCnIt.otf");
+    font-weight: 500;
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: 'Avenir';
     src: url("../fonts/AvenirNextLTPro-MediumCn.otf");
     font-weight: 500;
     font-style: normal;
@@ -140,7 +147,7 @@ body {
     color: var(--pseudo-black);
     width: 100%;
     height: 57vh;
-    text-align: center;
+    text-align: justify;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     -webkit-transition: background-color 0.5s ease-in-out;
@@ -149,6 +156,34 @@ body {
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
     box-shadow: black 3px 3px 5px;
+}
+
+#instructionsBox p{
+  font-size: 0.6em;
+  padding: 20px;
+  padding-bottom: 5px;
+}
+
+#instructionsBox h2{
+  -webkit-transition: background-color 0.5s ease-in-out;
+  -moz-transition: background-color 0.5s ease-in-out;
+  -o-transition: background-color 0.5s ease-in-out;
+  -ms-transition: background-color 0.5s ease-in-out;
+  transition: background-color 0.5s ease-in-out;
+}
+
+.currentLvl{
+  font-size: 0.8em;
+  font-weight: 700;
+  font-style: normal;
+  padding: 5px 20px 5px 20px;
+}
+
+.otherLvl{
+  font-size: 0.7em;
+  padding: 5px 20px 5px 20px;
+  font-style: italic;
+  font-weight: 300;
 }
 
 #instructionsTitle{

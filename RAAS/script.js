@@ -345,6 +345,10 @@ async function loadLevel(lvl){
   baseRecPosition(rec01, position01[lvl]);
   baseRecPosition(rec02, position02[lvl]);
   if (lvl != 0){await delay(1000);}
+  document.getElementById('lvl'+level.toString()+'title').classList.remove('currentLvl');
+  document.getElementById('lvl'+level.toString()+'title').classList.add('otherLvl');
+  document.getElementById('lvl'+lvl.toString()+'title').classList.remove('otherLvl');
+  document.getElementById('lvl'+lvl.toString()+'title').classList.add('currentLvl');
   document.querySelectorAll('.lvl'+lvl.toString()).forEach(element => {
     element.style.display = '';
     element.style.animation = "fadeIn 1s";
@@ -430,8 +434,8 @@ function level1Arrows(){
 
   arrows.push(new LeaderLine(document.getElementById('rec10'),document.getElementById('rec11'),{color:"var(--pseudo-black)", startSocket: 'top', endSocket: 'left', path: 'magnet', hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec10'),document.getElementById('rec12'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', path: 'magnet', hide: true}));
-  arrows.push(new LeaderLine(document.getElementById('rec10'),document.getElementById('rec13'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', hide: true}));
-  arrows.push(new LeaderLine(document.getElementById('rec13'),document.getElementById('rec01'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'top', hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec10'),document.getElementById('rec13'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path:'straight', hide: true}));
+  arrows.push(new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec11'), {x: document.getElementById('rec11').clientWidth, y: 0.4*document.getElementById('rec11').clientHeight}),document.getElementById('rec01'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'top', path: 'fluid', startSocketGravity: 500, hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec13'),document.getElementById('rec16'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path:'straight', hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec12'),document.getElementById('rec15'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path: "straight", hide: true}));
 
@@ -440,7 +444,7 @@ function level1Arrows(){
   arrows.push(new LeaderLine(document.getElementById('rec15'),document.getElementById('rec16'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: "straight", hide: true}));
   arrows.push(new LeaderLine(document.getElementById('rec16'),document.getElementById('rec01'),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: "straight", hide: true}));
 
-  arrows.push(new LeaderLine(document.getElementById('rec17'),LeaderLine.pointAnchor(document.getElementById('rec01'), {x: 0, y: 0.85*document.getElementById('rec01').clientHeight}),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: 'magnet', hide: true}));
+  arrows.push(new LeaderLine(document.getElementById('rec17'),LeaderLine.pointAnchor(document.getElementById('rec01'), {x: 0, y: 0.85*document.getElementById('rec01').clientHeight}),{color:"var(--pseudo-black)", startSocket: 'right', endSocket: 'left', path: 'magnet', startSocketGravity: 200,  hide: true}));
 
   arrows.push(new LeaderLine(document.getElementById('rec01'),document.getElementById('rec02'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', path: "straight", hide: true}));
   return arrows;
