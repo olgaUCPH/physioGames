@@ -152,7 +152,8 @@ function addToArsenal(element, x){
   }
   else{
     for (let i = 0; i < children.length; i+=1) {
-      if (x < (children[i].getBoundingClientRect().left + children[i].getBoundingClientRect().right)/2){
+      //if (x < (children[i].getBoundingClientRect().left + children[i].getBoundingClientRect().right)/2){
+      if (element.id < children[i].id){
         arsenal.insertBefore(element, children[i]);
         break;
       }

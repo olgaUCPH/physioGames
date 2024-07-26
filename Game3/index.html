@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="height=device-height, initial-scale=1.0">
+        <title>Game3 - Physiology Games</title>
+        <link rel="icon" type="image/vnd.icon" href="../assets/favicon.ico">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <script src="../leaderLine/leader-line.min.js"></script>
+        <div id="leftColumn">
+            <div id="titleBox">
+                <h1 id="title">Game 3</h1>
+                <h2 id="author">Created by Carl Ferlay, under the supervision of Olga Sosnovtseva, Niels-Henrik Holstein-Rahtlou and Charlotte Mehlin Sørensen</h2>
+            </div>
+            <div id="scoreBox">
+                <h3 class="scoreText" style="top: 0px; left: 0px">Current Score:</h3>
+                <h3 class="scoreText" style="top: 0px; right: 0px"id="currentScore">0</h3>
+                <h3 class="scoreText" style="bottom: 0px; left: 0px">High Score:</h3>
+                <h3 class="scoreText" style="bottom: 0px; right: 0px" id="highScore">0</h3>
+            </div>
+            <div id="instructionsBox">
+                <ul>
+                    <li>Make captions more eye-catching</li>
+                    <li>Nicer sliders</li>
+                    <li>Buttons column</li>
+                    <li>Score system</li>
+                    <li>instructions</li>
+                </ul>
+            </div>
+            <div id="checkButton">Check</div>
+        </div>
+
+        <div id="rightColumn">
+            <div id="gridContainer">
+                <div id="sliders">
+                    <span>pH threshold: </span><input id="pHrange" type="range" min="0" max="14" value="7" step="0.2"> <char id="pHvalue">7</char>
+                    <span>BE threshold: </span><input id="BErange" type="range" min="-10" max="10" value="0" step="1"> <char id="BEvalue">0</char> mM
+                    <span>PCO<sub>2</sub> threshold: </span><input id="PCrange" type="range" min="0" max="100" value="0" step="5"> <char id="PCvalue">0</char> mmHg
+                </div>
+                <div class="line">
+                    <div class="rectangle smallBox" id="rec00"><p id="lab00">Arteriel blodprøve</p></div>
+                </div>
+                <div class="line">
+                    <div class="rectangle smallBox" id="rec20"></div>
+                    <div class="rectangle smallBox" id="rec10" style="position: absolute;"></div>
+                    <div class="rectangle smallBox" id="rec21"></div>
+                </div>
+                <div class="line">
+                    <div class="rectangle smallBox" id="rec30"></div>
+                    <div class="rectangle smallBox" id="rec31"></div>
+                    <div class="rectangle smallBox" id="rec32"></div>
+                    <div class="rectangle smallBox" id="rec33"></div>
+                </div>
+                <div class="line">
+                    <div class="rectangle smallBox" id="rec40"></div>
+                    <div class="rectangle smallBox" id="rec41"></div>
+                    <div class="rectangle smallBox" id="rec42"></div>
+                    <div class="rectangle smallBox" id="rec43"></div>
+                </div>
+                <div class="line">
+                    <span id="PC1">PCO₂ ?? 0 mmHg</span>
+                    <span id="BE1">BE ?? 0 mM</span>
+                    <span id="PC2">PCO₂ ?? 0 mmHg</span>
+                    <span id="BE2">BE ?? 0 mM</span>
+                </div>
+                <div class = "endWindow" id="congratulations">
+                    <h1>Congratulations !</h1>
+                    <h3>Press the arrow on the top-right of the screen to move on to the next level !</h3>
+                </div>
+
+                <div class = "endWindow" id="gameOverWindow">
+                    <h1>Congratulations !</h1>
+                    <p>You got a score of <span id = "gameOverScore">0</span> points. </p>
+                    <p>That's <span id="gameOverPercent">0</span>% of the maximum score !</p>
+                    <p>Refresh the page to try again !</p>
+                </div>
+
+                <div id = "buttonsColumn">
+                    <img id="previousLevelButton" src="assets/leftArrow.png">
+                    <img id="nextLevelButton" src="assets/rightArrow.png">
+                    <img id="colorButton" src="assets/colorIcon.png">
+                </div>
+            </div>
+            <div id="arsenalContainer">
+                <div class="label smallBox" id="lab10">pH</div>
+                <div class="label smallBox" id="lab20">Acidose</div>
+                <div class="label smallBox" id="lab21">Alkalose</div>
+                <div class="label smallBox" id="lab30">Metabolisk</div>
+                <div class="label smallBox" id="lab31">Respiratorisk</div>
+                <div class="label smallBox" id="lab40">Respiratorisk Kompensation</div>
+                <div class="label smallBox" id="lab41">Renal Kompensation</div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
