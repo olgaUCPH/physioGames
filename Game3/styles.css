@@ -357,6 +357,7 @@ body {
   100%{opacity: 0;}
 }
 
+
 .rectangle:hover {
     scale: 1.05;
   }
@@ -441,6 +442,37 @@ body {
 #sliders char{
   margin-right: 0.5vw;
 }
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 2px;  
+  height: 10px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%; 
+  background: var(--deep-highlight);
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--deep-highlight);
+  cursor: pointer;
+}
+
 
 .tableOne{
   display: flex;
@@ -631,4 +663,23 @@ body {
 .hideColors{
   background-color: var(--rectangle-light);
   border-color: var(--pseudo-black);
+}
+
+.clickBox{
+  background-color: var(--deep-highlight);
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--pseudo-black);
+  z-index: 1;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -ms-user-select: none; 
+  user-select: none;
+}
+
+.clickBox:hover{
+  filter: brightness(1.2);
 }

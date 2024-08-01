@@ -191,8 +191,13 @@ function addToArsenal(element, x){
 checkButton.addEventListener('click',verifyGrid);
 
 let attempt = 0;
-let currentScore = 0;
+let currentScore = -10;
 let highScore = 0;
+
+let checkSign = [true, true, true, true, true, true, true, true];
+let checkPH = true;
+let checkBE = true;
+let checkPC = true;
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -201,6 +206,8 @@ function delay(ms) {
 async function verifyGrid() {
   attempt += 1;
   let allGood = true;
+  let signError = false;
+  let valueError = false;
   gridRectangles.forEach((rectangle,i) => {
     if (rectangle.children.length == 0){
       rectangle.style.animation = '';
@@ -214,7 +221,6 @@ async function verifyGrid() {
         if (!rectangle.firstChild.classList.contains('correctRectangle')){
           currentScore += (attempt == 1? 10: (attempt == 2? 5 : 1));
           rectangle.firstChild.classList.add('correctRectangle');
-          rectangle.firstChild.classList.remove('hideColors');
         }
       }
       else{
@@ -225,25 +231,37 @@ async function verifyGrid() {
       }
     }
   });
+  for (let i = 0; i < 8; i++){
+    if (signs[i] == verifySigns[i]){
+      if (checkSign[i]){
+        currentScore += (attempt == 1? 5: (attempt == 2? 2 : 1));
+        checkSign[i] = false;
+      }
+    }
+    else{
+      allGood = false;
+      signError = true;
+    }
+
+  }
+  if (pHrange.value == 7.4){if(checkPH){currentScore += (attempt == 1? 10: (attempt == 2? 5 : 1)); checkPH = false;}}
+  else{allGood = false;valueError = true;}
+  if (BErange.value == 0){if(checkBE){currentScore += (attempt == 1? 10: (attempt == 2? 5 : 1)); checkBE = false;}}
+  else{allGood = false;valueError = true;}
+  if (PCrange.value == 40){if(checkPC){currentScore += (attempt == 1? 10: (attempt == 2? 5 : 1)); checkPC = false;}}
+  else{allGood = false;valueError = true;}
+
   display(currentScore);
   if (currentScore > highScore){
     highScore = currentScore;
     document.getElementById('highScore').textContent = highScore;
-    localStorage.setItem('RAAS_highScore',highScore);
+    localStorage.setItem('Game3_highScore',highScore);
   }
   if (allGood){
-    attempt = 0;
-    maxLevel = Math.min(level+1, 2);
-    if (level < 2){
-      congratulations();
-      nextButton.style.animation = "shake 2s ease-in-out 0s infinite";
-      nextButton.style.scale = 1.5;
-      nextButton.addEventListener('click',nextLevel);
-      nextButton.classList.add("activeNext");
-    }
-    else{
-      gameOver();
-    }
+    gameOver();
+  }
+  else{
+    keepTrying(signError, valueError);
   }
 }
 
@@ -251,11 +269,13 @@ async function verifyGrid() {
 
 /// LEVELS ////////////////////////////////////////////////////////////////////////////////
 
-function congratulations(){
-  const cong = document.getElementById("congratulations");
-  cong.addEventListener('animationend', function () {cong.style.display = "none";})
-  void cong.offsetWidth;
-  cong.style.display = "flex";
+function keepTrying(signError, valueError){
+  const ktWindow = document.getElementById("ktWindow");
+  ktWindow.addEventListener('animationend', function () {ktWindow.style.display = "none";})
+  void ktWindow.offsetWidth;
+  document.getElementById('signError').style.display = signError ? "flex" : "none";
+  document.getElementById('valueError').style.display = valueError ? "flex" : "none";
+  ktWindow.style.display = "flex";
 }
 
 function gameOver(){
@@ -320,9 +340,9 @@ let arrow1020 = new LeaderLine(document.getElementById('rec10'),document.getElem
 let arrow1021 = new LeaderLine(document.getElementById('rec10'),document.getElementById('rec21'),{color:"var(--pseudo-black)", path: "straight", startLabel: LeaderLine.captionLabel('> 7')});
 
 let arrow2030 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec20'), {x: 0, y: 0.85*document.getElementById('rec20').clientHeight}),document.getElementById('rec30'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "left", endSocket: "top", endLabel: LeaderLine.captionLabel('BE ?? 0 mM')});
-let arrow2031 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec20'), {x: document.getElementById('rec20').clientWidth, y: 0.85*document.getElementById('rec20').clientHeight}),document.getElementById('rec31'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "right", endSocket: "top", endLabel: LeaderLine.captionLabel('PCO₂ ?? 0 mmHg')});
+let arrow2031 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec20'), {x: document.getElementById('rec20').clientWidth+parseFloat(getComputedStyle(document.getElementById('rec20')).borderLeftWidth), y: 0.85*document.getElementById('rec20').clientHeight}),document.getElementById('rec31'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "right", endSocket: "top", endLabel: LeaderLine.captionLabel('PCO₂ ?? 0 mmHg')});
 let arrow2132 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec21'), {x: 0, y: 0.85*document.getElementById('rec21').clientHeight}),document.getElementById('rec32'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "left", endSocket: "top", endLabel: LeaderLine.captionLabel('BE ?? 0 mM')});
-let arrow2133 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec21'), {x: document.getElementById('rec21').clientWidth, y: 0.85*document.getElementById('rec21').clientHeight}),document.getElementById('rec33'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "right", endSocket: "top", endLabel: LeaderLine.captionLabel('PCO₂ ?? 0 mmHg')});
+let arrow2133 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec21'), {x: document.getElementById('rec21').clientWidth+parseFloat(getComputedStyle(document.getElementById('rec21')).borderLeftWidth), y: 0.85*document.getElementById('rec21').clientHeight}),document.getElementById('rec33'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "right", endSocket: "top", endLabel: LeaderLine.captionLabel('PCO₂ ?? 0 mmHg')});
 
 new LeaderLine(document.getElementById('rec30'),document.getElementById('rec40'),{color:"var(--pseudo-black)", path: "straight"});
 new LeaderLine(document.getElementById('rec31'),document.getElementById('rec41'),{color:"var(--pseudo-black)", path: "straight"});
@@ -333,6 +353,9 @@ new LeaderLine(document.getElementById('rec33'),document.getElementById('rec43')
 var pHrange = document.getElementById('pHrange');
 var BErange = document.getElementById('BErange');
 var PCrange = document.getElementById('PCrange');
+
+var signs = ['??','??','??','??','??','??','??','??'];
+var verifySigns = ['<','>','>','<','<','>','>','<'];
 
 function updatepH(){
   let pHvalue = document.getElementById("pHvalue");
@@ -345,6 +368,8 @@ function updateBE(){
   BEvalue.textContent = BErange.value;
   arrow2030.endLabel = LeaderLine.captionLabel("BE "+signs[0]+' '+BErange.value+" mM");
   arrow2132.endLabel = LeaderLine.captionLabel("BE "+signs[2]+' '+BErange.value+" mM");
+  document.getElementById('BE1').textContent = "BE "+signs[5]+' '+PCrange.value+" mM";
+  document.getElementById('BE2').textContent = "BE "+signs[7]+' '+PCrange.value+" mM";
   clickableCaptions();
 }
 function updatePC(){
@@ -352,6 +377,8 @@ function updatePC(){
   PCvalue.textContent = PCrange.value;
   arrow2031.endLabel = LeaderLine.captionLabel("PCO₂ "+signs[1]+' '+PCrange.value+" mmHg");
   arrow2133.endLabel = LeaderLine.captionLabel("PCO₂ "+signs[3]+' '+PCrange.value+" mmHg");
+  document.getElementById('PC1').textContent = "PCO₂ "+signs[4]+' '+PCrange.value+" mmHg";
+  document.getElementById('PC2').textContent = "PCO₂ "+signs[6]+' '+PCrange.value+" mmHg";
   clickableCaptions();
 }
 pHrange.addEventListener('input', updatepH, false);
@@ -361,10 +388,14 @@ BErange.addEventListener('change', updateBE, false);
 PCrange.addEventListener('input', updatePC, false);
 PCrange.addEventListener('change', updatePC, false);
 
-var signs = ['??','??','??','??','??','??','??','??'];
+updatepH();
+updateBE();
+updatePC();
+
+
 
 function clickableCaptions(){
-  document.querySelectorAll(".clickBox").forEach(box => box.remove());
+  document.querySelectorAll(".clickBoxAux").forEach(box => box.remove());
   var captions = Array.from(document.querySelectorAll("text")).slice(2,);
   captions.forEach((cap,i) => {
     let x = cap.getBoundingClientRect().left;
@@ -372,31 +403,35 @@ function clickableCaptions(){
     let w = cap.getBoundingClientRect().width;
     let h = cap.getBoundingClientRect().height;
     let box = document.createElement("div");
-    box.style.position = "absolute";
-    box.style.left = x+'px';
-    box.style.top = y+'px';
-    box.style.width = w+'px';
-    box.style.height = h+'px';
-    box.style.opacity = 0.5;
-    box.style.cursor="pointer";
     box.classList.add('clickBox');
+    box.classList.add('clickBoxAux');
+    box.style.position = "absolute";
+    box.style.left = (x-7)+'px';
+    box.style.top = (y-0.1*h)+'px';
+    box.style.width = w*1.2+'px';
+    box.style.height = 1.2*h+'px';
+    box.style.zIndex = 0;
+    box.textContent = cap.textContent;
     document.body.appendChild(box);
-    box.addEventListener('click', changeSign(cap,i));
+    box.addEventListener('click', changeSign(cap,box,i));
+    box.style.backgroundColor = (signs[i] == "??") ? "var(--deep-highlight)" : "var(--light-highlight)";
   }) 
 }
 
-function changeSign(cap,i){
+function changeSign(cap,box,i){
   return function(){
     signs[i] = (signs[i] == '<' ? '>' : '<');
     cap.textContent = cap.textContent.replace('>','??');
     cap.textContent = cap.textContent.replace('<','>');
     cap.textContent = cap.textContent.replace('??','<');
+    box.textContent = cap.textContent;
+    box.style.backgroundColor = "var(--light-highlight)";
   }
 }
 
-document.getElementById('PC1').addEventListener("click",changeSign(document.getElementById('PC1'),4));
-document.getElementById('BE1').addEventListener("click",changeSign(document.getElementById('BE1'),5));
-document.getElementById('PC2').addEventListener("click",changeSign(document.getElementById('PC2'),6));
-document.getElementById('BE2').addEventListener("click",changeSign(document.getElementById('BE2'),7));
+document.getElementById('PC1').addEventListener("click",changeSign(document.getElementById('PC1'),document.getElementById('PC1'),4));
+document.getElementById('BE1').addEventListener("click",changeSign(document.getElementById('BE1'),document.getElementById('BE1'),5));
+document.getElementById('PC2').addEventListener("click",changeSign(document.getElementById('PC2'),document.getElementById('PC2'),6));
+document.getElementById('BE2').addEventListener("click",changeSign(document.getElementById('BE2'),document.getElementById('BE2'),7));
 
 clickableCaptions();
