@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="height=device-height, initial-scale=1.0">
+        <title>RAAS - Physiology Games</title>
+        <link rel="icon" type="image/vnd.icon" href="../assets/favicon.ico">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body  class="no-select">
+        <script src="../leaderLine/leader-line.min.js"></script>
+        <div id="leftColumn">
+            <div id="titleBox">
+                <h1 id="title">RAAS</h1>
+                <h2 id="author">Created by Carl Ferlay, under the supervision of Olga Sosnovtseva, Niels-Henrik Holstein-Rahtlou and Charlotte Mehlin Sørensen</h2>
+            </div>
+            <div id="scoreBox">
+                <h3 class="scoreText" style="top: 0px; left: 0px">Current Score:</h3>
+                <h3 class="scoreText" style="top: 0px; right: 0px"id="currentScore">0</h3>
+                <h3 class="scoreText" style="bottom: 0px; left: 0px">High Score:</h3>
+                <h3 class="scoreText" style="bottom: 0px; right: 0px" id="highScore">0</h3>
+            </div>
+            <div id="instructionsBox">
+                <p>The renin-angiotension-aldosteron system (RAAS) is a critical regulator of blood volume, electrolyte balance, and systemic vascular resistance.</p>
+                <h2 id="lvl0title" class="currentLvl">Level 0: General Overview</h2>
+                <h2 id="lvl1title" class="otherLvl">Level 1: Mechanisms of renin secretion and the role of renal sympathetic nerve activity</h2>
+                <h2 id="lvl2title" class="otherLvl">Level 2: Role of RAAS system in blood pressure and extracellular volume regulation</h2>
+            </div>
+            <div id="checkButton">Check</div>
+        </div>
+
+        <div id="rightColumn">
+            <div id="gridContainer">
+                <div id = "AMOverlay">Arrow Mode</div>
+                <div class = "box labelContainer"><div class="label box no-select red hideColors" id="lab00"><span class = "big arrow down">↓</span><p>Blood Volume</br>Blood Pressure</p></div></div>
+                <div class = "box labelContainer"><div class="label box no-select red hideColors" id="lab01"><p><span class = "arrow up">↑</span>Renin Secretion</br><span class = "arrow up">↑</span>cAMP   Ca<sup>2+</sup><span class = "arrow down">↓</span></p></div></div>
+                <div class = "box labelContainer"><div class="label box no-select red hideColors" id="lab02"><span class = "big arrow up">↑</span><p>Blood Volume</br>Blood Pressure</p></div></div>
+
+                <div class = "endWindow" id="congratulations">
+                    <h1>Congratulations !</h1>
+                    <h3>Press the arrow on the top-right of the screen to move on to the next level !</h3>
+                </div>
+
+                <div class = "endWindow" id="gameOverWindow">
+                    <h1>Congratulations !</h1>
+                    <p>You got a score of <span id = "gameOverScore" style = "margin-left: 5px; margin-right: 5px;">0</span> points. </p>
+                    <p>That's <span id="gameOverPercent" style="margin-left: 5px;">0</span>% of the maximum score !</p>
+                    <p>Refresh the page to try again !</p>
+                </div>
+
+                <div id = "buttonsColumn">
+                    <img id="previousLevelButton" src="assets/leftArrow.png">
+                    <img id="nextLevelButton" src="assets/rightArrow.png">
+                    <img id="colorButton" src="assets/colorIcon.png">
+                    <img id="newArrow" src="assets/NewArrow.png">
+                </div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
+
+
