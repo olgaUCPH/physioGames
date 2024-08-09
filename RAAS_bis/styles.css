@@ -624,6 +624,21 @@ body {
 }
 
 
-svg.leader-line {
-  pointer-events: auto!important;
+.deleteButton{
+  border-radius : 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url("assets/delete.png");
+  cursor: pointer;
+  -webkit-transition: scale 0.3s ease-in-out;
+  -moz-transition: scale 0.3s ease-in-out;
+  -o-transition: scale 0.3s ease-in-out;
+  -ms-transition: scale 0.3s ease-in-out;
+  transition: scale 0.3s ease-in-out;
+  pointer-events: all;
+}
+
+.deleteButton:hover{
+  scale: 1.1;
 }

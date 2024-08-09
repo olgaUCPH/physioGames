@@ -6,6 +6,11 @@ const body = document.body;
 
 
 let arrows = [];
+let connections = [];
+let buttons = [];
+let buttonsUpdate = [];
+
+let connectionsVerif = [["lab00", "lab01"], ["lab01", "lab02"]];
 
 let level = 0;
 let maxLevel = 0;
@@ -20,7 +25,7 @@ function isMobile() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  highScore = localStorage.getItem('RAAS_highScore') || 0;
+  highScore = localStorage.getItem('RAAS2_highScore') || 0;
   themeId = parseInt(localStorage.getItem('themeId')) || 0;
   setColor(themeId);
   document.getElementById('highScore').textContent = highScore;
@@ -73,7 +78,10 @@ function dragFunction(element){
     function moveAt(pageX, pageY) {
       element.style.left = pageX - shiftX + 'px';
       element.style.top = pageY - shiftY + 'px';
-      if (arrows.length > 0) {arrows.forEach(line => line.position());}
+      if (arrows.length > 0) {
+        arrows.forEach(line => line.position());
+        buttonsUpdate.forEach(f => f());
+      }
     }
   
     function onMouseMove(event) {
@@ -92,7 +100,7 @@ function dragFunction(element){
       document.removeEventListener('mouseup',onMouseUp);
       document.removeEventListener('touchmove', onMouseMove);
       document.removeEventListener('touchend',onMouseUp);
-      if (Date.now() - lastTrigger > 10){
+      if (Date.now() - lastTrigger > 0){
         parent.appendChild(element);
         let boolean = true;
         lastTrigger = Date.now();
@@ -120,6 +128,9 @@ function dragFunction(element){
 const newArrow = document.getElementById('newArrow');
 newArrow.addEventListener("click",startArrowMode);
 
+const trashButton = document.getElementById("trashButton");
+trashButton.addEventListener("click",clickTrash);
+
 function startArrowMode(){
   arrowMode = true;
   newArrow.removeEventListener("click", startArrowMode);
@@ -138,21 +149,34 @@ function arrowCandidateFunction(element){
       arrowStart = element;
     }
     else{
-      createArrow(arrowStart, element);
+      if (!contains(connections,[arrowStart.id, element.id]) && arrowStart != element){
+        createArrow(arrowStart, element);
+      }
       arrowStart = "none";
     }
   }
 }
 
-async function createArrow(A,B){
-  var line =  new LeaderLine(A,B,{color:"var(--pseudo-black)", hide:true, size: 5});
-  line.show("draw", {duration: 500});
-  arrows.push(line);
-  delay(500);
-  let svgArrow = document.querySelector(".leader-line:last-of-type");
-  svgArrow.addEventListener('dblclick',async function (){line.hide("draw", {duration: 500})});
+function contains(a,x){
+  for (let i = 0; i < a.length; i++){
+    if (a[i][0] == x[0] && a[i][1] == x[1]){
+      return true;
+    }
+  }
+  return false;
 }
 
+async function createArrow(A,B){
+  var line =  new LeaderLine(A,B,{color:"var(--pseudo-black)", size: 5, hide: true});
+  line.show("draw", {duration: 500});
+  arrows.push(line);
+  let connector = [A.id, B.id];
+  connections.push(connector);
+  console.log(connections);
+  let i = arrows.length - 1;
+  await delay(510);
+  buttons.push(deleteButton(line, connector));
+}
 
 
 function endArrowMode(){
@@ -160,6 +184,56 @@ function endArrowMode(){
   newArrow.removeEventListener("click", endArrowMode);
   newArrow.addEventListener("click", startArrowMode);
   document.getElementById("AMOverlay").style.display = "none";
+  arrowStart = "none";
+}
+
+function clickTrash(){
+  document.querySelectorAll('.deleteElement').forEach(element => {element.style.display = (trashButton.style.opacity == 1) ? "none" : "block";});
+  trashButton.style.opacity = (trashButton.style.opacity == 1) ? 0.5 : 1;
+  buttonsUpdate.forEach(f => f());
+}
+
+function deleteButton(line, connector){
+  console.log("Check");
+  line.middleLabel = LeaderLine.captionLabel("X");
+  let cap = document.querySelector('text:not(.deleteElement)');
+  let x = parseFloat(cap.getBoundingClientRect().left) + parseFloat(cap.getBoundingClientRect().width)/2;
+  let y = parseFloat(cap.getBoundingClientRect().top) + parseFloat(cap.getBoundingClientRect().height)/2;
+  let box = document.createElement("div");
+  box.classList.add('deleteButton');
+  box.style.position = "absolute";
+  box.style.left = (x-10)+'px';
+  box.style.top = (y-10)+'px';
+  box.style.width = 20+'px';
+  box.style.height = 20+'px';
+  document.body.appendChild(box);
+  cap.classList.add('deleteElement');
+  box.classList.add('deleteElement');
+  document.querySelectorAll('.deleteElement').forEach(element => {element.style.display = (trashButton.style.opacity == 1) ? "block" : "none";});
+  let uf = updateFunction(box, cap);
+  buttonsUpdate.push(uf);
+  box.addEventListener("click",function (){
+    line.hide("draw", {duration: 500});
+    buttons.splice(buttons.indexOf(box),1);
+    box.remove();
+    arrows.splice(arrows.indexOf(line),1);
+    connections.splice(connections.indexOf(connector),1);
+    buttonsUpdate.splice(buttonsUpdate.indexOf(uf),1);
+  });
+  box.addEventListener("hover", function (){
+    line.outlineColor = "white";
+  })
+  return box;
+  
+}
+
+function updateFunction(box, cap){
+  return function(){
+    let x = parseFloat(cap.getBoundingClientRect().left) + parseFloat(cap.getBoundingClientRect().width)/2;
+    let y = parseFloat(cap.getBoundingClientRect().top) + parseFloat(cap.getBoundingClientRect().height)/2;
+    box.style.left = (x-10)+'px';
+    box.style.top = (y-10)+'px';
+  }
 }
 
 /// ADDING TRANSPORTERS TO RECTANGLES //////////////////////////////////////////////////////////////
@@ -178,53 +252,56 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+let wrongConnections = 0;
+let missingConnections = 0;
+let correctConnections = 0;
+let totalCorrect = 0;
+
 async function verifyGrid() {
   attempt += 1;
   let allGood = true;
-  gridRectangles.forEach((rectangle,i) => {
-    if (rectangle.children.length == 0){
-      rectangle.style.animation = '';
-      void rectangle.offsetWidth;
-      rectangle.style.animation = 'smallShake 0.5s ease-in-out forwards';
-      allGood = false;
+  connections.forEach((connector,i) => {
+    if (contains(connectionsVerif, connector)){
+      if (buttons[i].classList.contains('deleteElement')){
+        correctConnections += 1;
+        arrows[i].middleLabel.remove();
+      }
+      buttons[i].classList.remove("deleteElement");
+      buttons[i].style.display = 'none';
+      arrows[i].color = "darkgreen";
     }
     else{
-      if (rectangle.firstChild.id == "lab"+level.toString()+i.toString()){
-        removeAllEventListeners(rectangle.firstChild);
-        if (!rectangle.firstChild.classList.contains('correctRectangle')){
-          currentScore += (attempt == 1? 10: (attempt == 2? 5 : 1));
-          rectangle.firstChild.classList.add('correctRectangle');
-          rectangle.firstChild.classList.remove('hideColors');
-        }
-      }
-      else{
-        rectangle.style.animation = '';
-        rectangle.style.animation = 'smallShake 0.5s ease-in-out forwards';
-        
-        allGood = false;
-      }
+      allGood = false;
+      arrows[i].color = "maroon";
+      wrongConnections += 1;
     }
-  });
+  })
+  connectionsVerif.forEach((connector,i) => {
+    if (!contains(connections, connector)){
+      missingConnections += 1;
+      allGood = false;
+    }
+  })
+  currentScore += correctConnections * (attempt == 1 ? 10 : attempt == 2 ? 5 : 1);
+  currentScore -= wrongConnections * (attempt == 1 ? 1: attempt == 2 ? 2 : 3);
+  currentScore -= missingConnections * (attempt == 1 ? 1: attempt == 2 ? 2 : 3);
+  totalCorrect += correctConnections;
   display(currentScore);
   if (currentScore > highScore){
     highScore = currentScore;
     document.getElementById('highScore').textContent = highScore;
-    localStorage.setItem('RAAS_highScore',highScore);
+    localStorage.setItem('RAAS2_highScore',highScore);
   }
   if (allGood){
     attempt = 0;
-    maxLevel = Math.min(level+1, 2);
-    if (level < 2){
-      congratulations();
-      nextButton.style.animation = "shake 2s ease-in-out 0s infinite";
-      nextButton.style.scale = 1.5;
-      nextButton.addEventListener('click',nextLevel);
-      nextButton.classList.add("activeNext");
-    }
-    else{
-      gameOver();
-    }
+    congratulations();
   }
+  else {
+    keepTrying();
+  }
+  wrongConnections = 0;
+  correctConnections = 0;
+  missingConnections = 0;
 }
 
 
@@ -236,6 +313,19 @@ function congratulations(){
   cong.addEventListener('animationend', function () {cong.style.display = "none";})
   void cong.offsetWidth;
   cong.style.display = "flex";
+}
+
+function keepTrying(){
+  const kT = document.getElementById("keepTryingWindow");
+  kT.addEventListener('animationend', function () {kT.style.display = "none";})
+  void kT.offsetWidth;
+  document.getElementById('correct').textContent = totalCorrect;
+  document.getElementById('wrong').textContent = wrongConnections;
+  document.getElementById('missing').textContent = missingConnections;
+  document.getElementById('connector').textContent = (wrongConnections * missingConnections == 0) ? " but " : " and ";
+  document.getElementById('wrongGrammar').textContent = wrongConnections == 1 ? " connection is " : " connections are ";
+  document.getElementById('missingGrammar').textContent = missingConnections == 1 ? " connection is " : " connections are ";
+  kT.style.display = "flex";
 }
 
 function gameOver(){
@@ -252,6 +342,7 @@ function gameOver(){
 
 const previousButton = document.getElementById('previousLevelButton');
 const nextButton = document.getElementById('nextLevelButton');
+
 
 function previousLevel(){
   loadLevel(level - 1);
