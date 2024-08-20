@@ -1,20 +1,20 @@
-const allRectangles = document.querySelectorAll('.rectangle');
 let allLabels = document.querySelectorAll('.label');
 const checkButton = document.getElementById('checkButton');
 const gridContainer = document.getElementById('gridContainer');
 const body = document.body;
-
+const arrowInstruction = document.getElementById("arrowInstruction");
 
 let arrows = [];
 let connections = [];
 let buttons = [];
 let buttonsUpdate = [];
 
-let connectionsVerif = [["lab00", "lab01"], ["lab01", "lab02"]];
+let connectionsVerif = [[["lab00", "lab01"], ["lab01", "lab02"]]];
+connectionsVerif.push([["lab00", "lab10"], ["lab00", "lab14"], ["lab10", "lab11"], ["lab10", "lab12"], ["lab10", "lab13"], ["lab11", "lab01"], ["lab13", "lab16"], ["lab12", "lab15"], ["lab14", "lab15"], ["lab14", "lab17"], ["lab15", "lab16"], ["lab16", "lab01"], ["lab17", "lab01"], ["lab01", "lab02"]]);
+connectionsVerif.push([["lab00", "lab01"], ["lab01", "lab20"], ["lab20", "lab21"], ["lab20", "lab22"], ["lab20", "lab23"], ["lab21", "lab23"], ["lab22", "lab24"], ["lab23", "lab24"], ["lab24", "lab02"], ["lab20", "lab25"], ["lab25", "lab26"], ["lab26", "lab02"]]);
 
 let level = 0;
 let maxLevel = 0;
-let gridRectangles = document.querySelectorAll('.rectangle.lvl'+level.toString());
 let themeId = 0;
 
 let arrowMode = false;
@@ -67,10 +67,11 @@ function dragFunction(element){
       let shiftX = userX - element.getBoundingClientRect().left;
       let shiftY = userY - element.getBoundingClientRect().top;
     const parent = element.parentNode;
+    if (parent != body){parent.style.zIndex = 0};
     document.body.appendChild(element);
     element.style.pointerEvents = "none";
     element.style.position = "fixed";
-    element.style.zIndex = 1000;
+    element.style.zIndex = 5;
     console
     moveAt(userX, userY);
     const startTime = Date.now();
@@ -79,7 +80,11 @@ function dragFunction(element){
       element.style.left = pageX - shiftX + 'px';
       element.style.top = pageY - shiftY + 'px';
       if (arrows.length > 0) {
-        arrows.forEach(line => line.position());
+        arrows.forEach(line => {
+          let A = line.start;
+          let B = line.end;
+          line.path =  d(A,B) < 1.5*A.getBoundingClientRect().width ? "straight" : "fluid";
+          line.position()});
         buttonsUpdate.forEach(f => f());
       }
     }
@@ -101,7 +106,7 @@ function dragFunction(element){
       document.removeEventListener('touchmove', onMouseMove);
       document.removeEventListener('touchend',onMouseUp);
       if (Date.now() - lastTrigger > 0){
-        parent.appendChild(element);
+        body.appendChild(element);
         let boolean = true;
         lastTrigger = Date.now();
         element.style.pointerEvents = "auto";
@@ -118,6 +123,14 @@ function dragFunction(element){
         if (element.getBoundingClientRect().bottom > gridContainer.getBoundingClientRect().bottom){
           element.style.top = element.getBoundingClientRect().top - (element.getBoundingClientRect().bottom - gridContainer.getBoundingClientRect().bottom + 50) + "px";
         }
+        if (arrows.length > 0) {
+          arrows.forEach(line => {
+            let A = line.start;
+            let B = line.end;
+            line.path =  d(A,B) < 1.5*A.getBoundingClientRect().width ? "straight" : "fluid";
+            line.position()});
+          buttonsUpdate.forEach(f => f());
+        }
       }
       }
       }
@@ -131,14 +144,24 @@ newArrow.addEventListener("click",startArrowMode);
 const trashButton = document.getElementById("trashButton");
 trashButton.addEventListener("click",clickTrash);
 
+document.getElementById("newArrowLabel").style.opacity = 0.9;
+
+document.getElementById("arrowWrap").style.animation = "highlight 2s ease-in-out 0s infinite";
+
 function startArrowMode(){
+  let label = document.getElementById("newArrowLabel");
+  if(label.style.opacity == 0.9){label.style.opacity = ""};
+  label.textContent = "Leave arrow mode";
+  document.getElementById("arrowWrap").style.animation = "";
   arrowMode = true;
   newArrow.removeEventListener("click", startArrowMode);
   newArrow.addEventListener("click",endArrowMode);
   document.getElementById("AMOverlay").style.display = "block";
+  document.getElementById("BMOverlay").style.display = "none";
 }
 
 let arrowStart = "none";
+arrowInstruction.textContent = "← Select arrow starting point →";
 
 function arrowCandidateFunction(element){
   return function () {
@@ -147,12 +170,16 @@ function arrowCandidateFunction(element){
     }
     if (arrowStart == "none"){
       arrowStart = element;
+      arrowStart.classList.add("selected");
+      arrowInstruction.textContent = "→ Select arrow end point ←";
     }
     else{
       if (!contains(connections,[arrowStart.id, element.id]) && arrowStart != element){
         createArrow(arrowStart, element);
       }
+      arrowStart.classList.remove("selected");
       arrowStart = "none";
+      arrowInstruction.textContent = "← Select arrow starting point →";
     }
   }
 }
@@ -166,8 +193,15 @@ function contains(a,x){
   return false;
 }
 
+function d(A,B){
+  return Math.sqrt(Math.pow(A.getBoundingClientRect().left - B.getBoundingClientRect().left,2) + Math.pow(A.getBoundingClientRect().top - B.getBoundingClientRect().top,2));
+}
+
+let firstTime = true;
+
 async function createArrow(A,B){
-  var line =  new LeaderLine(A,B,{color:"var(--pseudo-black)", size: 5, hide: true});
+  path =  d(A,B) < 1.5*A.getBoundingClientRect().width ? "straight" : "fluid";
+  var line =  new LeaderLine(A,B,{color:"var(--pseudo-black)", size: 5, hide: true, path: path});
   line.show("draw", {duration: 500});
   arrows.push(line);
   let connector = [A.id, B.id];
@@ -176,21 +210,31 @@ async function createArrow(A,B){
   let i = arrows.length - 1;
   await delay(510);
   buttons.push(deleteButton(line, connector));
+  if (firstTime){
+    firstTime = false;
+    document.getElementById("trashButtonLabel").style.opacity = 0.9;
+  }
 }
 
 
 function endArrowMode(){
+  document.getElementById("newArrowLabel").textContent = "Enter arrow mode";
   arrowMode = false;
   newArrow.removeEventListener("click", endArrowMode);
   newArrow.addEventListener("click", startArrowMode);
   document.getElementById("AMOverlay").style.display = "none";
+  document.getElementById("BMOverlay").style.display = "block";
+  if (arrowStart != "none") {arrowStart.classList.remove("selected");}
   arrowStart = "none";
+  arrowInstruction.textContent = "← Select arrow starting point →";
 }
 
 function clickTrash(){
   document.querySelectorAll('.deleteElement').forEach(element => {element.style.display = (trashButton.style.opacity == 1) ? "none" : "block";});
+  document.getElementById("trashButtonLabel").textContent = (trashButton.style.opacity == 1) ? "Show removal buttons" : "Hide removal buttons";
   trashButton.style.opacity = (trashButton.style.opacity == 1) ? 0.5 : 1;
   buttonsUpdate.forEach(f => f());
+  if(document.getElementById("trashButtonLabel").style.opacity == 0.9){document.getElementById("trashButtonLabel").style.opacity = ""};
 }
 
 function deleteButton(line, connector){
@@ -261,7 +305,7 @@ async function verifyGrid() {
   attempt += 1;
   let allGood = true;
   connections.forEach((connector,i) => {
-    if (contains(connectionsVerif, connector)){
+    if (contains(connectionsVerif[level], connector)){
       if (buttons[i].classList.contains('deleteElement')){
         correctConnections += 1;
         arrows[i].middleLabel.remove();
@@ -276,7 +320,7 @@ async function verifyGrid() {
       wrongConnections += 1;
     }
   })
-  connectionsVerif.forEach((connector,i) => {
+  connectionsVerif[level].forEach((connector,i) => {
     if (!contains(connections, connector)){
       missingConnections += 1;
       allGood = false;
@@ -294,7 +338,14 @@ async function verifyGrid() {
   }
   if (allGood){
     attempt = 0;
-    congratulations();
+    if (level < 2){
+      congratulations();
+      nextButton.style.animation = "shake 2s ease-in-out 0s infinite";
+      nextButton.style.scale = 1.5;
+      nextButton.addEventListener('click',nextLevel);
+      nextButton.classList.add("activeNext");
+      nextButton.style.opacity = 1;
+    }
   }
   else {
     keepTrying();
@@ -331,7 +382,7 @@ function keepTrying(){
 function gameOver(){
   const goWindow = document.getElementById("gameOverWindow");
   document.getElementById('gameOverScore').textContent = ' '+currentScore+' ';
-  document.getElementById('gameOverPercent').textContent = ' '+Math.round(currentScore/180*100)+' ';
+  document.getElementById('gameOverPercent').textContent = ' '+Math.round(currentScore/280*100)+' ';
   goWindow.addEventListener('animationend', function () {goWindow.style.display = "none";});
   goWindow.style.display = "flex";
 }
@@ -350,11 +401,29 @@ function previousLevel(){
   previousButton.classList.remove("activePrevious");
 }
 
-function nextLevel(){
+async function nextLevel(){
   nextButton.style.animation = '';
   nextButton.style.scale = '';
+  nextButton.removeEventListener("click", nextLevel);
+  nextButton.style.opacity = '';
+  document.querySelectorAll(".lvl"+level.toString()).forEach(div => div.style.display = "none");
+  document.getElementById("lvl"+level.toString()+"title").classList.remove("currentLvl");
+  document.getElementById("lvl"+level.toString()+"title").classList.add("otherLvl");
+  level++;
+  document.getElementById("lvl"+level.toString()+"title").classList.add("currentLvl");
+  document.getElementById("lvl"+level.toString()+"title").classList.remove("otherLvl");
+  buttons.forEach(button => button.remove());
+  arrows.forEach(line => line.hide());
+  await delay(500);
+  arrows.forEach(line => line.remove());
+  document.querySelectorAll(".lvl"+level.toString()).forEach(div => div.style.display = "flex");
+  arrows = [];
+  connections = [];
+  buttons = [];
+  buttonsUpdate = [];
+  attempt = 0;
   nextButton.removeEventListener('click', nextLevel);
-  loadLevel(level + 1);
+  //loadLevel(level + 1);
   nextButton.classList.remove("activeNext");
 }
 

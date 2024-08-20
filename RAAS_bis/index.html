@@ -21,20 +21,47 @@
                 <h3 class="scoreText" style="bottom: 0px; right: 0px" id="highScore">0</h3>
             </div>
             <div id="instructionsBox">
-                <p>The renin-angiotension-aldosteron system (RAAS) is a critical regulator of blood volume, electrolyte balance, and systemic vascular resistance.</p>
+                <p style="padding-bottom: 5px;">The renin-angiotension-aldosteron system (RAAS) is a critical regulator of blood volume, electrolyte balance, and systemic vascular resistance.</p>
                 <h2 id="lvl0title" class="currentLvl">Level 0: General Overview</h2>
                 <h2 id="lvl1title" class="otherLvl">Level 1: Mechanisms of renin secretion and the role of renal sympathetic nerve activity</h2>
                 <h2 id="lvl2title" class="otherLvl">Level 2: Role of RAAS system in blood pressure and extracellular volume regulation</h2>
+                <p style="padding-top: 5px;">Switch between Build and Arrow modes to construct your diagram !</p>
             </div>
             <div id="checkButton">Check</div>
         </div>
 
         <div id="rightColumn">
             <div id="gridContainer">
-                <div id = "AMOverlay">Arrow Mode</div>
-                <div class = "box labelContainer"><div class="label box no-select red hideColors" id="lab00"><span class = "big arrow down">↓</span><p>Blood Volume</br>Blood Pressure</p></div></div>
-                <div class = "box labelContainer"><div class="label box no-select red hideColors" id="lab01"><p><span class = "arrow up">↑</span>Renin Secretion</br><span class = "arrow up">↑</span>cAMP   Ca<sup>2+</sup><span class = "arrow down">↓</span></p></div></div>
-                <div class = "box labelContainer"><div class="label box no-select red hideColors" id="lab02"><span class = "big arrow up">↑</span><p>Blood Volume</br>Blood Pressure</p></div></div>
+                <div id = "AMOverlay">Arrow Mode</br><span id="arrowInstruction" style ="font-size: 0.5em;">← Select arrow starting point →</span></div>
+                <div id = "BMOverlay">Build Mode</br><span style ="font-size: 0.5em;">Click & Drag to build your diagram</span></div>
+                <div class="lvlContainer">
+                    <div class = "box labelContainer"><div class="label box no-select red hideColors" id="lab00"><span class = "big arrow down">↓</span><p>Blood Volume</br>Blood Pressure</p></div></div>
+                    <div class = "box labelContainer"><div class="label box no-select red hideColors" id="lab01"><p><span class = "arrow up">↑</span>Renin Secretion</br><span class = "arrow up">↑</span>cAMP   Ca<sup>2+</sup><span class = "arrow down">↓</span></p></div></div>
+                    <div class = "box labelContainer"><div class="label box no-select red hideColors" id="lab02"><span class = "big arrow up">↑</span><p>Blood Volume</br>Blood Pressure</p></div></div>
+                </div>
+                <div class="lvlContainer lvl1">
+                    <div class = "box labelContainer"><div class="label smallBox lvl1 blue hideColors" id="lab10"><span class = "big arrow up">↑</span><p>Renal Sympathetic</br>Nerve Activity</p></div></div>
+                    <div class = "box labelContainer"><div class="label smallBox lvl1 blue hideColors" id="lab11">ß-Adrenergetic Receptors</br> Justaglomerular Cells</p></div></div>
+                    <div class = "box labelContainer"><div class="label smallBox lvl1 blue hideColors" id="lab12">Renal Vasoconstriction </br> α1 Receptors AA</p></div></div>
+                    <div class = "box labelContainer"><div class="label smallBox lvl1 blue hideColors" id="lab13"><p>Na<sup>+</sup>Reabsorption in PT</br>α-Adrenergic Receptors</p></div></div>
+                
+                    <div class = "box labelContainer"><div class="label smallBox lvl1 green hideColors" id="lab14"><span class = "big arrow down">↓</span><p>Renal Artery</br>Pressure</p></div></div>
+                    <div class = "box labelContainer"><div class="label smallBox lvl1 green hideColors" id="lab15"><span class = "big arrow down">↓</span><p>Glomerular</br>Filtration Rate</p></div></div>
+                    <div class = "box labelContainer"><div class="label smallBox lvl1 green hideColors" id="lab16"><span class = "big arrow down">↓</span><p>NaCl load</br>Macula densa</p></div></div>
+                    <div class = "box labelContainer"><div class="label smallBox lvl1 yellow hideColors" id="lab17">Renal Baroreceptors</br> AA</p></div></div>
+                </div>
+                <div class="lvlContainer lvl2">
+                    <div class = "box labelContainer"><div class="label smallBox lvl2 gray hideColors" id="lab20"><p><span class = "arrow up">↑</span>Plasma AngII</p></div></div>
+                    <div class = "box labelContainer"><div class="label smallBox lvl2 gray hideColors" id="lab21"><p><span class = "arrow up">↑</span>Aldosterone Secretion</p></div></div>
+                    <div class = "box labelContainer"><div class="label smallBox lvl2 gray hideColors" id="lab22"><p><span class = "arrow up">↑</span>ADH Thirst Center</p></div></div>
+                    <div class = "box labelContainer"><div class="label smallBox lvl2 gray hideColors" id="lab23"><p><span class = "arrow up">↑</span>Na <sup>+</sup> Renal Reabsorption</p></div></div>
+                    <div class = "box labelContainer"><div class="label smallBox lvl2 gray hideColors" id="lab24"><p><span class = "arrow up">↑</span> ECF Volume</p></div></div>
+
+                    <div class = "box labelContainer"><div class="label smallBox lvl2 gray hideColors" id="lab25"><p>Systemic Vasoconstriction</p></div></div>
+                    <div class = "box labelContainer"><div class="label smallBox lvl2 gray hideColors" id="lab26"><p><span class = "arrow up">↑</span> Total Peripheral Resistance</p></div></div>
+
+                </div>
+                
 
                 <div class = "endWindow" id="congratulations">
                     <h1>Congratulations !</h1>
@@ -56,11 +83,23 @@
                 </div>
 
                 <div id = "buttonsColumn">
-                    <img id="previousLevelButton" src="assets/leftArrow.png">
-                    <img id="nextLevelButton" src="assets/rightArrow.png">
-                    <img id="colorButton" src="assets/colorIcon.png">
-                    <img id="newArrow" src="assets/NewArrow.png">
-                    <img id="trashButton" style="opacity: 0.5" src="assets/trash.png">
+                    <!--<img id="previousLevelButton" src="assets/leftArrow.png">-->
+                    <div class="buttonWrapper">
+                        <img id="nextLevelButton" src="assets/rightArrow.png">
+                        <span>Go to next level</span>
+                    </div>
+                    <div class="buttonWrapper" id = "arrowWrap">
+                        <img id="newArrow" src="assets/NewArrow.png">
+                        <span id="newArrowLabel">Enter arrow mode (Click & Drag disabled)</span>
+                    </div>
+                    <div class="buttonWrapper">
+                        <img id="trashButton" style="opacity: 0.5;" src="assets/trash.png">
+                        <span id="trashButtonLabel">Show removal buttons</span>
+                    </div>
+                    <div class="buttonWrapper">
+                        <img id="colorButton" src="assets/colorIcon.png">
+                        <span>Change color theme</span>
+                    </div>
                 </div>
             </div>
         </div>
