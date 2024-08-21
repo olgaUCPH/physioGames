@@ -31,9 +31,6 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById('highScore').textContent = highScore;
 });
 
-function display(text){
-  document.getElementById('currentScore').textContent = text;
-}
 
 /// CLICK AND DRAG ////////////////////////////////////////////////////////////////////////////
 
@@ -72,7 +69,6 @@ function dragFunction(element){
     element.style.pointerEvents = "none";
     element.style.position = "fixed";
     element.style.zIndex = 5;
-    console
     moveAt(userX, userY);
     const startTime = Date.now();
   
@@ -206,7 +202,6 @@ async function createArrow(A,B){
   arrows.push(line);
   let connector = [A.id, B.id];
   connections.push(connector);
-  console.log(connections);
   let i = arrows.length - 1;
   await delay(510);
   buttons.push(deleteButton(line, connector));
@@ -238,7 +233,6 @@ function clickTrash(){
 }
 
 function deleteButton(line, connector){
-  console.log("Check");
   line.middleLabel = LeaderLine.captionLabel("X");
   let cap = document.querySelector('text:not(.deleteElement)');
   let x = parseFloat(cap.getBoundingClientRect().left) + parseFloat(cap.getBoundingClientRect().width)/2;
@@ -330,7 +324,7 @@ async function verifyGrid() {
   currentScore -= wrongConnections * (attempt == 1 ? 1: attempt == 2 ? 2 : 3);
   currentScore -= missingConnections * (attempt == 1 ? 1: attempt == 2 ? 2 : 3);
   totalCorrect += correctConnections;
-  display(currentScore);
+  document.getElementById('currentScore').textContent = highScore;
   if (currentScore > highScore){
     highScore = currentScore;
     document.getElementById('highScore').textContent = highScore;
@@ -345,6 +339,13 @@ async function verifyGrid() {
       nextButton.addEventListener('click',nextLevel);
       nextButton.classList.add("activeNext");
       nextButton.style.opacity = 1;
+      document.querySelectorAll(".lvl"+level.toString()).forEach(div => div.classList.remove("hideColors"));
+      document.getElementById("lab00").classList.remove("hideColors");
+      document.getElementById("lab01").classList.remove("hideColors");
+      document.getElementById("lab02").classList.remove("hideColors");
+    }
+    else{
+      gameOver();
     }
   }
   else {
@@ -391,31 +392,23 @@ function gameOver(){
 
 /// SIDE BAR ///////////////////////////////////////////////////////////////////////////
 
-const previousButton = document.getElementById('previousLevelButton');
 const nextButton = document.getElementById('nextLevelButton');
-
-
-function previousLevel(){
-  loadLevel(level - 1);
-  previousButton.removeEventListener('click', previousLevel);
-  previousButton.classList.remove("activePrevious");
-}
 
 async function nextLevel(){
   nextButton.style.animation = '';
   nextButton.style.scale = '';
   nextButton.removeEventListener("click", nextLevel);
   nextButton.style.opacity = '';
+  buttons.forEach(button => button.remove());
+  arrows.forEach(line => line.hide());
+  await delay(500);
+  arrows.forEach(line => line.remove());
   document.querySelectorAll(".lvl"+level.toString()).forEach(div => div.style.display = "none");
   document.getElementById("lvl"+level.toString()+"title").classList.remove("currentLvl");
   document.getElementById("lvl"+level.toString()+"title").classList.add("otherLvl");
   level++;
   document.getElementById("lvl"+level.toString()+"title").classList.add("currentLvl");
   document.getElementById("lvl"+level.toString()+"title").classList.remove("otherLvl");
-  buttons.forEach(button => button.remove());
-  arrows.forEach(line => line.hide());
-  await delay(500);
-  arrows.forEach(line => line.remove());
   document.querySelectorAll(".lvl"+level.toString()).forEach(div => div.style.display = "flex");
   arrows = [];
   connections = [];

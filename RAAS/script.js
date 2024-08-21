@@ -1,4 +1,3 @@
-const allRectangles = document.querySelectorAll('.rectangle');
 const allLabels = document.querySelectorAll('.label');
 const checkButton = document.getElementById('checkButton');
 const body = document.body;
@@ -19,11 +18,8 @@ document.addEventListener("DOMContentLoaded", function() {
   themeId = parseInt(localStorage.getItem('themeId')) || 0;
   setColor(themeId);
   document.getElementById('highScore').textContent = highScore;
-});
+}); //Get local storage values
 
-function display(text){
-  document.getElementById('currentScore').textContent = text;
-}
 
 /// CLICK AND DRAG ////////////////////////////////////////////////////////////////////////////
 
@@ -212,7 +208,7 @@ async function verifyGrid() {
       }
     }
   });
-  display(currentScore);
+  document.getElementById('currentScore').textContent = currentScore;
   if (currentScore > highScore){
     highScore = currentScore;
     document.getElementById('highScore').textContent = highScore;
@@ -227,6 +223,7 @@ async function verifyGrid() {
       nextButton.style.scale = 1.5;
       nextButton.addEventListener('click',nextLevel);
       nextButton.classList.add("activeNext");
+      nextButton.style.opacity = 1;
     }
     else{
       gameOver();
@@ -252,6 +249,9 @@ function gameOver(){
   goWindow.addEventListener('animationend', function () {goWindow.style.display = "none";});
   goWindow.style.display = "flex";
 }
+
+
+/// CALCULATE POSITIONS FOR SMOOTH ANIMATIONS LATER ///////////////////////////////////////
 
 const rec00 = document.getElementById("rec00");
 const rec01 = document.getElementById("rec01");
@@ -312,6 +312,9 @@ function baseRecPosition(rec, position){
   rec.style.left = position[3];
 }
 
+/// LOAD LEVEL TRANSITIONS ///////////////////////////////////////////////////////////////////////
+
+
 function auxLoadLevel(rec){
   rec.classList.add('smoothTransitions');
   rec.classList.remove('rectangle');
@@ -356,7 +359,6 @@ async function loadLevel(lvl){
     element.addEventListener('animationend', ()=>{element.style.animation = ''});
   });
   await delay(1000);
-  allArrows[lvl] = arrowFunctions[lvl]();
   for (const line of allArrows[lvl])
     {
       line.position();
@@ -365,10 +367,12 @@ async function loadLevel(lvl){
   if (level < maxLevel){
     nextButton.addEventListener('click', nextLevel);
     nextButton.classList.add('activeNext');
+    nextButton.style.opacity = 1;
   }
   if (level > 0){
     previousButton.addEventListener('click', previousLevel);
     previousButton.classList.add('activePrevious');
+    previousButton.style.opacity = 1;
   }
   checkButton.addEventListener('click', verifyGrid);
 }
@@ -380,10 +384,14 @@ async function loadLevel(lvl){
 const previousButton = document.getElementById('previousLevelButton');
 const nextButton = document.getElementById('nextLevelButton');
 
+previousButton.style.opacity = 0.5;
+nextButton.style.opacity = 0.5;
+
 function previousLevel(){
   loadLevel(level - 1);
   previousButton.removeEventListener('click', previousLevel);
   previousButton.classList.remove("activePrevious");
+  previousButton.style.opacity = 0.5;
 }
 
 function nextLevel(){
@@ -392,6 +400,7 @@ function nextLevel(){
   nextButton.removeEventListener('click', nextLevel);
   loadLevel(level + 1);
   nextButton.classList.remove("activeNext");
+  nextButton.style.opacity = 0.5;
 }
 
 /// COLOR THEMES //////////////////////////////////////////////////////////////////////////
@@ -420,6 +429,8 @@ function setColor(id){
   root.style.setProperty('--light-highlight', lightHighlight[id]);
 }
 
+
+/// DEFINE ARROWS ////////////////////////////////////////////////////////////////////////////////
 
 function level0Arrows(){
   let arrows = [];

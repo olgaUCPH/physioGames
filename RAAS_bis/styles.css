@@ -185,24 +185,6 @@ body {
   font-weight: 300;
 }
 
-#instructionsTitle{
-    padding-top: 0.2em ;
-    margin-left: 10px;
-    margin-top: 5px;
-    margin-bottom: 0.8em;
-    font-weight: 700;
-    font-size: 3em;
-}
-
-.instructions{
-    margin: 1vh; 
-    margin-top: 0px;
-    margin-bottom: 0px;
-    padding-bottom: 0.6em; 
-    font-size: 1em;
-}
-
-
 #checkButton {
   width: 101%;
   appearance: none;
@@ -352,35 +334,6 @@ body {
   z-index: 3;
 }
 
-#gridContainer .smallBox{
-  -webkit-transition: all 1s ease-in-out;
-  -moz-transition: all 1s ease-in-out;
-  -o-transition: all 1s ease-in-out;
-  -ms-transition: all 1s ease-in-out;
-  transition: all 1s ease-in-out;
-}
-
-.smoothTransitions{
-  -webkit-transition: all 1s ease-in-out;
-  -moz-transition: all 1s ease-in-out;
-  -o-transition: all 1s ease-in-out;
-  -ms-transition: all 1s ease-in-out;
-  transition: all 1s ease-in-out;
-}
-
-@keyframes fadeIn {
-  0%{opacity: 0;}
-  100%{opacity: 1;}
-}
-
-@keyframes fadeOut {
-  0%{opacity: 1;}
-  100%{opacity: 0;}
-}
-
-
-
-
 .label{
     display: flex;
     flex-wrap: wrap;
@@ -407,11 +360,6 @@ body {
   border-style: none;
   margin: 2vw;
   z-index: 3;
-}
-
-.correctRectangle{
-  position: absolute;
-  cursor: pointer;
 }
 
 
@@ -443,6 +391,7 @@ body {
   opacity: 0;
   white-space: nowrap;
   transition: opacity 0.2s ease-in-out;
+  text-shadow: 1px 1px 2px white;
 }
 
 .buttonWrapper:hover span {
@@ -452,27 +401,6 @@ body {
 #buttonsColumn img:hover{
   scale: 1.05;
   filter: brightness(5);
-}
-
-.tableOne{
-  display: flex;
-}
-
-.tableTwo{
-  display: none;
-}
-
-@keyframes rotate {
-  0%  {rotate: 0deg;}
-  15% {rotate: 380deg;}
-  30% {rotate: 360deg;}
-  100%{rotate: 360deg;}
-}
-
-@keyframes switch{
-  0%{transform: rotate3d(-1,-1,0,0deg);}
-  15%{transform: rotate3d(-1,-1,0,180deg);}
-  30%{transform: rotate3d(-1,-1,0,0deg);}
 }
 
 @keyframes shake{
@@ -491,47 +419,16 @@ body {
   100%{rotate: 0deg;}
 }
 
-#resetButton:hover{
-  animation: rotate;
-  animation-duration: 5s;
-  animation-iteration-count: infinite;
-}
-
-#changeButton:hover{
-  transform: rotate3d(-1,-1,0,180deg);
-}
 
 #colorButton:hover{
   animation: shake;
   animation-duration: 2.5s;
   animation-iteration-count: infinite;
 }
-
-.activePrevious:hover{
-  animation: previous;
-  animation-duration: 2.5s;
-  animation-iteration-count: infinite;
-}
-
 .activeNext:hover{
   animation: next;
   animation-duration: 2.5s;
   animation-iteration-count: infinite;
-}
-
-@keyframes previous {
-  10%{
-    translate: -0.5vw;
-  }
-  20%{
-    translate: 0vw;
-  }
-  30%{
-    translate: -0.5vw;
-  }
-  40%{
-    translate: 0vw;
-  }
 }
 
 @keyframes next {
@@ -653,7 +550,7 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  background-image: url("assets/delete.png");
+  background-image: url("../assets/delete.png");
   cursor: pointer;
   -webkit-transition: scale 0.3s ease-in-out;
   -moz-transition: scale 0.3s ease-in-out;

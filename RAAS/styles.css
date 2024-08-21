@@ -64,11 +64,11 @@ body {
     -o-transition: background-color 0.5s ease-in-out;
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
-    overflow-y: hidden; /* Blocks vertical scrolling */
+    overflow-y: hidden;
     overflow-x: auto;
   }
 
-  .no-select {
+.no-select {
     user-select: none; /* For modern browsers */
     -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */
@@ -173,36 +173,18 @@ body {
 }
 
 .currentLvl{
-  font-size: 0.8em;
+  font-size: 0.7em;
   font-weight: 700;
   font-style: normal;
-  padding: 5px 20px 5px 20px;
+  padding: 2px 20px 2px 20px;
 }
 
 .otherLvl{
-  font-size: 0.7em;
-  padding: 5px 20px 5px 20px;
+  font-size: 0.65em;
+  padding: 2px 20px 2px 20px;
   font-style: italic;
   font-weight: 300;
 }
-
-#instructionsTitle{
-    padding-top: 0.2em ;
-    margin-left: 10px;
-    margin-top: 5px;
-    margin-bottom: 0.8em;
-    font-weight: 700;
-    font-size: 3em;
-}
-
-.instructions{
-    margin: 1vh; 
-    margin-top: 0px;
-    margin-bottom: 0px;
-    padding-bottom: 0.6em; 
-    font-size: 1em;
-}
-
 
 #checkButton {
   width: 101%;
@@ -296,7 +278,6 @@ body {
     width: calc(0.13*max(100vw - 17vw,100vh - 50vh));
     height: 12.6vh;
     background-color: var(--rectangle-light);
-    margin: calc(max(0.5vw,1vh));
     border-radius: calc(2*max(0.5vw,1vh));
     border-width: calc(max(0.5vw,1vh));
     border-style: solid;
@@ -314,7 +295,6 @@ body {
   width: calc(0.13*max(100vw - 17vw,100vh - 50vh));
   height: 10vh;
   background-color: var(--rectangle-light);
-  margin: calc(max(0.5vw,1vh));
   border-radius: calc(2*max(0.5vw,1vh));
   border-width: calc(max(0.5vw,1vh));
   border-style: solid;
@@ -342,16 +322,6 @@ body {
   -o-transition: all 1s ease-in-out;
   -ms-transition: all 1s ease-in-out;
   transition: all 1s ease-in-out;
-}
-
-@keyframes fadeIn {
-  0%{opacity: 0;}
-  100%{opacity: 1;}
-}
-
-@keyframes fadeOut {
-  0%{opacity: 1;}
-  100%{opacity: 0;}
 }
 
 .rectangle:hover {
@@ -395,14 +365,13 @@ body {
   position: absolute;
   right: 0.5vw;
   top: 0;
-  width: 3vw;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 #buttonsColumn img{
   cursor: pointer;
-  width: 75%;
+  width: 2.25vw;
   height: auto;
   padding: calc(max(0.5vw,1vh));
   -webkit-transition: all 0.3s ease-in-out;
@@ -412,17 +381,29 @@ body {
   transition: all 0.3s ease-in-out;
 }
 
+.buttonWrapper span {
+  position: absolute;
+  right: 100%;
+  margin-top: 1.125vw;
+  margin-left: 10px;
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.2s ease-in-out;
+  text-shadow: 1px 1px 2px white;
+  background-color: var(--pseudo-white);
+  border-radius: 5px;
+  background-color: var(--pseudo-white);
+  border-radius: 5px;
+  z-index: 1000;
+}
+
+.buttonWrapper:hover span {
+  opacity: 1;
+}
+
 #buttonsColumn img:hover{
   scale: 1.05;
   filter: brightness(5);
-}
-
-.tableOne{
-  display: flex;
-}
-
-.tableTwo{
-  display: none;
 }
 
 @keyframes rotate {
@@ -452,16 +433,6 @@ body {
   60%{rotate: 5deg;}
   80%{rotate:-5deg;}
   100%{rotate: 0deg;}
-}
-
-#resetButton:hover{
-  animation: rotate;
-  animation-duration: 5s;
-  animation-iteration-count: infinite;
-}
-
-#changeButton:hover{
-  transform: rotate3d(-1,-1,0,180deg);
 }
 
 #colorButton:hover{

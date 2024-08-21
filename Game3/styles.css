@@ -159,39 +159,6 @@ body {
     font-size: medium;
 }
 
-
-.currentLvl{
-  font-size: 0.8em;
-  font-weight: 700;
-  font-style: normal;
-  padding: 5px 20px 5px 20px;
-}
-
-.otherLvl{
-  font-size: 0.7em;
-  padding: 5px 20px 5px 20px;
-  font-style: italic;
-  font-weight: 300;
-}
-
-#instructionsTitle{
-    padding-top: 0.2em ;
-    margin-left: 10px;
-    margin-top: 5px;
-    margin-bottom: 0.8em;
-    font-weight: 700;
-    font-size: 3em;
-}
-
-.instructions{
-    margin: 1vh; 
-    margin-top: 0px;
-    margin-bottom: 0px;
-    padding-bottom: 0.6em; 
-    font-size: 1em;
-}
-
-
 #checkButton {
   width: 101%;
   appearance: none;
@@ -296,24 +263,6 @@ body {
     box-shadow: black 3px 3px 5px;
 }
 
-.box{
-    width: calc(0.13*max(100vw - 17vw,100vh - 50vh));
-    height: 12.6vh;
-    background-color: var(--rectangle-light);
-    margin: calc(max(0.5vw,1vh));
-    border-radius: calc(2*max(0.5vw,1vh));
-    border-width: calc(max(0.5vw,1vh));
-    border-style: solid;
-    border-color: var(--pseudo-black);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    font-size: max(2.1vh,1.3vw);
-    z-index: 500;
-}
-
 .smallBox{
   width: calc(0.13*max(100vw - 17vw,100vh - 50vh));
   height: 9vh;
@@ -338,25 +287,6 @@ body {
   -ms-transition: all 1s ease-in-out;
   transition: all 1s ease-in-out;
 }
-
-.smoothTransitions{
-  -webkit-transition: all 1s ease-in-out;
-  -moz-transition: all 1s ease-in-out;
-  -o-transition: all 1s ease-in-out;
-  -ms-transition: all 1s ease-in-out;
-  transition: all 1s ease-in-out;
-}
-
-@keyframes fadeIn {
-  0%{opacity: 0;}
-  100%{opacity: 1;}
-}
-
-@keyframes fadeOut {
-  0%{opacity: 1;}
-  100%{opacity: 0;}
-}
-
 
 .rectangle:hover {
     scale: 1.05;
@@ -399,14 +329,13 @@ body {
   position: absolute;
   right: 0.5vw;
   top: 0;
-  width: 3vw;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 #buttonsColumn img{
   cursor: pointer;
-  width: 75%;
+  width: 2.25vw;
   height: auto;
   padding: calc(max(0.5vw,1vh));
   -webkit-transition: all 0.3s ease-in-out;
@@ -414,6 +343,23 @@ body {
   -o-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
+}
+
+.buttonWrapper span {
+  position: absolute;
+  right: 100%;
+  margin-top: 1.125vw;
+  margin-left: 10px;
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.2s ease-in-out;
+  text-shadow: 1px 1px 2px white;
+  background-color: var(--pseudo-white);
+  border-radius: 5px;
+}
+
+.buttonWrapper:hover span {
+  opacity: 1;
 }
 
 #buttonsColumn img:hover{
@@ -473,28 +419,6 @@ body {
   cursor: pointer;
 }
 
-
-.tableOne{
-  display: flex;
-}
-
-.tableTwo{
-  display: none;
-}
-
-@keyframes rotate {
-  0%  {rotate: 0deg;}
-  15% {rotate: 380deg;}
-  30% {rotate: 360deg;}
-  100%{rotate: 360deg;}
-}
-
-@keyframes switch{
-  0%{transform: rotate3d(-1,-1,0,0deg);}
-  15%{transform: rotate3d(-1,-1,0,180deg);}
-  30%{transform: rotate3d(-1,-1,0,0deg);}
-}
-
 @keyframes shake{
   10% {rotate: 20deg;}
   20%{rotate:-20deg;}
@@ -511,80 +435,10 @@ body {
   100%{rotate: 0deg;}
 }
 
-#resetButton:hover{
-  animation: rotate;
-  animation-duration: 5s;
-  animation-iteration-count: infinite;
-}
-
-#changeButton:hover{
-  transform: rotate3d(-1,-1,0,180deg);
-}
-
 #colorButton:hover{
   animation: shake;
   animation-duration: 2.5s;
   animation-iteration-count: infinite;
-}
-
-.activePrevious:hover{
-  animation: previous;
-  animation-duration: 2.5s;
-  animation-iteration-count: infinite;
-}
-
-.activeNext:hover{
-  animation: next;
-  animation-duration: 2.5s;
-  animation-iteration-count: infinite;
-}
-
-@keyframes previous {
-  10%{
-    translate: -0.5vw;
-  }
-  20%{
-    translate: 0vw;
-  }
-  30%{
-    translate: -0.5vw;
-  }
-  40%{
-    translate: 0vw;
-  }
-}
-
-@keyframes next {
-  10%{
-    translate: +0.5vw;
-  }
-  20%{
-    translate: 0vw;
-  }
-  30%{
-    translate: +0.5vw;
-  }
-  40%{
-    translate: 0vw;
-  }
-}
-
-.big{
-  font-size: 2.5em;
-}
-
-.arrow{
-  vertical-align: 0.2em;
-  padding-bottom: 0.25em;
-}
-
-.box p{
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.box{
-  cursor: pointer;
 }
 
 .endWindow{
@@ -633,36 +487,6 @@ body {
     opacity: 0;
     translate: 0 -15vw;
   }
-}
-
-.red{
-  background-color: pink;
-  border-color: maroon;
-}
-
-.blue{
-  background-color: lightskyblue;
-  border-color: navy;
-}
-
-.green{
-  background-color: darkseagreen;
-  border-color: darkgreen;
-}
-
-.yellow{
-  background-color: moccasin;
-  border-color: darkgoldenrod;
-}
-
-.gray{
-  background-color: gainsboro;
-  border-color: darkslategray;
-}
-
-.hideColors{
-  background-color: var(--rectangle-light);
-  border-color: var(--pseudo-black);
 }
 
 .clickBox{

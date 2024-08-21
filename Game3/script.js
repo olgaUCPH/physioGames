@@ -1,4 +1,3 @@
-const allRectangles = document.querySelectorAll('.rectangle');
 const allLabels = document.querySelectorAll('.label');
 const checkButton = document.getElementById('checkButton');
 const body = document.body;
@@ -14,16 +13,16 @@ function isMobile() {
   return /android|ipad|iphone|ipod/i.test(userAgent);
 }
 
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 document.addEventListener("DOMContentLoaded", function() {
   highScore = localStorage.getItem('Game3_highScore') || 0;
   themeId = parseInt(localStorage.getItem('themeId')) || 0;
   setColor(themeId);
   document.getElementById('highScore').textContent = highScore;
 });
-
-function display(text){
-  document.getElementById('currentScore').textContent = text;
-}
 
 /// CLICK AND DRAG ////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +55,7 @@ function dragFunction(element){
 
     if (element.parentNode == arsenal){
       const newElement = element.cloneNode(true);
-      addToArsenal(newElement, 0);
+      addToArsenal(newElement);
       newElement.onmousedown = dragFunction(newElement);
       newElement.addEventListener('touchstart', dragFunction(newElement));
       newElement.ondragstart = function() {return false;};
@@ -69,7 +68,6 @@ function dragFunction(element){
     element.style.zIndex = 1000;
     document.body.classList.add('no-select');
     moveAt(userX, userY);
-    const startTime = Date.now();
   
     function moveAt(pageX, pageY) {
       element.style.left = pageX - shiftX + 'px';
@@ -158,14 +156,13 @@ function addLabel(container, element) {
 
 }
 
-function addToArsenal(element, x){
+function addToArsenal(element){
   const children = arsenal.children;
   if (children.length == 0){
     arsenal.appendChild(element);
   }
   else{
     for (let i = 0; i < children.length; i+=1) {
-      //if (x < (children[i].getBoundingClientRect().left + children[i].getBoundingClientRect().right)/2){
       if (element.id < children[i].id){
         arsenal.insertBefore(element, children[i]);
         break;
@@ -198,10 +195,6 @@ let checkSign = [true, true, true, true, true, true, true, true];
 let checkPH = true;
 let checkBE = true;
 let checkPC = true;
-
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 async function verifyGrid() {
   attempt += 1;
@@ -251,7 +244,7 @@ async function verifyGrid() {
   if (PCrange.value == 40){if(checkPC){currentScore += (attempt == 1? 10: (attempt == 2? 5 : 1)); checkPC = false;}}
   else{allGood = false;valueError = true;}
 
-  display(currentScore);
+  document.getElementById('currentScore').textContent = highScore;
   if (currentScore > highScore){
     highScore = currentScore;
     document.getElementById('highScore').textContent = highScore;
@@ -285,25 +278,6 @@ function gameOver(){
   goWindow.addEventListener('animationend', function () {goWindow.style.display = "none";});
   goWindow.style.display = "flex";
 }
-
-function offsetTop(element){
-  return element.offsetTop - parseFloat(getComputedStyle(element).borderTopWidth);
-}
-
-function offsetRight(element){
-  return element.offsetParent.offsetWidth - (element.offsetLeft + element.offsetWidth) - parseFloat(getComputedStyle(element).borderLeftWidth);
-}
-
-function offsetBottom(element){
-  return element.offsetParent.offsetHeight - (element.offsetTop + element.offsetHeight) - parseFloat(getComputedStyle(element).borderTopWidth);
-}
-
-function offsetLeft(element){
-  return element.offsetLeft - parseFloat(getComputedStyle(element).borderLeftWidth);
-}
-
-/// SIDE BAR ///////////////////////////////////////////////////////////////////////////
-
 
 
 /// COLOR THEMES //////////////////////////////////////////////////////////////////////////
@@ -350,6 +324,8 @@ new LeaderLine(document.getElementById('rec32'),document.getElementById('rec42')
 new LeaderLine(document.getElementById('rec33'),document.getElementById('rec43'),{color:"var(--pseudo-black)", path: "straight"});
 
 
+/// SLIDERS ////////////////////////////////////////////////////////////////////////////::
+
 var pHrange = document.getElementById('pHrange');
 var BErange = document.getElementById('BErange');
 var PCrange = document.getElementById('PCrange');
@@ -392,7 +368,7 @@ updatepH();
 updateBE();
 updatePC();
 
-
+/// CLICKABLE THRESHOLDS ////////////////////////////////////////////////////////////////////////////::
 
 function clickableCaptions(){
   document.querySelectorAll(".clickBoxAux").forEach(box => box.remove());

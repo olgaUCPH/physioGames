@@ -2,12 +2,14 @@ const allRectangles = document.querySelectorAll('.rectangle');
 const allTransporters = document.querySelectorAll('.transporterImage');
 const checkButton = document.getElementById('checkButton');
 
-
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+} //For asynchronous functions
 
 function isMobile() {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
   return /android|ipad|iphone|ipod/i.test(userAgent);
-}
+} //Useless for now
 
 document.addEventListener("DOMContentLoaded", function() {
   highScore1 = parseInt(localStorage.getItem('trans_highScore1')) || 0;
@@ -16,18 +18,14 @@ document.addEventListener("DOMContentLoaded", function() {
   themeId = parseInt(localStorage.getItem('themeId')) || 0;
   setColor(themeId);
   document.getElementById('highScore').textContent = highScore;
-});
-
-function display(text){
-  document.getElementById('currentScore').textContent = text;
-}
+}); //Get stored values
 
 window.onresize = resizeAllSmallShapes;
 window.onfullscreenchange = resizeAllSmallShapes;
 
 function resizeAllSmallShapes(){
   allRectangles.forEach(rectangle => realignSmallShapes(rectangle));
-}
+} //SmallShapes in rectangles need to be resized
 
 /// CLICK AND DRAG ////////////////////////////////////////////////////////////////////////////
 
@@ -41,7 +39,7 @@ allTransporters.forEach(transporter => {
     transporter.ontouchstart = dragFunction(transporter);
     transporter.addEventListener('touchstart', dragFunction(transporter));
     transporter.ondragstart = function() {return false;};
-})
+}) //Add a drag function to each transporter
 
 function dragFunction(element){
     return function(event){
@@ -102,14 +100,14 @@ function dragFunction(element){
 
 allRectangles.forEach(rectangle => {
     rectangle.addEventListener("click", function () {selectRectangle(rectangle)});
-  });
+  }); //Rectangle selection
 
 function appendableTransporter(container, elementImage){
     const smallShapes = container.querySelectorAll('.smallShape');
     let bool = container.querySelectorAll('.smallShape').length < 6 && !container.classList.contains('correctRectangle');
     smallShapes.forEach(shape => {bool = bool && shape.src != elementImage});
     return bool;
-}
+} //Can a transporter be added to a given rectangle ? (Unblocked and less than 6 transporters)
 
 function createSmallShape(container, elementImage) {
     lastCreation = Date.now();
@@ -128,9 +126,7 @@ function createSmallShape(container, elementImage) {
         removeShape(container,smallShape);
       });
     });
-
-    
-}
+} //Add a given transporter to a rectangle
   
 function removeShape(container, smallShape){
   if (!container.classList.contains('correctRectangle')){
@@ -139,7 +135,7 @@ function removeShape(container, smallShape){
       container.removeChild(smallShape);
       realignSmallShapes(container);
   }); }
-}
+} //Remove a given transporter from a rectangle
   
 function realignSmallShapes(container) {
     const smallShapes = container.querySelectorAll('.smallShape');
@@ -154,7 +150,7 @@ function realignSmallShapes(container) {
     smallShapes.forEach(shape => {
         shape.style.width = size+'px';
       });
-}
+} // Realign transporters in a rectangle
   
 let selectedRectangle = "none";
 
@@ -173,7 +169,7 @@ function clickShape(elementImage){
       }
     }
   }
-}
+} //Handle transporter clicking (when a rectangle is selected)
 
 let formerColor = "var(--rectangle-light)";
 
@@ -190,12 +186,14 @@ function selectRectangle(rectangle){
       selectedRectangle.style.backgroundColor = "var(--rectangle-deep)";
     }
   }
-}
+} //Select a rectangle
 
 /// BUTTON ////////////////////////////////////////////////////////////////////////////////////
 
 checkButton.addEventListener('click',verifyGrid);
 
+
+//Define the correct solution
 const validationGrid1 = [];
 //Na+
 validationGrid1.push(['assets/yellowTriangle.png','assets/redSquare.png', 'assets/blackPill.png']);
@@ -234,13 +232,9 @@ let attempt = 0;
 let currentScore = 0;
 let highScore = 0;
 
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 const idOrder1 = [[0],[1,5],[2,6,10],[3,7,11],[4,8,12],[9,13],[14]];
 const idOrder2 = [[0],[1,5],[2,6],[3,7],[4,8],[9]];
-let idOrder = idOrder1;
+let idOrder = idOrder1; //For nice propagation effect when checking
 
 async function verifyGrid() {
   checkButton.removeEventListener('click',verifyGrid);
@@ -276,14 +270,14 @@ async function verifyGrid() {
       gameOver();
     }
   }
-}
+} //Check if the grid is correct
 
 function checkRectangle(i){
   const smallShapes = gridRectangles[i].querySelectorAll('.smallShape');
   let userAnswer = [];
   smallShapes.forEach(shape => {userAnswer.push("assets/"+shape.src.split(/(\\|\/)/g).pop())});
   return userAnswer.sort().join(',') === validationGrid[i].sort().join(',');
-}
+} //Check if a single rectangle is correct
 
 
 /// GAME OVER ////////////////////////////////////////////////////////////////////////////////
