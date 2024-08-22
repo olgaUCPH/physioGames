@@ -1,3 +1,4 @@
+const allRectangles = document.querySelectorAll('.rectangle');
 const allLabels = document.querySelectorAll('.label');
 const checkButton = document.getElementById('checkButton');
 const body = document.body;
@@ -6,7 +7,6 @@ const arsenal = document.getElementById('arsenalContainer');
 let level = 0;
 let maxLevel = 0;
 let gridRectangles = document.querySelectorAll('.rectangle.lvl'+level.toString());
-let themeId = 0;
 
 function isMobile() {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -15,11 +15,12 @@ function isMobile() {
 
 document.addEventListener("DOMContentLoaded", function() {
   highScore = localStorage.getItem('RAAS_highScore') || 0;
-  themeId = parseInt(localStorage.getItem('themeId')) || 0;
-  setColor(themeId);
   document.getElementById('highScore').textContent = highScore;
-}); //Get local storage values
+});
 
+function display(text){
+  document.getElementById('currentScore').textContent = text;
+}
 
 /// CLICK AND DRAG ////////////////////////////////////////////////////////////////////////////
 
@@ -208,7 +209,7 @@ async function verifyGrid() {
       }
     }
   });
-  document.getElementById('currentScore').textContent = currentScore;
+  display(currentScore);
   if (currentScore > highScore){
     highScore = currentScore;
     document.getElementById('highScore').textContent = highScore;
@@ -249,9 +250,6 @@ function gameOver(){
   goWindow.addEventListener('animationend', function () {goWindow.style.display = "none";});
   goWindow.style.display = "flex";
 }
-
-
-/// CALCULATE POSITIONS FOR SMOOTH ANIMATIONS LATER ///////////////////////////////////////
 
 const rec00 = document.getElementById("rec00");
 const rec01 = document.getElementById("rec01");
@@ -312,9 +310,6 @@ function baseRecPosition(rec, position){
   rec.style.left = position[3];
 }
 
-/// LOAD LEVEL TRANSITIONS ///////////////////////////////////////////////////////////////////////
-
-
 function auxLoadLevel(rec){
   rec.classList.add('smoothTransitions');
   rec.classList.remove('rectangle');
@@ -359,6 +354,7 @@ async function loadLevel(lvl){
     element.addEventListener('animationend', ()=>{element.style.animation = ''});
   });
   await delay(1000);
+  allArrows[lvl] = arrowFunctions[lvl]();
   for (const line of allArrows[lvl])
     {
       line.position();
@@ -383,7 +379,6 @@ async function loadLevel(lvl){
 
 const previousButton = document.getElementById('previousLevelButton');
 const nextButton = document.getElementById('nextLevelButton');
-
 previousButton.style.opacity = 0.5;
 nextButton.style.opacity = 0.5;
 
@@ -403,34 +398,8 @@ function nextLevel(){
   nextButton.style.opacity = 0.5;
 }
 
-/// COLOR THEMES //////////////////////////////////////////////////////////////////////////
-let background     = ["#141e46","#D6E5FA","#1E0342","#92817A","#343A40","#5F8670","#4D2DB7","#3A4D39","#A3D8FF","#DCD6F7"];
-let pseudoBlack    = ["#141e46","#141e46","#1E0342","#505050","#343A40","#202020","#0E21A0","#3A4D39","#7952B3","#424874"];
-let deepHighlight  = ["#C70039","#D77FA1","#0E46A3","#8DB596","#7952B3","#820300","#9D44C0","#4F6F52","#FF76CE","#424874"];
-let lightHighlight = ["#FF7979","#E6B2C6","#9AC8CD","#BEDBBB","#FFC107","#B80000","#EC53B0","#739072","#94FFD8","#A6B1E1"];
-let pseudoWhite    = ["#FFF5E0","#FEF6FB","#E1F7F5","#FFF5E0","#E1E8EB","#FF9800","#FFF5E0","#ECE3CE","#FDFFC2","#F4EEFF"];
 
 
-
-document.getElementById('colorButton').onclick = colorChange;
-
-const root = document.documentElement;
-function colorChange(){
-  themeId = (themeId+1)%background.length;
-  localStorage.setItem('themeId',themeId);
-  setColor(themeId);
-}
-
-function setColor(id){
-  root.style.setProperty('--background', background[id]);
-  root.style.setProperty('--pseudo-black', pseudoBlack[id]);
-  root.style.setProperty('--pseudo-white', pseudoWhite[id]);
-  root.style.setProperty('--deep-highlight', deepHighlight[id]);
-  root.style.setProperty('--light-highlight', lightHighlight[id]);
-}
-
-
-/// DEFINE ARROWS ////////////////////////////////////////////////////////////////////////////////
 
 function level0Arrows(){
   let arrows = [];

@@ -1,0 +1,364 @@
+:root {
+    --rectangle-light: #e1f7f5;
+    --rectangle-deep: #9ac8cd;
+
+    --background: #141e46;
+    --pseudo-black: #141e46; 
+    --deep-highlight: #C70039;
+    --light-highlight: #FF7979;
+    --pseudo-white: #FFF5E0;
+    
+  }
+
+  @font-face {
+    font-family: 'Avenir';
+    src: url("fonts/AvenirNextLTPro-UltLtCn.otf");
+    font-weight: 100;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Avenir';
+    src: url("fonts/AvenirNextLTPro-MediumCnIt.otf");
+    font-weight: 500;
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: 'Avenir';
+    src: url("fonts/AvenirNextLTPro-MediumCn.otf");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Avenir';
+    src: url("fonts/AvenirNextLTPro-Cn.otf");
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Avenir';
+    src: url("fonts/AvenirNextLTPro-DemiCn.otf");
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Avenir';
+    src: url("fonts/AvenirNextLTPro-HeavyCn.otf");
+    font-weight: 900;
+    font-style: normal;
+  }
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    font-family: 'Avenir';
+    background-color: var(--background);
+    -webkit-transition: background-color 0.5s ease-in-out;
+    -moz-transition: background-color 0.5s ease-in-out;
+    -o-transition: background-color 0.5s ease-in-out;
+    -ms-transition: background-color 0.5s ease-in-out;
+    transition: background-color 0.5s ease-in-out;
+    overflow-y: hidden; /* Blocks vertical scrolling */
+    overflow-x: auto;
+    flex-wrap: wrap;
+    font-size: 0.75em;
+  }
+
+.no-select {
+    user-select: none; /* For modern browsers */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE 10+ */
+}
+
+#titleBox{
+    margin: 10px;
+    background-color: var(--deep-highlight);
+    color: var(--pseudo-white);
+    height: 150px;
+    width: 98.5%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    text-align: center;
+    -webkit-transition: background-color 0.5s ease-in-out;
+    -moz-transition: background-color 0.5s ease-in-out;
+    -o-transition: background-color 0.5s ease-in-out;
+    -ms-transition: background-color 0.5s ease-in-out;
+    transition: background-color 0.5s ease-in-out;
+    box-shadow: black 3px 3px 5px;
+    position: relative;
+    margin-bottom: calc(min(1vh,1vw));
+}
+
+#title{
+    font-size: 5em;
+    font-weight: 700;
+    margin: 5px;
+    padding-top: 20px;
+    margin-bottom: 5px;
+    text-shadow: 1px 1px 2px black;
+}
+
+#author{
+    font-size: 2em;
+    font-weight: 100;
+    margin: 5px;
+}
+
+.gameWrapper{
+    background-color: var(--pseudo-white);
+    color: var(--pseudo-black);
+    height: 120px;
+    width: 49%;
+    margin: 5px;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    box-shadow: black 3px 3px 5px;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.gameWrapper:hover{
+    transform: scale(1.01);
+    background-color: var(--deep-highlight);
+    color: var(--pseudo-white);
+}
+
+.gameWrapper:hover .gameScore{
+    background-color: var(--deep-highlight);
+}
+
+.gameWrapper img{
+    width: 30%;
+    height: auto;
+    margin: 5px;
+    -webkit-filter: drop-shadow(3px 3px 2px black);
+    filter: drop-shadow(3px 3px 2px black);
+}
+
+.gameText{
+    width: 35%;
+    text-align: justify;
+}
+
+.gameTitle{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.gameDescription{
+    margin-top: 5px;
+}
+
+.gameScore{
+    height: 100%;
+    position: absolute;
+    right: 0;
+    width: 30%;
+    background-color: var(--light-highlight);
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    -webkit-transition: background-color 0.2s ease-in-out;
+    -moz-transition: background-color 0.2s ease-in-out;
+    -o-transition: background-color 0.2s ease-in-out;
+    -ms-transition: background-color 0.2s ease-in-out;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.BP{
+    font-size: 2em;
+    margin-top: 5px;
+}
+
+.gamePercentage{
+    font-size: 7em;
+    margin-top: -15px;
+}
+
+.moreGamesBig{
+    width: 99%;
+    background-color: var(--pseudo-white);
+    color: var(--pseudo-black);
+    height: 75px;
+    margin: 10px;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    box-shadow: black 3px 3px 5px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 3em;
+    align-items: center;
+    font-style: italic;
+}
+
+.moreGamesSmall{
+    width: 48.5%;
+    background-color: var(--pseudo-white);
+    color: var(--pseudo-black);
+    height: 120px;
+    margin: 10px;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    box-shadow: black 3px 3px 5px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 3em;
+    align-items: center;
+    font-style: italic;
+}
+
+#colorBar{
+    width: 98.5%;
+    height: 37.5px;
+    font-size: 1.5em;
+    margin-bottom: 5px;
+    background-color: var(--light-highlight);
+    color: var(--pseudo-black);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    box-shadow: black 3px 3px 5px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+
+#colorBar span{
+    margin: auto;
+    cursor: pointer;
+}
+
+#colorBar span:hover{
+    font-style: italic;
+}
+
+#resetScores{
+    height: 30px;
+    width: auto;
+    position: absolute;
+    right: 30px;
+    cursor: pointer;
+}
+
+#resetScores:hover{
+    animation: rotate;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes rotate {
+    0%  {rotate: 0deg;}
+    15% {rotate: 380deg;}
+    30% {rotate: 360deg;}
+    100%{rotate: 360deg;}
+  }
+
+  #resetWindow {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -40%);
+    width: auto;
+    height: auto;
+    overflow: auto;
+    background-color: var(--deep-highlight);
+    color: var(--pseudo-white);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;
+    border-width: 10px;
+    border-color: var(--pseudo-black);
+    border-style: solid;
+    box-shadow: 5px 5px 10px black;
+    transform-origin: top left;
+    font-size: 1.5em;
+    padding: 20px;
+  }
+
+#resetWindow button{
+  margin: 10px;
+  background-color: #111827;
+  border: 1px solid transparent;
+  border-radius: .75rem;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  padding: .75rem 1.2rem;
+  text-align: center;
+  transition-duration: .2s;
+  transition-property: background-color,border-color,color,fill,stroke;
+  transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
+  width: 200px;
+  font-family: Avenir;
+  font-weight: 300;
+  font-size: 1em;
+}
+
+#resetWindow button:hover {
+  background-color: #374151;
+}
+
+#resetWindow button:focus {
+  box-shadow: none;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+
+@keyframes fadeIn {
+    0%{
+      opacity: 0;
+      scale:0;
+    }
+    100%{
+      opacity: 1;
+      scale:1;
+    }
+  }
+
+  
+  @keyframes fadeOut {
+    0%{
+      opacity: 1;
+      scale: 1;
+    }
+    100%{
+      opacity: 0;
+      scale: 0;
+    }
+  }

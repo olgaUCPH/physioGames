@@ -101,6 +101,7 @@ body {
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
     box-shadow: black 3px 3px 5px;
+    cursor: pointer;
 }
 
 #title{
@@ -276,6 +277,7 @@ body {
 
 .box{
     width: calc(0.13*max(100vw - 17vw,100vh - 50vh));
+    margin: calc(min(1vh,1vw));
     height: 12.6vh;
     background-color: var(--rectangle-light);
     border-radius: calc(2*max(0.5vw,1vh));
@@ -293,6 +295,7 @@ body {
 
 .smallBox{
   width: calc(0.13*max(100vw - 17vw,100vh - 50vh));
+  margin: calc(min(1vh,1vw));
   height: 10vh;
   background-color: var(--rectangle-light);
   border-radius: calc(2*max(0.5vw,1vh));
@@ -307,6 +310,17 @@ body {
   font-size: max(1.5vh,0.9vw);
   z-index: 500;
 }
+
+@keyframes fadeIn {
+  0%{opacity: 0;}
+  100%{opacity: 1;}
+}
+
+@keyframes fadeOut {
+  0%{opacity: 1;}
+  100%{opacity: 0;}
+}
+
 
 #gridContainer .smallBox{
   -webkit-transition: all 1s ease-in-out;

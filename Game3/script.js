@@ -4,7 +4,6 @@ const body = document.body;
 const arsenal = document.getElementById('arsenalContainer');
 
 let gridRectangles = document.querySelectorAll('.rectangle');
-let themeId = 0;
 
 let solutions = ['lab00', 'lab20', 'lab10', 'lab21', 'lab30', 'lab31', 'lab30', 'lab31', 'lab40', 'lab41', 'lab40', 'lab41']
 
@@ -19,8 +18,6 @@ function delay(ms) {
 
 document.addEventListener("DOMContentLoaded", function() {
   highScore = localStorage.getItem('Game3_highScore') || 0;
-  themeId = parseInt(localStorage.getItem('themeId')) || 0;
-  setColor(themeId);
   document.getElementById('highScore').textContent = highScore;
 });
 
@@ -279,33 +276,6 @@ function gameOver(){
   goWindow.style.display = "flex";
 }
 
-
-/// COLOR THEMES //////////////////////////////////////////////////////////////////////////
-let background     = ["#141e46","#D6E5FA","#1E0342","#92817A","#343A40","#5F8670","#4D2DB7","#3A4D39","#A3D8FF","#DCD6F7"];
-let pseudoBlack    = ["#141e46","#141e46","#1E0342","#505050","#343A40","#202020","#0E21A0","#3A4D39","#7952B3","#424874"];
-let deepHighlight  = ["#C70039","#D77FA1","#0E46A3","#8DB596","#7952B3","#820300","#9D44C0","#4F6F52","#FF76CE","#424874"];
-let lightHighlight = ["#FF7979","#E6B2C6","#9AC8CD","#BEDBBB","#FFC107","#B80000","#EC53B0","#739072","#94FFD8","#A6B1E1"];
-let pseudoWhite    = ["#FFF5E0","#FEF6FB","#E1F7F5","#FFF5E0","#E1E8EB","#FF9800","#FFF5E0","#ECE3CE","#FDFFC2","#F4EEFF"];
-
-
-
-document.getElementById('colorButton').onclick = colorChange;
-
-const root = document.documentElement;
-function colorChange(){
-  themeId = (themeId+1)%background.length;
-  localStorage.setItem('themeId',themeId);
-  setColor(themeId);
-}
-
-function setColor(id){
-  root.style.setProperty('--background', background[id]);
-  root.style.setProperty('--pseudo-black', pseudoBlack[id]);
-  root.style.setProperty('--pseudo-white', pseudoWhite[id]);
-  root.style.setProperty('--deep-highlight', deepHighlight[id]);
-  root.style.setProperty('--light-highlight', lightHighlight[id]);
-}
-
 /// ARROWS ////////////////////////////////////////////////////////////////////////////::
 
 new LeaderLine(document.getElementById('rec00'),document.getElementById('rec10'),{color:"var(--pseudo-black)", path: "straight"});
@@ -402,6 +372,7 @@ function changeSign(cap,box,i){
     cap.textContent = cap.textContent.replace('??','<');
     box.textContent = cap.textContent;
     box.style.backgroundColor = "var(--light-highlight)";
+    box.style.color = "var(--pseudo-black)";
   }
 }
 

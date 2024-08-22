@@ -1,3 +1,5 @@
+document.getElementById('colorButton').onclick = colorChange;
+
 let allLabels = document.querySelectorAll('.label');
 const checkButton = document.getElementById('checkButton');
 const gridContainer = document.getElementById('gridContainer');
@@ -15,7 +17,6 @@ connectionsVerif.push([["lab00", "lab01"], ["lab01", "lab20"], ["lab20", "lab21"
 
 let level = 0;
 let maxLevel = 0;
-let themeId = 0;
 
 let arrowMode = false;
 
@@ -26,8 +27,6 @@ function isMobile() {
 
 document.addEventListener("DOMContentLoaded", function() {
   highScore = localStorage.getItem('RAAS2_highScore') || 0;
-  themeId = parseInt(localStorage.getItem('themeId')) || 0;
-  setColor(themeId);
   document.getElementById('highScore').textContent = highScore;
 });
 
@@ -324,7 +323,7 @@ async function verifyGrid() {
   currentScore -= wrongConnections * (attempt == 1 ? 1: attempt == 2 ? 2 : 3);
   currentScore -= missingConnections * (attempt == 1 ? 1: attempt == 2 ? 2 : 3);
   totalCorrect += correctConnections;
-  document.getElementById('currentScore').textContent = highScore;
+  document.getElementById('currentScore').textContent = currentScore;
   if (currentScore > highScore){
     highScore = currentScore;
     document.getElementById('highScore').textContent = highScore;
@@ -401,7 +400,7 @@ async function nextLevel(){
   nextButton.style.opacity = '';
   buttons.forEach(button => button.remove());
   arrows.forEach(line => line.hide());
-  await delay(500);
+  await delay(750);
   arrows.forEach(line => line.remove());
   document.querySelectorAll(".lvl"+level.toString()).forEach(div => div.style.display = "none");
   document.getElementById("lvl"+level.toString()+"title").classList.remove("currentLvl");
@@ -418,31 +417,5 @@ async function nextLevel(){
   nextButton.removeEventListener('click', nextLevel);
   //loadLevel(level + 1);
   nextButton.classList.remove("activeNext");
-}
-
-/// COLOR THEMES //////////////////////////////////////////////////////////////////////////
-let background     = ["#141e46","#D6E5FA","#1E0342","#92817A","#343A40","#5F8670","#4D2DB7","#3A4D39","#A3D8FF","#DCD6F7"];
-let pseudoBlack    = ["#141e46","#141e46","#1E0342","#505050","#343A40","#202020","#0E21A0","#3A4D39","#7952B3","#424874"];
-let deepHighlight  = ["#C70039","#D77FA1","#0E46A3","#8DB596","#7952B3","#820300","#9D44C0","#4F6F52","#FF76CE","#424874"];
-let lightHighlight = ["#FF7979","#E6B2C6","#9AC8CD","#BEDBBB","#FFC107","#B80000","#EC53B0","#739072","#94FFD8","#A6B1E1"];
-let pseudoWhite    = ["#FFF5E0","#FEF6FB","#E1F7F5","#FFF5E0","#E1E8EB","#FF9800","#FFF5E0","#ECE3CE","#FDFFC2","#F4EEFF"];
-
-
-
-document.getElementById('colorButton').onclick = colorChange;
-
-const root = document.documentElement;
-function colorChange(){
-  themeId = (themeId+1)%background.length;
-  localStorage.setItem('themeId',themeId);
-  setColor(themeId);
-}
-
-function setColor(id){
-  root.style.setProperty('--background', background[id]);
-  root.style.setProperty('--pseudo-black', pseudoBlack[id]);
-  root.style.setProperty('--pseudo-white', pseudoWhite[id]);
-  root.style.setProperty('--deep-highlight', deepHighlight[id]);
-  root.style.setProperty('--light-highlight', lightHighlight[id]);
 }
 

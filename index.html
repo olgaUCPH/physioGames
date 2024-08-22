@@ -8,8 +8,110 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <script type="text/javascript">
-            window.location.href = "transporters/index.html";
+        <div id="titleBox">
+            <h1 id="title">Physiology Games</h1>
+            <h2 id="author">Created by Carl Ferlay, under the supervision of Olga Sosnovtseva, Niels-Henrik Holstein-Rahtlou and Charlotte Mehlin Sørensen</h2>
+        </div>
+
+        <div id="colorBar">
+            <div id="colorButton" style="font-style: italic; margin-left: 50px;">Color Theme:</div>
+            <span onclick="setColor(0)" onmouseover="tempColor(0)" onmouseout="restoreColor()">Health</span>
+            <span onclick="setColor(1)" onmouseover="tempColor(1)" onmouseout="restoreColor()">Cotton Candy</span>
+            <span onclick="setColor(2)" onmouseover="tempColor(2)" onmouseout="restoreColor()">Ocean</span>
+            <span onclick="setColor(3)" onmouseover="tempColor(3)" onmouseout="restoreColor()">Earth</span>
+            <span onclick="setColor(4)" onmouseover="tempColor(4)" onmouseout="restoreColor()">Cyberpunk</span>
+            <span onclick="setColor(5)" onmouseover="tempColor(5)" onmouseout="restoreColor()">Retro</span>
+            <span onclick="setColor(6)" onmouseover="tempColor(6)" onmouseout="restoreColor()">Beach</span>
+            <span onclick="setColor(7)" onmouseover="tempColor(7)" onmouseout="restoreColor()">Calligraphy</span>
+            <span onclick="setColor(8)" onmouseover="tempColor(8)" onmouseout="restoreColor()">Noir</span>
+            <span onclick="setColor(9)" onmouseover="tempColor(9)" onmouseout="restoreColor()">Neon</span>
+            <span onclick="setColor(10)" onmouseover="tempColor(10)" onmouseout="restoreColor()">Business</span>
+            <span onclick="setColor(11)" onmouseover="tempColor(11)" onmouseout="restoreColor()">Coffee</span>
+            <span onclick="setColor(12)" onmouseover="tempColor(12)" onmouseout="restoreColor()" style="margin-right: 200px;">Lavender</span>
+            <img src="assets/resetIcon.png" id="resetScores" onclick="document.getElementById('resetWindow').style.animation = 'fadeIn 0.5s ease-in-out forwards'; document.getElementById('resetWindow').style.display = 'block';">
+        </div>
+
+        <div class="gameWrapper" onclick="location.href='transporters/index.html'">
+            <img src="assets/transporters_icon.png">
+            <div class="gameText">
+                <h1 class="gameTitle">Transporters</h1>
+                <p class="gameDescription">Match the correct transporters to each ion/channel pairing. Switch between two tables to deal with every ion!</p>
+            </div>
+            <div class="gameScore">
+                <span class="BP">Best Performance</span>
+                <span class="gamePercentage" id="transportersPercent">0%</span>
+            </div>
+        </div>
+
+        <div class="gameWrapper" onclick="location.href='RAAS/index.html'">
+            <img src="assets/RAAS_icon.png">
+            <div class="gameText">
+                <h1 class="gameTitle">Renin-Angiotensin-Aldosterone System</h1>
+                <p class="gameDescription">Fill the diagram with the correct elements of the RAAS. Move through the levels to get a full overview of the regulatory system!</p>
+            </div>
+            <div class="gameScore">
+                <span class="BP">Best Performance</span>
+                <span class="gamePercentage" id="raasPercent">0%</span>
+            </div>
+        </div>
+
+        <div class="gameWrapper" onclick="location.href='Game3/index.html'">
+            <img src="assets/game3_icon.png">
+            <div class="gameText">
+                <h1 class="gameTitle">Untitled Game 3</h1>
+                <p class="gameDescription">Set the correct thresholds and fill the diagram to form the correct consequence tree!</p>
+            </div>
+            <div class="gameScore">
+                <span class="BP">Best Performance</span>
+                <span class="gamePercentage" id="game3Percent">0%</span>
+            </div>
+        </div>
+
+        <div class="gameWrapper" onclick="location.href='RAAS_bis/index.html'">
+            <img src="assets/RAAS2_icon.png">
+            <div class="gameText">
+                <h1 class="gameTitle">Renin-Angiotensin-Aldosterone System (V2)</h1>
+                <p class="gameDescription">Build your own diagram of the RAAS by dragging elements and drawing arrows !</p>
+            </div>
+            <div class="gameScore">
+                <span class="BP">Best Performance</span>
+                <span class="gamePercentage" id="raas2Percent">0%</span>
+            </div>
+        </div>
+        
+        <div id="moreGames" class="moreGamesBig">
+            More games to come...
+        </div>
+
+        <div id = "resetWindow">
+            <h1>Do you want to reset your scores to 0 ?</h1>
+            <button id = "Yes" onclick="resetScores()">Yes</button>
+            <button id = "No" onclick="document.getElementById('resetWindow').style.animation = 'fadeOut 0.5s ease-in-out forwards';">No</button>
+        </div>
+
+        <script src="color_script.js"></script>
+        <script>
+            document.getElementById("moreGames").classList.add(document.querySelectorAll(".gameWrapper").length % 2 == 0 ? "moreGamesBig" : "moreGamesSmall");
+            document.getElementById("colorButton").removeEventListener("click", colorChange);
+            document.addEventListener("DOMContentLoaded", function() {
+                let transP = parseInt(localStorage.getItem('trans_highScore1'))+parseInt(localStorage.getItem('trans_highScore2')) || 0;
+                document.getElementById("transportersPercent").textContent = Math.round(transP/250*100)+"%";
+                let RAAS1P = parseInt(localStorage.getItem('RAAS_highScore'))|| 0;
+                document.getElementById("raasPercent").textContent = Math.round(RAAS1P/180*100)+"%";
+                let RAAS2P = parseInt(localStorage.getItem('RAAS2_highScore'))|| 0;
+                document.getElementById("raas2Percent").textContent = Math.round(RAAS2P/280*100)+"%";
+                let Game3P = parseInt(localStorage.getItem('Game3_highScore'))|| 0;
+                document.getElementById("game3Percent").textContent = Math.round(Game3P/180*100)+"%";
+            });
+
+            function resetScores(){
+                localStorage.setItem("trans_highScore1", 0);
+                localStorage.setItem("trans_highScore2", 0);
+                localStorage.setItem("RAAS_highScore", 0);
+                localStorage.setItem("RAAS2_highScore", 0);
+                localStorage.setItem("Game3_highScore", 0);
+                location.reload();
+            }
         </script>
-        <p>If redirect does not work, click on this link.</p>
+
     </body>
