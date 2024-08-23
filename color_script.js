@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
     setColor(themeId);
   });
 
-document.getElementById('colorButton').onclick = colorChange;
+document.getElementById('colorButton').addEventListener('click', colorChange);
 
   /// COLOR THEMES //////////////////////////////////////////////////////////////////////////
 let background     = ["#141e46","#D6E5FA","#1E0342","#92817A","#343A40","#5F8670","#A0DEFF","#FAF6F0","#111111","#A3D8FF","#666666","#322C2B","#DCD6F7"];
