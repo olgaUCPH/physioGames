@@ -417,5 +417,6 @@ async function nextLevel(){
   nextButton.removeEventListener('click', nextLevel);
   //loadLevel(level + 1);
   nextButton.classList.remove("activeNext");
+  endArrowMode();
 }
 
