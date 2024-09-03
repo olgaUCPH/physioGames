@@ -302,7 +302,7 @@ body {
 }
 
 .box{
-    width: calc(0.13*max(100vw - 17vw,100vh - 50vh));
+    width: calc(0.135*max(100vw - 17vw,100vh - 50vh));
     height: 12.6vh;
     background-color: var(--rectangle-light);
     border-radius: calc(2*max(0.5vw,1vh));
@@ -319,7 +319,7 @@ body {
 }
 
 .smallBox{
-  width: calc(0.13*max(100vw - 17vw,100vh - 50vh));
+  width: calc(0.135*max(100vw - 17vw,100vh - 50vh));
   height: 10vh;
   background-color: var(--rectangle-light);
   border-radius: calc(2*max(0.5vw,1vh));

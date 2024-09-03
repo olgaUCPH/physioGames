@@ -374,7 +374,7 @@ body {
   left: 1vw;
   display: flex;
   flex-wrap: wrap;
-  width: 25vw;
+  width: 27vw;
 }
 
 #sliders input{
@@ -383,7 +383,7 @@ body {
 }
 
 #sliders span{
-  width: 8vw;
+  width: 10vw;
 }
 
 #sliders char{

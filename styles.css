@@ -67,7 +67,7 @@ body {
     overflow-y: hidden; /* Blocks vertical scrolling */
     overflow-x: auto;
     flex-wrap: wrap;
-    font-size: 0.75em;
+    font-size: max(1.35vh,0.8vw);
   }
 
 .no-select {

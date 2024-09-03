@@ -283,10 +283,10 @@ new LeaderLine(document.getElementById('rec00'),document.getElementById('rec10')
 let arrow1020 = new LeaderLine(document.getElementById('rec10'),document.getElementById('rec20'),{color:"var(--pseudo-black)", path: "straight", startLabel: LeaderLine.captionLabel('< 7')});
 let arrow1021 = new LeaderLine(document.getElementById('rec10'),document.getElementById('rec21'),{color:"var(--pseudo-black)", path: "straight", startLabel: LeaderLine.captionLabel('> 7')});
 
-let arrow2030 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec20'), {x: 0, y: 0.85*document.getElementById('rec20').clientHeight}),document.getElementById('rec30'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "left", endSocket: "top", endLabel: LeaderLine.captionLabel('BE ?? 0 mM')});
-let arrow2031 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec20'), {x: document.getElementById('rec20').clientWidth+parseFloat(getComputedStyle(document.getElementById('rec20')).borderLeftWidth), y: 0.85*document.getElementById('rec20').clientHeight}),document.getElementById('rec31'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "right", endSocket: "top", endLabel: LeaderLine.captionLabel('PCO₂ ?? 0 mmHg')});
-let arrow2132 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec21'), {x: 0, y: 0.85*document.getElementById('rec21').clientHeight}),document.getElementById('rec32'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "left", endSocket: "top", endLabel: LeaderLine.captionLabel('BE ?? 0 mM')});
-let arrow2133 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec21'), {x: document.getElementById('rec21').clientWidth+parseFloat(getComputedStyle(document.getElementById('rec21')).borderLeftWidth), y: 0.85*document.getElementById('rec21').clientHeight}),document.getElementById('rec33'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "right", endSocket: "top", endLabel: LeaderLine.captionLabel('PCO₂ ?? 0 mmHg')});
+let arrow2030 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec20'), {x: 0, y: 0.85*document.getElementById('rec20').clientHeight}),document.getElementById('rec30'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "left", endSocket: "top", middleLabel: LeaderLine.captionLabel('BE ?? 0 mM',{lineOffset: 30})});
+let arrow2031 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec20'), {x: document.getElementById('rec20').clientWidth+parseFloat(getComputedStyle(document.getElementById('rec20')).borderLeftWidth), y: 0.85*document.getElementById('rec20').clientHeight}),document.getElementById('rec31'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "right", endSocket: "top", middleLabel: LeaderLine.captionLabel('PCO₂ ?? 0 mmHg',{lineOffset: 30})});
+let arrow2132 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec21'), {x: 0, y: 0.85*document.getElementById('rec21').clientHeight}),document.getElementById('rec32'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "left", endSocket: "top", middleLabel: LeaderLine.captionLabel('BE ?? 0 mM',{lineOffset: 30})});
+let arrow2133 = new LeaderLine(LeaderLine.pointAnchor(document.getElementById('rec21'), {x: document.getElementById('rec21').clientWidth+parseFloat(getComputedStyle(document.getElementById('rec21')).borderLeftWidth), y: 0.85*document.getElementById('rec21').clientHeight}),document.getElementById('rec33'),{color:"var(--pseudo-black)", path: "magnet", startSocket: "right", endSocket: "top", middleLabel: LeaderLine.captionLabel('PCO₂ ?? 0 mmHg',{lineOffset: 30})});
 
 new LeaderLine(document.getElementById('rec30'),document.getElementById('rec40'),{color:"var(--pseudo-black)", path: "straight"});
 new LeaderLine(document.getElementById('rec31'),document.getElementById('rec41'),{color:"var(--pseudo-black)", path: "straight"});
@@ -306,14 +306,14 @@ var verifySigns = ['<','>','>','<','<','>','>','<'];
 function updatepH(){
   let pHvalue = document.getElementById("pHvalue");
   pHvalue.textContent = pHrange.value;
-  arrow1020.startLabel = LeaderLine.captionLabel("< "+pHrange.value);
+  arrow1020.startLabel = LeaderLine.captionLabel(pHrange.value + " >");
   arrow1021.startLabel = LeaderLine.captionLabel("> "+pHrange.value);
 }
 function updateBE(){
   let BEvalue = document.getElementById("BEvalue");
   BEvalue.textContent = BErange.value;
-  arrow2030.endLabel = LeaderLine.captionLabel("BE "+signs[0]+' '+BErange.value+" mM");
-  arrow2132.endLabel = LeaderLine.captionLabel("BE "+signs[2]+' '+BErange.value+" mM");
+  arrow2030.middleLabel = LeaderLine.captionLabel("BE "+signs[0]+' '+BErange.value+" mM",{lineOffset: 30});
+  arrow2132.middleLabel = LeaderLine.captionLabel("BE "+signs[2]+' '+BErange.value+" mM",{lineOffset: 30});
   document.getElementById('BE1').textContent = "BE "+signs[5]+' '+BErange.value+" mM";
   document.getElementById('BE2').textContent = "BE "+signs[7]+' '+BErange.value+" mM";
   clickableCaptions();
@@ -321,8 +321,8 @@ function updateBE(){
 function updatePC(){
   let PCvalue = document.getElementById("PCvalue");
   PCvalue.textContent = PCrange.value;
-  arrow2031.endLabel = LeaderLine.captionLabel("PCO₂ "+signs[1]+' '+PCrange.value+" mmHg");
-  arrow2133.endLabel = LeaderLine.captionLabel("PCO₂ "+signs[3]+' '+PCrange.value+" mmHg");
+  arrow2031.middleLabel = LeaderLine.captionLabel("PCO₂ "+signs[1]+' '+PCrange.value+" mmHg",{lineOffset: 30});
+  arrow2133.middleLabel = LeaderLine.captionLabel("PCO₂ "+signs[3]+' '+PCrange.value+" mmHg",{lineOffset: 30});
   document.getElementById('PC1').textContent = "PCO₂ "+signs[4]+' '+PCrange.value+" mmHg";
   document.getElementById('PC2').textContent = "PCO₂ "+signs[6]+' '+PCrange.value+" mmHg";
   clickableCaptions();
@@ -356,11 +356,12 @@ function clickableCaptions(){
     box.style.top = (y-0.1*h)+'px';
     box.style.width = w*1.2+'px';
     box.style.height = 1.2*h+'px';
-    box.style.zIndex = 0;
+    box.style.zIndex = 1000;
     box.textContent = cap.textContent;
     document.body.appendChild(box);
     box.addEventListener('click', changeSign(cap,box,i));
     box.style.backgroundColor = (signs[i] == "??") ? "var(--deep-highlight)" : "var(--light-highlight)";
+    box.style.color = (signs[i] == "??") ? "var(--pseudo-white)" : "var(--pseudo-black)";
   }) 
 }
 
