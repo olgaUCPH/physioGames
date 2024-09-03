@@ -314,8 +314,8 @@ function updateBE(){
   BEvalue.textContent = BErange.value;
   arrow2030.endLabel = LeaderLine.captionLabel("BE "+signs[0]+' '+BErange.value+" mM");
   arrow2132.endLabel = LeaderLine.captionLabel("BE "+signs[2]+' '+BErange.value+" mM");
-  document.getElementById('BE1').textContent = "BE "+signs[5]+' '+PCrange.value+" mM";
-  document.getElementById('BE2').textContent = "BE "+signs[7]+' '+PCrange.value+" mM";
+  document.getElementById('BE1').textContent = "BE "+signs[5]+' '+BErange.value+" mM";
+  document.getElementById('BE2').textContent = "BE "+signs[7]+' '+BErange.value+" mM";
   clickableCaptions();
 }
 function updatePC(){
