@@ -42,21 +42,21 @@
                     </div>
                     <div class="row">
                         <div class="rowLabel" style="border-top-left-radius: 5px;">ECV</div>
-                        <div class="rectangle">17</div>
-                        <div class="rectangle">290</div>
-                        <div class="rectangle">4 930</div>
+                        <div class="rectangle" onmouseover="x_highlight('ECV0_X')" onmouseout="x_restore('ECV0_X')">17</div>
+                        <div class="rectangle" onmouseover="y_highlight('ECV0_Y')" onmouseout="y_restore('ECV0_Y')">290</div>
+                        <div class="rectangle" onmouseover="x_highlight('ECV0_X'); y_highlight('ECV0_Y')" onmouseout="x_restore('ECV0_X');y_restore('ECV0_Y')">4 930</div>
                     </div>
                     <div class="row">
                         <div class="rowLabel">ICV</div>
-                        <div class="rectangle">25</div>
-                        <div class="rectangle">290</div>
-                        <div class="rectangle">7 250</div>
+                        <div class="rectangle" onmouseover="x_highlight('ICV0_X')" onmouseout="x_restore('ICV0_X')">25</div>
+                        <div class="rectangle" onmouseover="y_highlight('ICV0_Y')" onmouseout="y_restore('ICV0_Y')">290</div>
+                        <div class="rectangle" onmouseover="x_highlight('ICV0_X'); y_highlight('ICV0_Y')" onmouseout="x_restore('ICV0_X');y_restore('ICV0_Y')">7 250</div>
                     </div>
                     <div class="row">
                         <div class="rowLabel" style="border-bottom-left-radius: 5px;">TBW</div>
-                        <div class="rectangle">42</div>
-                        <div class="rectangle">290</div>
-                        <div class="rectangle" style="border-bottom-right-radius: 5px;">12 180</div>
+                        <div class="rectangle" onmouseover="x_highlight('TBW0_X')" onmouseout="x_restore('TBW0_X')">42</div>
+                        <div class="rectangle" onmouseover="y_highlight('ECV0_Y'); y_highlight('ICV0_Y')" onmouseout="y_restore('ECV0_Y'); y_restore('ICV0_Y')">290</div>
+                        <div class="rectangle" style="border-bottom-right-radius: 5px;" onmouseover="x_highlight('TBW0_X'); y_highlight('ECV0_Y')" onmouseout="x_restore('TBW0_X');y_restore('ECV0_Y')">12 180</div>
                     </div>
                 </div>
 
@@ -73,39 +73,63 @@
                     </div>
                     <div class="row">
                         <div class="rowLabel" style="border-top-left-radius: 5px;">ECV</div>
-                        <div class="rectangle toFill"></div>
-                        <div class="rectangle toFill"></div>
-                        <div class="rectangle toFill"></div>
+                        <div class="rectangle toFill" onmouseover="x_highlight('ECV1_X')" onmouseout="x_restore('ECV1_X')"></div>
+                        <div class="rectangle toFill" onmouseover="y_highlight('ECV1_Y')" onmouseout="y_restore('ECV1_Y')"></div>
+                        <div class="rectangle toFill" onmouseover="x_highlight('ECV1_X'); y_highlight('ECV1_Y')" onmouseout="x_restore('ECV1_X');y_restore('ECV1_Y')"></div>
                     </div>
                     <div class="row">
                         <div class="rowLabel">ICV</div>
-                        <div class="rectangle toFill"></div>
-                        <div class="rectangle toFill"></div>
-                        <div class="rectangle toFill"></div>
+                        <div class="rectangle toFill" onmouseover="x_highlight('ICV1_X')" onmouseout="x_restore('ICV1_X')"></div>
+                        <div class="rectangle toFill" onmouseover="y_highlight('ICV1_Y')" onmouseout="y_restore('ICV1_Y')"></div>
+                        <div class="rectangle toFill" onmouseover="x_highlight('ICV1_X'); y_highlight('ICV1_Y')" onmouseout="x_restore('ICV1_X');y_restore('ICV1_Y')"></div>
                     </div>
                     <div class="row">
                         <div class="rowLabel" style="border-bottom-left-radius: 5px;">TBW</div>
-                        <div class="rectangle toFill"></div>
-                        <div class="rectangle toFill"></div>
-                        <div class="rectangle toFill" style="border-bottom-right-radius: 5px;"></div>
+                        <div class="rectangle toFill" onmouseover="x_highlight('TBW1_X')" onmouseout="x_restore('TBW1_X')"></div>
+                        <div class="rectangle toFill" onmouseover="y_highlight('ECV1_Y'); y_highlight('ICV1_Y')" onmouseout="y_restore('ECV1_Y'); y_restore('ICV1_Y')"></div>
+                        <div class="rectangle toFill" style="border-bottom-right-radius: 5px;" onmouseover="x_highlight('TBW1_X'); y_highlight('ECV1_Y')" onmouseout="x_restore('TBW1_X');y_restore('ECV1_Y')"></div>
                     </div>
                 </div>
                 <div id="diagramContainer">
                     <div class="diagram" style="left: 8vw">
                         <div class="yAxis"><span>Osmolarity</span></div>
                         <div class="boxContainer">
-                            <div id="ECV0">ECV</div>
-                            <div id="ICV0">ICV</div>
+                            <div id ="TBW0_X" class="xArrow"><div class="arrow left"></div><div class="arrow right"></div></div>
+                            <div id="ECV0">
+                                <div id ="ECV0_X" class="xArrow"><div class="arrow left"></div><div class="arrow right"></div></div>
+                                <div id ="ECV0_Y" class="yArrow" style="left: -10px"><div class="arrow up"></div><div class="arrow down"></div></div>
+                                ECV
+                            </div>
+                            <div id="ICV0">
+                                <div id ="ICV0_X" class="xArrow"><div class="arrow left"></div><div class="arrow right"></div></div>
+                                <div id ="ICV0_Y" class="yArrow" style="right: -10px"><div class="arrow up"></div><div class="arrow down"></div></div>
+                                ICV
+                            </div>
                         </div>
                         <div class="xAxis"><span>Volume</span></div>
                     </div>
                     <div class="diagram" style="right: 8vw">
                         <div class="yAxis"><span>Osmolarity</span></div>
                         <div class="boxContainer">
-                            <div id="ECV1">ECV</div>
-                            <div id="ICV1">ICV</div>
-                            <div id="ECVX"></div>
-                            <div id="ICVX"></div>    
+                            <div class="ECVX" style="background-color: var(--deep-highlight); opacity: 0.5;"></div>
+                            <div class="ICVX" style="background-color: var(--light-highlight); opacity: 0.5;"></div>
+                            <div id="ECV1">
+                            </div>
+                            <div id="ICV1">
+                            </div>
+                            <div id="TBW1_X_Container" style="position: fixed;"><div id ="TBW1_X" class="xArrow"><div class="arrow left"></div><div class="arrow right"></div></div></div>
+                            <div id="ECV_Shadow" style="position: fixed; color: var(--pseudo-white)">
+                                <div id ="ECV1_X" class="xArrow"><div class="arrow left"></div><div class="arrow right"></div></div>
+                                <div id ="ECV1_Y" class="yArrow" style="left: -10px"><div class="arrow up"></div><div class="arrow down"></div></div>
+                                ECV
+                            </div>
+                            <div id="ICV_Shadow" style="position: fixed;">
+                                <div id ="ICV1_X" class="xArrow"><div class="arrow left"></div><div class="arrow right"></div></div>
+                                <div id ="ICV1_Y" class="yArrow" style="right: -10px"><div class="arrow up"></div><div class="arrow down"></div></div>
+                                ICV
+                            </div>
+                            <div class="ECVX" style="border-style: dotted; border-width: 2px;"></div>
+                            <div class="ICVX" style="border-style: dotted; border-width: 2px;"></div>    
                         </div>
                         <div class="xAxis"><span>Volume</span></div>
                     </div>
@@ -120,7 +144,7 @@
                 </div>
             </div>
             <div id="arsenalContainer">
-                <div class="arsenalTile" style="border-bottom-left-radius: 10px;">
+                <div class="arsenalTile" style="border-bottom-left-radius: 10px; margin-left: 0;">
                     <div class="tileTitle">Volume (L)</div>
                     <div class="label">12</div>
                     <div class="label">35</div>
@@ -136,7 +160,7 @@
                     <div class="label">21</div>
                     <div class="label">20</div> 
                 </div>
-                <div class="arsenalTile" style="margin: 0 0.8vw 0 0.8vw;">
+                <div class="arsenalTile">
                     <div class="tileTitle">Concentration (mosm/L)</div>
                     <div class="label">280</div>
                     <div class="label">250</div>
@@ -150,7 +174,7 @@
                     <div class="label">333</div>
                     <div class="label">310</div>
                 </div>
-                <div class="arsenalTile" style="border-bottom-right-radius: 10px;">
+                <div class="arsenalTile" style="border-bottom-right-radius: 10px; margin-right: 0;">
                     <div class="tileTitle">Total mosmol (mosm)</div>
                     <div class="label">3 000</div>
                     <div class="label">10 395</div>
@@ -161,6 +185,17 @@
                     <div class="label">11 020</div>
                     <div class="label">5 600</div>
                     <div class="label">6 090</div>
+                </div>
+                <div class="mcqWrapper">
+                    <div class="questionWrapper">
+                        <h2>Question 1</h2>
+                        <h1>What is the first letter of the alphabet ?</h1>
+                    </div>
+                    <div class="answerWrapper">
+                        <button>D</button>
+                        <button>A</button>
+                        <button>Q</button>
+                    </div>
                 </div>
             </div>
             

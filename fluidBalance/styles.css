@@ -251,7 +251,6 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    padding-bottom: 5px;
     -webkit-transition: background-color 0.5s ease-in-out;
     -moz-transition: background-color 0.5s ease-in-out;
     -o-transition: background-color 0.5s ease-in-out;
@@ -260,14 +259,18 @@ body {
 }
 
 .arsenalTile{
-  width: 32.5%;
-  height: 100%;
+  width: 32.75%;
+  height: 28vh;
   background-color: var(--light-highlight);
   box-shadow: 3px 3px 5px black;
   justify-content: center;
   align-items: center;
   display: flex;
   flex-wrap: wrap;
+  transition: width 0.5s ease-in-out;
+  margin: auto;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .label{
@@ -282,6 +285,7 @@ body {
   padding: 7px;
   font-size: 1.2em;
   cursor: pointer;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .tileTitle{
@@ -289,7 +293,72 @@ body {
   opacity: 0.7;
   font-size: 1.2em;
   text-align: center;
+  transition: opacity 0.5s ease-in-out;
 }
+
+.mcqWrapper{
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+
+
+.questionWrapper{
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.questionWrapper h2{
+  width: 90%;
+  text-align: center;
+}
+
+.questionWrapper h1{
+  width: 90%;
+  text-align: center;
+  margin-top: 0;
+}
+
+.answerWrapper{
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.answerWrapper button{
+  margin: 5px;
+  background-color: var(--pseudo-black);
+  border: 1px solid transparent;
+  border-radius: .75rem;
+  box-sizing: border-box;
+  color: var(--pseudo-white);
+  cursor: pointer;
+  padding: .75rem 1.2rem;
+  text-align: center;
+  transition-duration: .2s;
+  transition-property: background-color,border-color,color,fill,stroke;
+  transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
+  width: 80%;
+  font-family: Avenir;
+  font-weight: 300;
+  font-size: 1.25em;
+}
+
+.answerWrapper button:hover {
+  filter: brightness(1.5);
+}
+
+.answerWrapper button:active {
+  filter: brightness(2);
+}
+
 
 #buttonsColumn{
   position: absolute;
@@ -476,11 +545,12 @@ body {
   bottom: 22.5vh;
   width: 95%;
   display: flex;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
 
 }
 
 .diagram{
-  background-color: var(--rectangle-deep);
   position: absolute;
   margin: auto;
   display: flex;
@@ -497,88 +567,68 @@ body {
   align-items: center;
 }
 
+.boxContainer div{
+  transition: background-color 0.5s ease-in-out;
+}
+
 #ECV0{
-  width: 8vw;
+  width: calc(17/42*20vw);
   height: 15vh;
-  background-color: red;
+  background-color: var(--deep-highlight);
+  color: var(--pseudo-white);
+  position: absolute;
+  right: calc(25/42*20vw);
+  top: 0;
 }
 
 #ICV0{
-  width: 12vw;
+  width: calc(25/42*20vw);
   height: 15vh;
-  background-color: green;
+  background-color: var(--light-highlight);
+  position: absolute;
+  left: calc(17/42*20vw);
+  top: 0;
 }
 
-#ECVX{
-  width: 8vw;
+.ECVX{
+  width: calc(17/42*20vw);
   height: 15vh;
-  background-color: red;
-  opacity: 0.3;
-  border-style: dotted;
-  border-width: 2px;
-  z-index: 1;
   box-sizing: border-box;
+  position: absolute;
+  right: calc(25/42*20vw);
+  top: 0;
 }
 
-#ICVX{
-  width: 12vw;
+.ICVX{
+  width: calc(25/42*20vw);
   height: 15vh;
-  background-color: green;
-  opacity: 0.3;
-  border-style: dotted;
-  border-width: 2px;
-  z-index: 1;
   box-sizing: border-box;
+  position: absolute;
+  left: calc(17/42*20vw);
+  top: 0;
 }
 
 #ECV1{
-  width: 8vw;
+  width: calc(17/42*20vw);
   height: 15vh;
   position: absolute;
-  z-index: 0;
-  left: 0;
-  background-color: red;
+  right: calc(25/42*20vw);
+  top: 0;
+  background-color: var(--deep-highlight);
   transform-origin: bottom right;
-  animation: Xstretch 10s infinite ease-in-out;
+  transition: transform 1s ease-in-out;
+  color: var(--pseudo-white);
 }
 
 #ICV1{
-  width: 12vw;
+  width: calc(25/42*20vw);
   height: 15vh;
   position: absolute;
-  z-index: 0;
-  right: 0;
-  background-color: green;
+  left: calc(17/42*20vw);
+  top: 0;
+  background-color: var(--light-highlight);
   transform-origin: bottom left;
-  animation: Xsquash 10s infinite ease-in-out;
-}
-
-@keyframes Xstretch{
-  10%{transform: scaleX(1);}
-  20%{transform: scaleX(1.1);}
-  80%{transform: scaleX(1.1);}
-  90%{transform: scaleX(1);}
-}
-
-@keyframes Ystretch{
-  10%{transform: scaleY(1);}
-  20%{transform: scaleY(1.1);}
-  80%{transform: scaleY(1.1);}
-  90%{transform: scaleY(1);}
-}
-
-@keyframes Xsquash{
-  10%{transform: scaleX(1);}
-  20%{transform: scaleX(0.9);}
-  80%{transform: scaleX(0.9);}
-  90%{transform: scaleX(1);}
-}
-
-@keyframes Ysquash{
-  10%{transform: scaleY(1);}
-  20%{transform: scaleY(0.9);}
-  80%{transform: scaleY(0.9);}
-  90%{transform: scaleY(1);}
+  transition: transform 1s ease-in-out;
 }
 
 .xAxis{
@@ -621,3 +671,82 @@ body {
   position: absolute;
 }
 
+
+.arrow {
+  border: solid var(--pseudo-black);
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  position: absolute;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  right: 1px;
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+  left: 1px;
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  top: 1px;
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  bottom: 2px;
+}
+
+.xArrow{
+  position: absolute;
+  top: -10px;
+  width: 100%;
+  height: 3px;
+  background-color: var(--pseudo-black);
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+  display: flex;
+}
+
+.yArrow{
+  position: absolute;
+  height: 100%;
+  width: 2.5px;
+  background-color: var(--pseudo-black);
+  transition: all 0.5s ease-in-out;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  text-align: center;
+}
+
+@keyframes xExtend {
+  0% {width: 1%; opacity: 0};
+  10% {width: 10%; opacity: 1;}
+  100% {width: 100%; opacity: 1;};
+}
+
+@keyframes xRetract {
+  0% {width: 100%; opacity: 1};
+  95% {width: 5%; opacity: 1;}
+  100% {width: 1%; opacity: 0;}
+}
+
+@keyframes yExtend {
+  0% {height: 1%; opacity: 0};
+  10% {height: 10%; opacity: 1;}
+  100% {height: 100%; opacity: 1;};
+}
+
+@keyframes yRetract {
+  0% {height: 100%; opacity: 1};
+  95% {height: 5%; opacity: 1;}
+  100% {height: 1%; opacity: 0;}
+}

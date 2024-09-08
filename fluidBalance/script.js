@@ -17,7 +17,7 @@ allLabels.forEach(label => {
     label.ondragstart = function() {return false;};
   })
 
-  function dragFunction(element){
+function dragFunction(element){
     return function(event){
 
       userX = event.clientX || event.targetTouches[0].pageX;
@@ -55,32 +55,26 @@ allLabels.forEach(label => {
       document.removeEventListener('mouseup',onMouseUp);
       document.removeEventListener('touchmove', onMouseMove);
       document.removeEventListener('touchend',onMouseUp);
-      if (Date.now() - lastTrigger > 10){
-        let boolean = true;
-        lastTrigger = Date.now();
-        newElement.style.pointerEvents = "auto";
-        newElement.onmouseup = null;
-        gridRectangles.forEach(rectangle => {
-          const rect = rectangle.getBoundingClientRect();
-          if (userX >= rect.left && userX <= rect.right && userY >= rect.top && userY <= rect.bottom) {
-            if (rectangle != newElement.parentNode){
-              addLabel(rectangle, newElement);
-              newElement.remove();
-            }
-            newElement.style.position = "absolute";
-            newElement.style.zIndex = 999;
-            newElement.style.left = "";
-            newElement.style.top = "";
-            boolean = false;
-          }
-        });
-        if (boolean){
-            newElement.remove();
+      newElement.style.pointerEvents = "auto";
+      newElement.onmouseup = null;
+      gridRectangles.forEach(rectangle => {
+      const rect = rectangle.getBoundingClientRect();
+      if (userX >= rect.left && userX <= rect.right && userY >= rect.top && userY <= rect.bottom) {
+        if (rectangle != newElement.parentNode){
+          addLabel(rectangle, newElement);
+          newElement.remove();
         }
-      };
+        newElement.style.position = "absolute";
+        newElement.style.zIndex = 999;
+        newElement.style.left = "";
+        newElement.style.top = "";
+        boolean = false;
       }
-      }
+      });
+      newElement.remove();
+    };
   }
+}
 
 function addLabel(rectangle, element){
     rectangle.textContent = element.textContent;
@@ -130,7 +124,6 @@ async function aux(){
   tables[1].classList.add("smoothTransitions");
 }
 
-transition_01();
 aux();
 
 async function transition_01 (){
@@ -141,40 +134,110 @@ async function transition_01 (){
   tables[0].style.top  = table0[1][1]+'px';
   tables[1].style.top  = table1[1][1]+'px';
   await delay(500);
+  document.getElementById("diagramContainer").style.opacity = 1;
+  document.getElementById('arsenalContainer').style.backgroundColor="var(--light-highlight)";
+  allLabels.forEach(lab => lab.style.opacity = 0);
+  document.querySelectorAll('.tileTitle').forEach(lab => lab.style.opacity = 0);
+  document.querySelectorAll('.arsenalTile').forEach(element => element.style.width = "33.33334%");
+  await delay(500);
+  document.querySelectorAll('.arsenalTile').forEach(element => element.style.display = "none");
+  document.getElementById('arsenalContainer').style.boxShadow = "3px 3px 5px black";
+  getScales();
+
+  ECV_animation();
+  ICV_animation();
+
+  document.querySelectorAll('.mcqWrapper').forEach(element => element.style.display = "flex");  
 }
 
 checkButton.addEventListener("click", transition_01);
 
+const allRectangles = document.querySelectorAll(".rectangle");
 
+function getScales(){
+  ECV_scaleX = parseFloat(allRectangles[9].textContent)/parseFloat(allRectangles[0].textContent);
+  ECV_scaleY = parseFloat(allRectangles[10].textContent)/parseFloat(allRectangles[1].textContent);
 
-function updateKeyframeScaleX(scaleXValue) {
-  const styleSheet = document.styleSheets[0]; // Access the first stylesheet
-  
-  // Remove the existing keyframes rule (if any)
-  for (let i = 0; i < styleSheet.cssRules.length; i++) {
-    const rule = styleSheet.cssRules[i];
-    if (rule.name === 'ECV') {
-      styleSheet.deleteRule(i);
-      break;
-    }
-  }
-
-  // Insert the new keyframes rule with dynamic scaleX value
-  const keyframes = `
-    @keyframes ECV {
-      10% { transform: scaleX(1); }
-      20% { transform: scaleX(${scaleXValue}); }
-      80% { transform: scaleX(${scaleXValue}); }
-      90% { transform: scaleX(1); }
-    }
-  `;
-
-  styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
+  ICV_scaleX = parseFloat(allRectangles[12].textContent)/parseFloat(allRectangles[3].textContent);
+  ICV_scaleY = parseFloat(allRectangles[13].textContent)/parseFloat(allRectangles[4].textContent);
 }
 
-// Example calculation for scaleX value based on a parameter
-const someParameter = 1; // Your dynamic parameter
-const scaleXValue = 1 + someParameter; // Example: scaleX(1 + 0.2) = scaleX(1.2)
+let ECV_scaleX = 1;
+let ICV_scaleX = 1;
+let ECV_scaleY = 1;
+let ICV_scaleY = 1;
 
-// Update the keyframe with the dynamically calculated value
-updateKeyframeScaleX(scaleXValue);
+let animate_ECV = true;
+let animate_ICV = true;
+
+async function ECV_animation(){
+  const ECV = document.getElementById("ECV1");
+  ECV.style.transform = `scaleX(${ECV_scaleX}) scaleY(${ECV_scaleY})`;
+  await delay (8000);
+  ECV.style.transform = `scaleX(1) scaleY(1)`;
+  await delay (2000);
+  if (animate_ECV){ECV_animation();}
+}
+
+async function ICV_animation(){
+  const ICV = document.getElementById("ICV1");
+  ICV.style.transform = `scaleX(${ICV_scaleX}) scaleY(${ICV_scaleY})`;
+  await delay (8000);
+  ICV.style.transform = `scaleX(1) scaleY(1)`;
+  await delay (2000);
+  if (animate_ICV){ICV_animation();}
+}
+
+function x_highlight(id){
+  let element = document.getElementById(id);
+  element.style.width = "100%";
+  element.offsetHeight;
+  element.style.animation = "xExtend 0.5s forwards";
+}
+
+async function x_restore(id){
+  let element = document.getElementById(id);
+  element.offsetHeight;
+  element.style.width = "10%";
+  element.style.animation = "xRetract 0.5s forwards";
+}
+
+function y_highlight(id){
+  let element = document.getElementById(id);
+  element.style.display = "flex";
+  element.style.height = "100%";
+  element.offsetHeight;
+  element.style.animation = "yExtend 0.5s forwards";
+}
+
+async function y_restore(id){
+  let element = document.getElementById(id);
+  element.offsetHeight;
+  element.style.height = "10%";
+  element.style.animation = "yRetract 0.5s forwards";
+}
+
+const TBW1_Container = document.getElementById("TBW1_X_Container");
+const ECV_Shadow = document.getElementById("ECV_Shadow");
+const ICV_Shadow = document.getElementById("ICV_Shadow");
+
+async function diagram_update() {
+  TBW1_Container.style.width = document.getElementById('ECV1').getBoundingClientRect().width + document.getElementById('ICV1').getBoundingClientRect().width +"px";
+  TBW1_Container.style.height = Math.max(document.getElementById('ECV1').getBoundingClientRect().height,document.getElementById('ICV1').getBoundingClientRect().height) + "px";
+  TBW1_Container.style.left = document.getElementById('ECV1').getBoundingClientRect().left + "px";
+  TBW1_Container.style.top = Math.max(document.getElementById('ECV1').getBoundingClientRect().top, document.getElementById('ICV1').getBoundingClientRect().top) + "px";
+
+  ECV_Shadow.style.width = document.getElementById('ECV1').getBoundingClientRect().width+"px";
+  ECV_Shadow.style.height = document.getElementById('ECV1').getBoundingClientRect().height + "px";
+  ECV_Shadow.style.left = document.getElementById('ECV1').getBoundingClientRect().left + "px";
+  ECV_Shadow.style.top = document.getElementById('ECV1').getBoundingClientRect().top + "px";
+  
+  ICV_Shadow.style.width = document.getElementById('ICV1').getBoundingClientRect().width+"px";
+  ICV_Shadow.style.height = document.getElementById('ICV1').getBoundingClientRect().height + "px";
+  ICV_Shadow.style.left = document.getElementById('ICV1').getBoundingClientRect().left + "px";
+  ICV_Shadow.style.top = document.getElementById('ICV1').getBoundingClientRect().top + "px";
+  await delay(10);
+  diagram_update();
+}
+
+diagram_update();
