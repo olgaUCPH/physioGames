@@ -80,6 +80,66 @@ function addLabel(rectangle, element){
     rectangle.textContent = element.textContent;
 }
 
+consistent = false;
+
+function consistencyCheck(){
+  consistent = true;
+  if (parseFloat(gridRectangles[0].textContent) + parseFloat(gridRectangles[3].textContent) != parseFloat(gridRectangles[6].textContent)){
+    consistent = false;
+    document.getElementById("volumeTrue").style.display = "none";
+    document.getElementById("volumeFalse").style.display = "block";
+  }
+  else{
+    document.getElementById("volumeFalse").style.display = "none";
+    document.getElementById("volumeTrue").style.display = "block";
+  }
+  if (parseFloat(gridRectangles[1].textContent) != parseFloat(gridRectangles[4].textContent) || parseFloat(gridRectangles[4].textContent) != parseFloat(gridRectangles[7].textContent)){
+    consistent = false;
+    document.getElementById("concentrationTrue").style.display = "none";
+    document.getElementById("concentrationFalse").style.display = "block";
+  }
+  else{
+    document.getElementById("concentrationFalse").style.display = "none";
+    document.getElementById("concentrationTrue").style.display = "block";
+  }
+  if (parseFloat(gridRectangles[2].textContent) + parseFloat(gridRectangles[5].textContent) != parseFloat(gridRectangles[8].textContent)){
+    consistent = false;
+    document.getElementById("totalTrue").style.display = "none";
+    document.getElementById("totalFalse").style.display = "block";
+  }
+  else{
+    document.getElementById("totalFalse").style.display = "none";
+    document.getElementById("totalTrue").style.display = "block";
+  }
+  if (parseFloat(gridRectangles[0].textContent) * parseFloat(gridRectangles[1].textContent) != parseFloat(gridRectangles[2].textContent)){
+    consistent = false;
+    document.getElementById("ecvTrue").style.display = "none";
+    document.getElementById("ecvFalse").style.display = "block";
+  }
+  else{
+    document.getElementById("ecvFalse").style.display = "none";
+    document.getElementById("ecvTrue").style.display = "block";
+  }
+  if (parseFloat(gridRectangles[3].textContent) * parseFloat(gridRectangles[4].textContent) != parseFloat(gridRectangles[5].textContent)){
+    consistent = false;
+    document.getElementById("icvTrue").style.display = "none";
+    document.getElementById("icvFalse").style.display = "block";
+  }
+  else{
+    document.getElementById("icvFalse").style.display = "none";
+    document.getElementById("icvTrue").style.display = "block";
+  }
+  if (parseFloat(gridRectangles[6].textContent) * parseFloat(gridRectangles[7].textContent) != parseFloat(gridRectangles[8].textContent)){
+    consistent = false;
+    document.getElementById("tbwTrue").style.display = "none";
+    document.getElementById("tbwFalse").style.display = "block";
+  }
+  else{
+    document.getElementById("tbwFalse").style.display = "none";
+    document.getElementById("tbwTrue").style.display = "block";
+  }
+}
+
 /// PART 2 - GRAPHICAL VISUALIZATION /////////////////////////////////////////////////
 
 let tables = document.querySelectorAll(".table");
@@ -131,6 +191,7 @@ async function transition_01 (){
   tables[0].style.left = table0[1][0]+'px';
   tables[1].style.left = table1[1][0]+'px';
   await delay(500);
+  document.querySelectorAll(".checkWrapper").forEach(element => element.style.display = "none");
   tables[0].style.top  = table0[1][1]+'px';
   tables[1].style.top  = table1[1][1]+'px';
   await delay(500);
@@ -150,7 +211,7 @@ async function transition_01 (){
   document.querySelectorAll('.mcqWrapper').forEach(element => element.style.display = "flex");  
 }
 
-checkButton.addEventListener("click", transition_01);
+checkButton.addEventListener("click", function(){consistencyCheck();if(consistent){transition_01()}});
 
 const allRectangles = document.querySelectorAll(".rectangle");
 

@@ -520,6 +520,22 @@ body {
   box-shadow: 2px 2px 2px var(--pseudo-black);
 }
 
+.checkWrapper{
+  width: 9vw;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 3px;
+  display: flex;
+}
+
+.checkWrapper img{
+  height: 3vh;
+  width: auto;
+  position: absolute;
+  display: none;
+}
+
 .tableCorner{
   width: 4vw;
   height: 6vh;

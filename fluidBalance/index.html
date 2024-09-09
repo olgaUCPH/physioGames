@@ -29,9 +29,9 @@
         <div id="rightColumn">
             <div id="gridContainer">
 
-                <div class="table" style="top: -1vh;">
+                <div class="table" style="top: 1vh;">
                     <div class="row">
-                        <div class="tableCorner"></div>
+                        <div class="tableCorner" style="height: 2vh"></div>
                         <span class="tableTitle">Reference case</span>
                     </div>
                     <div class="row">
@@ -60,9 +60,9 @@
                     </div>
                 </div>
 
-                <div class="table" style="bottom: 2vh;">
+                <div class="table" style="bottom: 5vh;">
                     <div class="row">
-                        <div class="tableCorner"></div>
+                        <div class="tableCorner" style="height: 2vh"></div>
                         <span class="tableTitle">Study case</span>
                     </div>
                     <div class="row">
@@ -76,18 +76,27 @@
                         <div class="rectangle toFill" onmouseover="x_highlight('ECV1_X')" onmouseout="x_restore('ECV1_X')"></div>
                         <div class="rectangle toFill" onmouseover="y_highlight('ECV1_Y')" onmouseout="y_restore('ECV1_Y')"></div>
                         <div class="rectangle toFill" onmouseover="x_highlight('ECV1_X'); y_highlight('ECV1_Y')" onmouseout="x_restore('ECV1_X');y_restore('ECV1_Y')"></div>
+                        <div class="checkWrapper" style="position: absolute; right: -3vw"><img src="assets/cross.png" id="ecvFalse"><img src="assets/check.png" id="ecvTrue"></div>
                     </div>
                     <div class="row">
                         <div class="rowLabel">ICV</div>
                         <div class="rectangle toFill" onmouseover="x_highlight('ICV1_X')" onmouseout="x_restore('ICV1_X')"></div>
                         <div class="rectangle toFill" onmouseover="y_highlight('ICV1_Y')" onmouseout="y_restore('ICV1_Y')"></div>
                         <div class="rectangle toFill" onmouseover="x_highlight('ICV1_X'); y_highlight('ICV1_Y')" onmouseout="x_restore('ICV1_X');y_restore('ICV1_Y')"></div>
+                        <div class="checkWrapper" style="position: absolute; right: -3vw"><img src="assets/cross.png" id="icvFalse"><img src="assets/check.png" id="icvTrue"></div>
                     </div>
                     <div class="row">
                         <div class="rowLabel" style="border-bottom-left-radius: 5px;">TBW</div>
                         <div class="rectangle toFill" onmouseover="x_highlight('TBW1_X')" onmouseout="x_restore('TBW1_X')"></div>
                         <div class="rectangle toFill" onmouseover="y_highlight('ECV1_Y'); y_highlight('ICV1_Y')" onmouseout="y_restore('ECV1_Y'); y_restore('ICV1_Y')"></div>
                         <div class="rectangle toFill" style="border-bottom-right-radius: 5px;" onmouseover="x_highlight('TBW1_X'); y_highlight('ECV1_Y')" onmouseout="x_restore('TBW1_X');y_restore('ECV1_Y')"></div>
+                        <div class="checkWrapper" style="position: absolute; right: -3vw"><img src="assets/cross.png" id="tbwFalse"><img src="assets/check.png" id="tbwTrue"></div>
+                    </div>
+                    <div class="row" style = "position: absolute; bottom: -6vh">
+                        <div class="tableCorner"></div>
+                        <div class="checkWrapper"><img src="assets/cross.png" id="volumeFalse"><img src="assets/check.png" id="volumeTrue"></div>
+                        <div class="checkWrapper"><img src="assets/cross.png" id="concentrationFalse"><img src="assets/check.png" id="concentrationTrue"></div>
+                        <div class="checkWrapper"><img src="assets/cross.png" id="totalFalse"><img src="assets/check.png" id="totalTrue"></div>
                     </div>
                 </div>
                 <div id="diagramContainer">
