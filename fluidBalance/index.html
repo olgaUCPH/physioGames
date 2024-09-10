@@ -206,15 +206,30 @@
                     <div class="label">5 600</div>
                     <div class="label">6 090</div>
                 </div>
-                <div class="mcqWrapper">
+                <div id="questionStart" style="display:none;">
+                    <h1>Are you ready to answer some questions ?</h1>
+                    <button id = "qStart" class="qButton activeButton" onclick="document.getElementById('questionStart').style.display = 'none'; document.getElementById('mcqWrapper').style.display = 'flex';">Let's go !</button>
+                </div>
+                <div id="mcqWrapper" style="display:none;">
                     <div class="questionWrapper">
-                        <h2>Question 1</h2>
-                        <h1>What is the first letter of the alphabet ?</h1>
+                        <h2 id="qNumber">Question 1</h2>
+                        <h1 id="qTitle">What is the first letter of the alphabet ?</h1>
+                        <button id="previousQ" style="font-size: 1em; left: 2.5vw;" class="qButton inactiveButton" onclick="setQuestion(currentQ - 1)">← Previous Question</button>
+                        <button id="nextQ" style="font-size: 1em; right: 2.5vw;" class="qButton inactiveButton" onclick="setQuestion(currentQ + 1)">Next Question →</button>
                     </div>
                     <div class="answerWrapper">
-                        <button>D</button>
-                        <button>A</button>
-                        <button>Q</button>
+                        <div class="singleAnswer">
+                            <div class="checkWrapper" style="position: absolute; left: -4vw"><img src="assets/cross.png" id="a1False"><img src="assets/check.png" id="a1True"></div> 
+                            <button id="answer1" class="qButton activeButton" onclick="sendAnswer(1)">D</button>
+                        </div>
+                        <div class="singleAnswer">
+                            <div class="checkWrapper" style="position: absolute; left: -4vw"><img src="assets/cross.png" id="a2False"><img src="assets/check.png" id="a2True"></div>
+                            <button id="answer2" class="qButton activeButton" onclick="sendAnswer(2)">A</button>
+                        </div>
+                        <div class="singleAnswer">
+                            <div class="checkWrapper" style="position: absolute; left: -4vw"><img src="assets/cross.png" id="a3False"><img src="assets/check.png" id="a3True"></div>
+                            <button id="answer3" class="qButton activeButton" onclick="sendAnswer(3)">Q</button>
+                        </div>
                     </div>
                 </div>
             </div>

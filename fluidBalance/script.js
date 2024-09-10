@@ -250,8 +250,9 @@ async function transition_01 (){
   ECV_animation();
   ICV_animation();
 
-  document.querySelectorAll('.mcqWrapper').forEach(element => element.style.display = "flex");  
+  document.getElementById("questionStart").style.display = "flex";
 }
+
 
 checkButton.addEventListener("click", verifyGrid);
 
@@ -344,3 +345,93 @@ async function diagram_update() {
 }
 
 diagram_update();
+
+/// PART 3: QUESTIONS /////////////////////////////////////////////////////////
+
+let currentQ = 1;
+let maxQ = 1;
+
+let questions = [];
+let answers = [];
+let correctAnswers = [];
+
+let userAnswers = [];
+
+questions.push("What is the first letter of the alphabet ?");
+answers.push(["D", "A", "Q"]);
+correctAnswers.push(2);
+
+questions.push("What is 7×8 ?");
+answers.push(["56", "55", "54"]);
+correctAnswers.push(1);
+
+questions.push("Which is the correct expression ?");
+answers.push(["It's raining chairs and tables.", "It's raining apples and oranges.", "It's raining cats and dogs."]);
+correctAnswers.push(3);
+
+questions.push("Which of these sports was not at the Paris Olympics ?");
+answers.push(["Breakdance", "Baseball", "Golf"]);
+correctAnswers.push(2);
+
+questions.push("Which of these is not a type of french cheese ?");
+answers.push(["Morbier", "Saint Marcellin", "Clairette de Die"]);
+correctAnswers.push(3);
+
+function sendAnswer(n){
+  if (userAnswers.length < currentQ) {
+    userAnswers.push(n);
+    maxQ = Math.min(maxQ+1,questions.length);
+  }
+  setQuestion(currentQ);
+}
+
+function setQuestion(i){
+  if (i < 1 || i > maxQ){return 0;}
+  document.querySelectorAll(".singleAnswer > .checkWrapper").forEach(element => element.style.display = "none");
+  document.querySelectorAll(".checkWrapper > img").forEach(element => element.style.display = "none");
+  currentQ = i;
+  if (i==1){document.getElementById("previousQ").classList.add("inactiveButton");document.getElementById("previousQ").classList.remove("activeButton");}
+  else{document.getElementById("previousQ").classList.add("activeButton");document.getElementById("previousQ").classList.remove("inactiveButton");}
+  if (i<maxQ){document.getElementById("nextQ").classList.add("activeButton");document.getElementById("nextQ").classList.remove("inactiveButton");}
+  else{document.getElementById("nextQ").classList.add("inactiveButton");document.getElementById("nextQ").classList.remove("activeButton");}
+  document.getElementById("qNumber").textContent = "Question "+currentQ;
+  document.getElementById("qTitle").textContent = questions[currentQ-1];
+  document.getElementById("answer1").textContent = answers[currentQ-1][0];
+  document.getElementById("answer2").textContent = answers[currentQ-1][1];
+  document.getElementById("answer3").textContent = answers[currentQ-1][2];
+
+  document.getElementById("answer1").classList.remove("selectedButton");
+  document.getElementById("answer2").classList.remove("selectedButton");
+  document.getElementById("answer3").classList.remove("selectedButton");
+
+  if (i < maxQ || (i == maxQ && userAnswers.length == correctAnswers.length)){
+    document.getElementById("answer1").style.backgroundColor = correctAnswers[i-1] == 1 ? "darkgreen" : "maroon";
+    document.getElementById("answer2").style.backgroundColor = correctAnswers[i-1] == 2 ? "darkgreen" : "maroon";
+    document.getElementById("answer3").style.backgroundColor = correctAnswers[i-1] == 3 ? "darkgreen" : "maroon";
+    
+    document.getElementById("answer1").classList.remove("activeButton");
+    document.getElementById("answer2").classList.remove("activeButton");
+    document.getElementById("answer3").classList.remove("activeButton");
+
+    document.querySelectorAll(".singleAnswer > .checkWrapper").forEach(element => element.style.display = "flex");
+
+    if (userAnswers[i-1] == 1){document.getElementById("answer1").classList.add("selectedButton")}
+    if (userAnswers[i-1] == 2){document.getElementById("answer2").classList.add("selectedButton")}
+    if (userAnswers[i-1] == 3){document.getElementById("answer3").classList.add("selectedButton")}
+
+    if (correctAnswers[i-1] == 1){document.getElementById("a1True").style.display = "block"; document.getElementById("a2False").style.display = "block"; document.getElementById("a3False").style.display = "block"}
+    if (correctAnswers[i-1] == 2){document.getElementById("a1False").style.display = "block"; document.getElementById("a2True").style.display = "block"; document.getElementById("a3False").style.display = "block"}
+    if (correctAnswers[i-1] == 3){document.getElementById("a1False").style.display = "block"; document.getElementById("a2False").style.display = "block"; document.getElementById("a3True").style.display = "block"}
+
+  }
+  else{
+    document.getElementById("answer1").style.backgroundColor = "var(--pseudo-black)";
+    document.getElementById("answer2").style.backgroundColor = "var(--pseudo-black)";
+    document.getElementById("answer3").style.backgroundColor = "var(--pseudo-black)";
+
+    document.getElementById("answer1").classList.add("activeButton");
+    document.getElementById("answer2").classList.add("activeButton");
+    document.getElementById("answer3").classList.add("activeButton");
+  }
+
+}
