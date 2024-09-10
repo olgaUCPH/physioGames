@@ -84,10 +84,14 @@ consistent = false;
 
 function consistencyCheck(){
   consistent = true;
+  let bool = true;
+  const kTtext = document.getElementById("kTtext");
+  kTtext.innerHTML = "Your results are inconsistent.</br>";
   if (parseFloat(gridRectangles[0].textContent) + parseFloat(gridRectangles[3].textContent) != parseFloat(gridRectangles[6].textContent)){
     consistent = false;
     document.getElementById("volumeTrue").style.display = "none";
     document.getElementById("volumeFalse").style.display = "block";
+    kTtext.innerHTML += "Hint (Volume): TBW = ECV + ICV</br>";
   }
   else{
     document.getElementById("volumeFalse").style.display = "none";
@@ -97,12 +101,13 @@ function consistencyCheck(){
     consistent = false;
     document.getElementById("concentrationTrue").style.display = "none";
     document.getElementById("concentrationFalse").style.display = "block";
+    kTtext.innerHTML += "Hint (Concentration): Remember osmosis!</br>";
   }
   else{
     document.getElementById("concentrationFalse").style.display = "none";
     document.getElementById("concentrationTrue").style.display = "block";
   }
-  if (parseFloat(gridRectangles[2].textContent) + parseFloat(gridRectangles[5].textContent) != parseFloat(gridRectangles[8].textContent)){
+  if (parseFloat(gridRectangles[2].textContent.replace(' ','')) + parseFloat(gridRectangles[5].textContent.replace(' ','')) != parseFloat(gridRectangles[8].textContent.replace(' ',''))){
     consistent = false;
     document.getElementById("totalTrue").style.display = "none";
     document.getElementById("totalFalse").style.display = "block";
@@ -111,34 +116,71 @@ function consistencyCheck(){
     document.getElementById("totalFalse").style.display = "none";
     document.getElementById("totalTrue").style.display = "block";
   }
-  if (parseFloat(gridRectangles[0].textContent) * parseFloat(gridRectangles[1].textContent) != parseFloat(gridRectangles[2].textContent)){
+  if (parseFloat(gridRectangles[0].textContent) * parseFloat(gridRectangles[1].textContent) != parseFloat(gridRectangles[2].textContent.replace(' ',''))){
     consistent = false;
     document.getElementById("ecvTrue").style.display = "none";
     document.getElementById("ecvFalse").style.display = "block";
+    if(bool){kTtext.innerHTML += "Hint: Total mosmol = Volume * Concentration</br>";}
+    bool = false;
   }
   else{
     document.getElementById("ecvFalse").style.display = "none";
     document.getElementById("ecvTrue").style.display = "block";
   }
-  if (parseFloat(gridRectangles[3].textContent) * parseFloat(gridRectangles[4].textContent) != parseFloat(gridRectangles[5].textContent)){
+  if (parseFloat(gridRectangles[3].textContent) * parseFloat(gridRectangles[4].textContent) != parseFloat(gridRectangles[5].textContent.replace(' ',''))){
     consistent = false;
     document.getElementById("icvTrue").style.display = "none";
     document.getElementById("icvFalse").style.display = "block";
+    if(bool){kTtext.innerHTML += "Hint: Total mosmol = Volume * Concentration</br>";}
+    bool = false;
   }
   else{
     document.getElementById("icvFalse").style.display = "none";
     document.getElementById("icvTrue").style.display = "block";
   }
-  if (parseFloat(gridRectangles[6].textContent) * parseFloat(gridRectangles[7].textContent) != parseFloat(gridRectangles[8].textContent)){
+  if (parseFloat(gridRectangles[6].textContent) * parseFloat(gridRectangles[7].textContent) != parseFloat(gridRectangles[8].textContent.replace(' ',''))){
     consistent = false;
     document.getElementById("tbwTrue").style.display = "none";
     document.getElementById("tbwFalse").style.display = "block";
+    if(bool){kTtext.innerHTML += "Hint: Total mosmol = Volume * Concentration</br>";}
+    bool = false;
   }
   else{
     document.getElementById("tbwFalse").style.display = "none";
     document.getElementById("tbwTrue").style.display = "block";
   }
 }
+
+function verifyGrid(){
+  consistencyCheck();
+  const cong = document.getElementById("congratulations");
+  const kT = document.getElementById("keepTrying");
+  const kTtext = document.getElementById("kTtext");
+  if (consistent){
+    let allGood = true;
+    for (let i = 0; i++; i<9){
+      ///allGood = allGood && gridRectangles[i].textContent == answers[i];
+      allGood = allGood && true;
+    }
+    if (allGood){
+      cong.addEventListener('animationend', function () {cong.style.display = "none"; transition_01();})
+      void cong.offsetWidth;
+      cong.style.display = "flex";
+    }
+    else{
+      kTtext.textContent = "Your results are consistent, but the values are not the ones we are looking for. Keep looking !";
+      kT.addEventListener('animationend', function () {kT.style.display = "none";})
+      void kT.offsetWidth;
+      kT.style.display = "flex";
+    }
+  }
+  else{
+    kT.addEventListener('animationend', function () {kT.style.display = "none";})
+    void kT.offsetWidth;
+    kT.style.display = "flex";
+  }
+}
+
 
 /// PART 2 - GRAPHICAL VISUALIZATION /////////////////////////////////////////////////
 
@@ -211,7 +253,7 @@ async function transition_01 (){
   document.querySelectorAll('.mcqWrapper').forEach(element => element.style.display = "flex");  
 }
 
-checkButton.addEventListener("click", function(){consistencyCheck();if(consistent){transition_01()}});
+checkButton.addEventListener("click", verifyGrid);
 
 const allRectangles = document.querySelectorAll(".rectangle");
 
