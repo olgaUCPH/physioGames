@@ -200,7 +200,7 @@ function offsetTop(element){
 table0.push([offsetLeft(tables[0]),offsetTop(tables[0])]);
 table1.push([offsetLeft(tables[1]),offsetTop(tables[1])]);
 
-tables[0].style.left = "1vw";
+tables[0].style.left = "3vw";
 tables[0].style.top  = table0[0][1]+'px';
 
 tables[1].style.right = "1vw";
@@ -236,6 +236,7 @@ async function transition_01 (){
   document.querySelectorAll(".checkWrapper").forEach(element => element.style.display = "none");
   tables[0].style.top  = table0[1][1]+'px';
   tables[1].style.top  = table1[1][1]+'px';
+  document.getElementById("caseDescription").style.display = "none";
   await delay(500);
   document.getElementById("diagramContainer").style.opacity = 1;
   document.getElementById('arsenalContainer').style.backgroundColor="var(--light-highlight)";

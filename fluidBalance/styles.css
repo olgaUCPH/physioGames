@@ -505,6 +505,7 @@ body {
 
 .table{
   position: absolute;
+  width: 36vw;
 }
 
 .row {
@@ -569,6 +570,25 @@ body {
   width: auto;
   position: absolute;
   display: none;
+  filter: drop-shadow(0 0 2px black);
+  -webkit-filter: drop-shadow(0 0 1px black);
+}
+
+#caseDescription{
+  position: absolute;
+  left: 3vw;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  width: 25vw;
+  flex-direction: column;
+  font-size: 0.9em;
+}
+
+#caseDescription p{
+  text-align: justify;
+  margin: 5px;
 }
 
 .tableCorner{
