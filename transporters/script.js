@@ -45,11 +45,20 @@ function dragFunction(element){
       userY = event.clientY || event.targetTouches[0].pageY;
       let shiftX = userX - element.getBoundingClientRect().left;
       let shiftY = userY - element.getBoundingClientRect().top;
-    element.style.pointerEvents = "none";
-    element.style.position = "fixed";
-    element.style.zIndex = 1000;
-    moveAt(userX, userY);
-    const startTime = Date.now();
+
+      const newElement = element.cloneNode(true);
+      element.parentNode.appendChild(newElement);
+      newElement.onmousedown = dragFunction(newElement);
+      newElement.style.animation = "fadeIn 0.5s forwards";
+      newElement.addEventListener('touchstart', dragFunction(newElement));
+      newElement.ondragstart = function() {return false;};
+
+
+      element.style.pointerEvents = "none";
+      element.style.position = "fixed";
+      element.style.zIndex = 1000;
+      moveAt(userX, userY);
+      const startTime = Date.now();
   
     function moveAt(pageX, pageY) {
       element.style.left = pageX - shiftX + 'px';
@@ -74,22 +83,19 @@ function dragFunction(element){
       document.removeEventListener('touchend',onMouseUp);
       element.style.pointerEvents = "auto";
       element.onmouseup = null;
-      element.style.position = "absolute";
       element.style.zIndex = 999;
-      element.style.left = "";
-      element.style.top = "";
-      const elementImage = element.src;
       if (Date.now() - startTime < 250){
-        clickShape(elementImage);
+        clickShape(element);
       };
       gridRectangles.forEach(rectangle => {
         const rect = rectangle.getBoundingClientRect();
         if (userX >= rect.left && userX <= rect.right && userY >= rect.top && userY <= rect.bottom) {
-          if (appendableTransporter(rectangle, elementImage)) { 
-            createSmallShape(rectangle, elementImage);
+          if (appendableTransporter(rectangle, element)) { 
+            createSmallShape(rectangle, element, "slide");
           }
         }
       });
+    element.remove();
     };
     }
   }
@@ -100,29 +106,54 @@ allRectangles.forEach(rectangle => {
     rectangle.addEventListener("click", function () {selectRectangle(rectangle)});
   }); //Rectangle selection
 
-function appendableTransporter(container, elementImage){
+function appendableTransporter(container, element){
+    const elementImage = element.src;
     const smallShapes = container.querySelectorAll('.smallShape');
-    let bool = container.querySelectorAll('.smallShape').length < 6 && !container.classList.contains('correctRectangle');
+    let bool = container.querySelectorAll('.smallShape').length < 4 && !container.classList.contains('correctRectangle');
     smallShapes.forEach(shape => {bool = bool && shape.src != elementImage});
     return bool;
 } //Can a transporter be added to a given rectangle ? (Unblocked and less than 6 transporters)
 
-function createSmallShape(container, elementImage) {
+async function createSmallShape(container, element, animation) {
     lastCreation = Date.now();
     const smallShape = document.createElement('img');
-    smallShape.src = elementImage;
+    smallShape.src = element.src;
     smallShape.classList.add('smallShape');
-    smallShape.style.animation = 'fadeIn 0.5s ease-in-out forwards';
-    smallShape.style.transitionDuration = "0s";
     container.appendChild(smallShape);
+    smallShape.style.transitionDuration = "0s";
+    if(animation=="fade"){
+      let eP = endPosition(smallShape,container);
+      smallShape.style.width = '100px';
+      smallShape.style.height = '100px';
+      smallShape.style.left = eP[0]+'px';
+      smallShape.style.top = eP[1]+'px';
+      smallShape.style.width = eP[2]*parseFloat(smallShape.style.height)+'px';
+      smallShape.style.height = eP[2]*parseFloat(smallShape.style.height)+'px';
+      smallShape.style.animation = 'fadeIn 0.5s ease-in-out forwards';}
+    if(animation=="slide"){
+      smallShape.style.transitionDuration = "0s";
+      smallShape.style.position = "fixed";
+      smallShape.style.left = element.getBoundingClientRect().left+'px';
+      smallShape.style.top = element.getBoundingClientRect().top+'px';
+      smallShape.style.width = element.getBoundingClientRect().width+'px';
+      smallShape.style.height = element.getBoundingClientRect().height+'px';
+      smallShape.style.transformOrigin = 'top left';
+      smallShape.style.transitionDuration = "0.3s";
+      let eP = endPosition(smallShape,container);
+      smallShape.style.left = eP[0]+'px';
+      smallShape.style.top = eP[1]+'px';
+      smallShape.style.transform = `scale(${eP[2]})`;
+      smallShape.style.filter = `drop-shadow(${1+container.children.length}px ${1+container.children.length}px ${1+container.children.length}px black)`;
+
+    }
     realignSmallShapes(container);
     smallShape.addEventListener('animationend', () => {
       realignSmallShapes(container);
       smallShape.style.transitionDuration = "0.3s";
-      smallShape.addEventListener('click', (e) => {
-        e.stopPropagation();
-        removeShape(container,smallShape);
-      });
+    });
+    smallShape.addEventListener('click', (e) => {
+      e.stopPropagation();
+      removeShape(container,smallShape);
     });
 } //Add a given transporter to a rectangle
   
@@ -137,32 +168,59 @@ function removeShape(container, smallShape){
   
 function realignSmallShapes(container) {
     const smallShapes = container.querySelectorAll('.smallShape');
-    const length = smallShapes.length;
-    const height = container.clientHeight;
-    const width = 0.8*container.clientWidth;
-    let size = 0.9*Math.min(height, width);
-    if (length == 1){size = 0.9*Math.min(height, width);};
-    if (length == 2){size = 0.9*Math.min(height, width/2);};
-    if (length == 3){size = 0.9*Math.min(height, width/3);};
-    if (length >= 4){size = 0.9*Math.min(height/2, width/3);};
-    smallShapes.forEach(shape => {
-        shape.style.width = size+'px';
+    smallShapes.forEach(smallShape => {
+      let eP = endPosition(smallShape,container);
+      smallShape.style.left = eP[0]+'px';
+      smallShape.style.top = eP[1]+'px';
+      smallShape.style.transformOrigin = 'top left';
+      smallShape.style.transform = `scale(${eP[2]})`;
+      smallShape.style.filter = `drop-shadow(${1+container.children.length}px ${1+container.children.length}px ${1+container.children.length}px black)`;
       });
 } // Realign transporters in a rectangle
   
+function endPosition(element, rectangle){
+  const n = rectangle.children.length;
+  const i = Array.prototype.indexOf.call(rectangle.children, element);
+  const w = rectangle.clientWidth + 2*parseFloat(window.getComputedStyle(rectangle).borderLeftWidth);
+  const h = rectangle.clientHeight+ 2*parseFloat(window.getComputedStyle(rectangle).borderTopWidth);
+  const size = (n == 1) ? 0.8*h : (n == 2) ? Math.min(0.6*h,0.4*w) : 0.4*Math.min(h,w);
+  let x = 0;
+  let y = 0;
+  if (n == 1){
+    x = rectangle.getBoundingClientRect().left + w/2 - size/2;
+    y = rectangle.getBoundingClientRect().top + h/2 - size/2;
+  }
+  if (n == 2){
+    x = rectangle.getBoundingClientRect().left + 0.3*w + i*0.4*w - size/2;
+    y = rectangle.getBoundingClientRect().top + h/2 - size/2; 
+  }
+  if (n == 3){
+    x = i == 2 ? rectangle.getBoundingClientRect().left + w/2 - size/2 : rectangle.getBoundingClientRect().left + 0.3*w + i*0.4*w - size/2;
+    y = rectangle.getBoundingClientRect().top + 0.3*h + Math.floor(i/2)*0.4*h - size/2; 
+  }
+  if (n == 4){
+    x = rectangle.getBoundingClientRect().left + 0.3*w + i%2*0.4*w - size/2;
+    y = rectangle.getBoundingClientRect().top + 0.3*h + Math.floor(i/2)*0.4*h - size/2; 
+  }
+  let scale = size/parseFloat(element.style.height);
+  return [x,y,scale];
+}
+
+
 let selectedRectangle = "none";
 
 let counter = 1;
 
-function clickShape(elementImage){
+function clickShape(element){
+  let elementImage = element.src;
   if (selectedRectangle != "none"){
     counter += 1;
-    if (appendableTransporter(selectedRectangle, elementImage)) { 
-        createSmallShape(selectedRectangle, elementImage);
+    if (appendableTransporter(selectedRectangle, element)) { 
+        createSmallShape(selectedRectangle, element, "slide");
     }
     else{
       if (Date.now() - lastCreation > 500){
-        selectedRectangle.querySelectorAll(`.smallShape`).forEach(element => {if (element.src == elementImage){removeShape(selectedRectangle,element);}});
+        selectedRectangle.querySelectorAll(`.smallShape`).forEach(x => {if (x.src == elementImage){removeShape(selectedRectangle,x);}});
         realignSmallShapes(selectedRectangle);
       }
     }
@@ -315,7 +373,7 @@ function showCorrection(){
   resetGrid();
   attempt = 2;
   gridRectangles.forEach((rectangle,i) => {
-    validationGrid[i].forEach(src => createSmallShape(rectangle,src));
+    validationGrid[i].forEach(source => createSmallShape(rectangle,{src: source},"fade"));
     rectangle.style.borderColor = 'darkGreen';
     rectangle.style.backgroundColor = 'darkGreen';
     rectangle.classList.add('correctRectangle');

@@ -277,14 +277,10 @@ body {
     -o-transition: all 0.5s ease-in-out;
     -ms-transition: all 0.5s ease-in-out;
     transition: all 0.5s ease-in-out;
+    cursor: pointer;
 }
 
-.rectangle:hover {
-    scale: 1.05;
-  }
-
 .smallShape{
-    margin: 0 calc(max(0.5vw,1vh)) 0 calc(max(0.5vw,1vh));
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition: all 0.3s ease-in-out;
     -o-transition: all 0.3s ease-in-out;
@@ -292,6 +288,9 @@ body {
     transition: all 0.3s ease-in-out;
     -webkit-filter: drop-shadow(2px 2px 2px black);
     filter: drop-shadow(2px 2px 2px black);
+    position: fixed;
+    cursor: pointer;
+    transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
 }
 
 .rowLabel{
@@ -330,9 +329,8 @@ body {
 
 .transporterImage{
     width: calc(0.075*max(100vw - 17vw,100vh - 50vh));;
-    margin: 5px;
     position: absolute;
-    top: calc(45% - 0.04*max(100vw - 21vw,100vh - 50vh));
+    top: calc(48% - 0.04*max(100vw - 21vw,100vh - 50vh));
     -webkit-filter: drop-shadow(calc(max(0.5vw,1vh)) calc(max(0.5vw,1vh)) 4px black);
     filter: drop-shadow(calc(max(0.5vw,1vh)) calc(max(0.5vw,1vh)) 4px black);
     cursor: pointer;
@@ -347,14 +345,11 @@ body {
     animation-timing-function: ease-in-out;
 }
 
-.transporterImage:hover {
-    scale: 1.05;
-  }
 
 .transporterLabel{
     width: 100%;
     height: 20%;
-    margin: 0px;
+    margin-bottom: 0px;
     position: absolute;
 }
 
@@ -386,10 +381,11 @@ body {
   @keyframes fadeOut {
     0%{
       opacity: 1;
-      scale: 1;
     }
     100%{
       opacity: 0;
+      transform: translateX(100%);
+      transform: translateY(100%);
       scale: 0;
     }
   }
