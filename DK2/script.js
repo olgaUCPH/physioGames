@@ -1,5 +1,3 @@
-document.getElementById('colorButton').onclick = colorChange;
-
 let allLabels = document.querySelectorAll('.label');
 const checkButton = document.getElementById('checkButton');
 const gridContainer = document.getElementById('gridContainer');
