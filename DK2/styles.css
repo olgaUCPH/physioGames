@@ -19,6 +19,13 @@
 
   @font-face {
     font-family: 'Avenir';
+    src: url("../fonts/AvenirNextLTPro-MediumCnIt.otf");
+    font-weight: 500;
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: 'Avenir';
     src: url("../fonts/AvenirNextLTPro-MediumCn.otf");
     font-weight: 500;
     font-style: normal;
@@ -61,12 +68,19 @@ body {
     overflow-x: auto;
   }
 
+  .no-select {
+    user-select: none; /* For modern browsers */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE 10+ */
+}
+
 #leftColumn{
     left: 0px;
     margin: calc(min(1vh,1vw));
     width: calc(max(16vw,34vh));
     height: 95%;
-    flex-wrap: wrap;
+    flex-wrap:wrap;
     justify-content: center;
     align-items: center;
     font-size: calc(max(1.6vw,2.9vh));
@@ -145,23 +159,32 @@ body {
     box-shadow: black 3px 3px 5px;
 }
 
-#instructionsTitle{
-    padding-top: 0.2em ;
-    margin-left: 10px;
-    margin-top: 5px;
-    margin-bottom: 0.8em;
-    font-weight: 700;
-    font-size: 1em;
+#instructionsBox p{
+  font-size: 0.6em;
+  padding: 20px;
 }
 
-.instructions{
-    margin: 1vh; 
-    margin-top: 0px;
-    margin-bottom: 0px;
-    padding-bottom: 0.6em; 
-    font-size: 0.6em;
+#instructionsBox h2{
+  -webkit-transition: background-color 0.5s ease-in-out;
+  -moz-transition: background-color 0.5s ease-in-out;
+  -o-transition: background-color 0.5s ease-in-out;
+  -ms-transition: background-color 0.5s ease-in-out;
+  transition: background-color 0.5s ease-in-out;
 }
 
+.currentLvl{
+  font-size: 0.8em;
+  font-weight: 700;
+  font-style: normal;
+  padding: 5px 20px 5px 20px;
+}
+
+.otherLvl{
+  font-size: 0.7em;
+  padding: 5px 20px 5px 20px;
+  font-style: italic;
+  font-weight: 300;
+}
 
 #checkButton {
   width: 101%;
@@ -205,30 +228,57 @@ body {
     margin: calc(min(1vh,1vw));
     width: calc(max(100vw - 17vw,100vh - 50vh));
     height: 95%;
-    flex-wrap:wrap;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    
+    align-items: center;    
 }
 
 #gridContainer{
     width: 99%;
-    height: 64vh;
+    height: 95vh;
     margin: calc(min(1vh,1vw));
     background-color: var(--pseudo-white);
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-radius: 10px;
+    border-radius: 10px;
     display: flex;
     flex-wrap: wrap;
     position: relative;
     justify-content: center;
+    align-items: center;
     -webkit-transition: background-color 0.5s ease-in-out;
     -moz-transition: background-color 0.5s ease-in-out;
     -o-transition: background-color 0.5s ease-in-out;
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
     box-shadow: black 3px 3px 5px;
-    font-size: max(2.4vh,1.5vw);
+}
+
+#AMOverlay{
+  display: none;
+  opacity: 0.5;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: var(--deep-highlight);
+  text-align: center;
+  font-size: 3em;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: var(--pseudo-white);
+}
+
+#BMOverlay{
+  display: block;
+  opacity: 0.5;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  text-align: center;
+  font-size: 3em;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: var(--pseudo-black);
 }
 
 #arsenalContainer{
@@ -239,8 +289,9 @@ body {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    text-align: center;
+    align-items: center;
     padding-bottom: 5px;
     -webkit-transition: background-color 0.5s ease-in-out;
     -moz-transition: background-color 0.5s ease-in-out;
@@ -248,22 +299,12 @@ body {
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
     box-shadow: black 3px 3px 5px;
-    font-size: max(1.6vh,1vw);
 }
 
-.row {
-    display: flex;
-    height: auto;
-    align-items: center;
-    margin-right: 4vw;
-    margin-left: 2vw;
-}
-
-.rectangle{
-    width: calc(-5px + 0.2*calc(max(100vw - 17vw,100vh - 50vh) - 7vw - 20*calc(max(0.5vw,1vh)) - 0.07*(max(100vw - 17vw,100vh - 50vh))));
+.box{
+    width: calc(0.135*max(100vw - 17vw,100vh - 50vh));
     height: 12.6vh;
     background-color: var(--rectangle-light);
-    margin: calc(max(0.5vw,1vh));
     border-radius: calc(2*max(0.5vw,1vh));
     border-width: calc(max(0.5vw,1vh));
     border-style: solid;
@@ -272,174 +313,56 @@ body {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    -webkit-transition: all 0.5s ease-in-out;
-    -moz-transition: all 0.5s ease-in-out;
-    -o-transition: all 0.5s ease-in-out;
-    -ms-transition: all 0.5s ease-in-out;
-    transition: all 0.5s ease-in-out;
-    cursor: pointer;
+    position: absolute;
+    font-size: max(2.1vh,1.3vw);
+    z-index: 3;
 }
 
-.smallShape{
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    -o-transition: all 0.3s ease-in-out;
-    -ms-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
-    -webkit-filter: drop-shadow(2px 2px 2px black);
-    filter: drop-shadow(2px 2px 2px black);
-    position: fixed;
-    cursor: pointer;
-    transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
-}
-
-.rowLabel{
-  width: calc(0.06*(max(100vw - 17vw,100vh - 50vh)));
-  height: auto;
-  text-align: center;
-  font-weight: 700;
-}
-
-.columnLabel{
-  width: calc(-5px + 0.2*calc(max(100vw - 17vw,100vh - 50vh) - 7vw - 20*calc(max(0.5vw,1vh)) - 0.07*(max(100vw - 17vw,100vh - 50vh))));
-  margin: calc(max(0.5vw,1vh));
-  margin-top: 0;
-  text-align: center;
-  font-weight: 700;
+.smallBox{
+  width: calc(0.135*max(100vw - 17vw,100vh - 50vh));
+  height: 10vh;
+  background-color: var(--rectangle-light);
   border-radius: calc(2*max(0.5vw,1vh));
   border-width: calc(max(0.5vw,1vh));
   border-style: solid;
-  border-color: var(--pseudo-white);
-  -webkit-transition: border-color 0.5s ease-in-out;
-  -moz-transition: border-color 0.5s ease-in-out;
-  -o-transition: border-color 0.5s ease-in-out;
-  -ms-transition: border-color 0.5s ease-in-out;
-  transition: border-color 0.5s ease-in-out;
+  border-color: var(--pseudo-black);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 3;
 }
 
-.transporter{
-    width: 10%;
-    margin: 4px;
+.label{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     text-align: center;
-    position: relative;
-}
-
-.transporterImage{
-    width: calc(0.075*max(100vw - 17vw,100vh - 50vh));;
     position: absolute;
-    top: calc(48% - 0.04*max(100vw - 21vw,100vh - 50vh));
-    -webkit-filter: drop-shadow(calc(max(0.5vw,1vh)) calc(max(0.5vw,1vh)) 4px black);
-    filter: drop-shadow(calc(max(0.5vw,1vh)) calc(max(0.5vw,1vh)) 4px black);
     cursor: pointer;
-    -webkit-transition: scale 0.3s ease-in-out;
-    -moz-transition: scale 0.3s ease-in-out;
-    -o-transition: scale 0.3s ease-in-out;
-    -ms-transition: scale 0.3s ease-in-out;
-    transition: scale 0.3s ease-in-out;
-    animation-name: wave;
-    animation-duration: 15s;
-    animation-iteration-count: infinite; 
-    animation-timing-function: ease-in-out;
+    -webkit-transition: background-color 0.5s ease-in-out;
+    -moz-transition: background-color 0.5s ease-in-out;
+     -o-transition: background-color 0.5s ease-in-out;
+    -ms-transition: background-color 0.5s ease-in-out;
+    transition: background-color 0.5s ease-in-out;
+    -webkit-transition: border-color 0.5s ease-in-out;
+    -moz-transition: border-color 0.5s ease-in-out;
+     -o-transition: border-color 0.5s ease-in-out;
+    -ms-transition: border-color 0.5s ease-in-out;
+    transition: border-color 0.5s ease-in-out;
+    opacity: 0.95;
+    font-size: 16pt;
 }
 
-
-.transporterLabel{
-    width: 100%;
-    height: 20%;
-    margin-bottom: 0px;
-    position: absolute;
+.labelContainer{
+  position: relative;
+  background: none;
+  border-style: none;
+  margin: 2vw;
+  z-index: 3;
 }
 
-@keyframes wave {
-  0%  {transform: scale(1);}
-  10% {transform: scale(1.1);}
-  20% {transform: scale(1);}
-  30% {transform: scale(1.05);}
-  40% {transform: scale(1);}
-  50% {transform: scale(1.05);}
-  60% {transform: scale(1);}
-  70% {transform: scale(1.05);}
-  80% {transform: scale(1);}
-  90% {transform: scale(1.05);}
-  100%{transform: scale(1);}
-}
-
-@keyframes fadeIn {
-    0%{
-      opacity: 0;
-      scale:0;
-    }
-    100%{
-      opacity: 1;
-      scale:1;
-    }
-  }
-  
-  @keyframes fadeOut {
-    0%{
-      opacity: 1;
-    }
-    100%{
-      opacity: 0;
-      transform: translateY(50%);
-      scale: 0;
-    }
-  }
-
-  #gameOverWindow {
-    display: none;
-    position: absolute;
-    z-index: 1000;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -40%);
-    width: auto;
-    height: auto;
-    overflow: auto;
-    background-color: var(--deep-highlight);
-    color: var(--pseudo-white);
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border-radius: 10px;
-    border-width: 10px;
-    border-color: var(--pseudo-black);
-    border-style: solid;
-    box-shadow: 5px 5px 10px black;
-    transform-origin: top left;
-  }
-
-#gameOverWindow button{
-  margin: 10px;
-  background-color: #111827;
-  border: 1px solid transparent;
-  border-radius: .75rem;
-  box-sizing: border-box;
-  color: #FFFFFF;
-  cursor: pointer;
-  padding: .75rem 1.2rem;
-  text-align: center;
-  transition-duration: .2s;
-  transition-property: background-color,border-color,color,fill,stroke;
-  transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
-  width: 200px;
-  font-family: Avenir;
-  font-weight: 300;
-  font-size: 14pt;
-}
-
-#gameOverWindow button:hover {
-  background-color: #374151;
-}
-
-#gameOverWindow button:focus {
-  box-shadow: none;
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-}
 
 #buttonsColumn{
   position: absolute;
@@ -447,7 +370,6 @@ body {
   top: 0;
   display: flex;
   flex-direction: column;
-  font-size: 0.8em;
 }
 
 #buttonsColumn img{
@@ -471,8 +393,6 @@ body {
   white-space: nowrap;
   transition: opacity 0.2s ease-in-out;
   text-shadow: 1px 1px 2px white;
-  background-color: var(--pseudo-white);
-  border-radius: 5px;
 }
 
 .buttonWrapper:hover span {
@@ -483,48 +403,194 @@ body {
   scale: 1.05;
   filter: brightness(5);
 }
-.tableOne{
-  display: flex;
-}
-
-.tableTwo{
-  display: none;
-}
-
-@keyframes rotate {
-  0%  {rotate: 0deg;}
-  15% {rotate: 380deg;}
-  30% {rotate: 360deg;}
-  100%{rotate: 360deg;}
-}
-
-@keyframes switch{
-  0%{transform: rotate3d(-1,-1,0,0deg);}
-  15%{transform: rotate3d(-1,-1,0,180deg);}
-  30%{transform: rotate3d(-1,-1,0,0deg);}
-}
 
 @keyframes shake{
-  5% {rotate: 20deg;}
-  10%{rotate:-20deg;}
-  15%{rotate: 20deg;}
+  10% {rotate: 20deg;}
   20%{rotate:-20deg;}
-  25%{rotate: 0deg;}
+  30%{rotate: 20deg;}
+  40%{rotate:-20deg;}
+  50%{rotate: 0deg;}
 }
 
-#resetButton:hover{
-  animation: rotate;
-  animation-duration: 5s;
-  animation-iteration-count: infinite;
+@keyframes smallShake{
+  20% {rotate: 5deg;}
+  40%{rotate:-5deg;}
+  60%{rotate: 5deg;}
+  80%{rotate:-5deg;}
+  100%{rotate: 0deg;}
 }
 
-#changeButton:hover{
-  transform: rotate3d(-1,-1,0,180deg);
-}
 
 #colorButton:hover{
   animation: shake;
-  animation-duration: 5s;
+  animation-duration: 2.5s;
+  animation-iteration-count: infinite;
+}
+.activeNext:hover{
+  animation: next;
+  animation-duration: 2.5s;
   animation-iteration-count: infinite;
 }
 
+@keyframes next {
+  10%{
+    translate: +0.5vw;
+  }
+  20%{
+    translate: 0vw;
+  }
+  30%{
+    translate: +0.5vw;
+  }
+  40%{
+    translate: 0vw;
+  }
+}
+
+.big{
+  font-size: 2.5em;
+}
+
+.arrow{
+  vertical-align: 0.2em;
+  padding-bottom: 0.25em;
+}
+
+.box p{
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.endWindow{
+  position: absolute;
+  width: 30vw;
+  font-size: 1.5em;
+  z-index: 10;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: var(--deep-highlight);
+  color: var(--pseudo-white);
+  padding: 0 3vw 0 3vw;
+  border-radius: 2vw;
+  border-style: solid;
+  border-width: 1vw;
+  border-color: var(--pseudo-black);
+  animation: fade;
+  animation-duration: 5s;
+  display: none;
+}
+
+.endWindow p{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 5px; 
+  margin-top: 0;
+}
+
+@keyframes fade {
+  0%{
+    scale: 0;
+  }
+  20%  {
+    scale: 1;
+    opacity: 1;
+    translate: 0;
+  }
+  80%  {
+    scale: 1;
+    opacity: 1;
+    translate: 0;
+  }
+  100%{
+    opacity: 0;
+    translate: 0 -15vw;
+  }
+}
+
+@keyframes highlight{
+  0%  {scale: 1;}
+  50% {scale: 1.05;}
+  100%{scale: 1;}
+}
+
+.red{
+  background-color: pink;
+  border-color: maroon;
+}
+
+.blue{
+  background-color: lightskyblue;
+  border-color: navy;
+}
+
+.green{
+  background-color: darkseagreen;
+  border-color: darkgreen;
+}
+
+.yellow{
+  background-color: moccasin;
+  border-color: darkgoldenrod;
+}
+
+.gray{
+  background-color: gainsboro;
+  border-color: darkslategray;
+}
+
+.hideColors{
+  background-color: var(--rectangle-light);
+  border-color: var(--pseudo-black);
+}
+
+
+.deleteButton{
+  border-radius : 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url("../assets/delete.png");
+  cursor: pointer;
+  -webkit-transition: scale 0.3s ease-in-out;
+  -moz-transition: scale 0.3s ease-in-out;
+  -o-transition: scale 0.3s ease-in-out;
+  -ms-transition: scale 0.3s ease-in-out;
+  transition: scale 0.3s ease-in-out;
+  pointer-events: all;
+  z-index: 2;
+}
+
+.deleteButton:hover{
+  scale: 1.1;
+}
+
+
+.lvlContainer{
+  position: absolute;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.selected{
+  background-color: var(--rectangle-deep);
+}
+
+.lvl1{
+  display: none;
+  bottom: 0;
+}
+
+.lvl2{
+  display: none;
+  bottom: 0;
+}
+
+#nextLevelButton{
+  opacity: 0.3;
+}
