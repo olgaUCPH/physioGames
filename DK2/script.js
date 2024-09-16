@@ -322,10 +322,13 @@ async function verifyGrid() {
   if (allGood){
     attempt = 0;
     gameOver();
-  wrongConnections = 0;
-  correctConnections = 0;
-  missingConnections = 0;
 }
+else{
+  keepTrying();
+}
+wrongConnections = 0;
+correctConnections = 0;
+missingConnections = 0;
 }
 
 
@@ -341,6 +344,18 @@ function gameOver(){
   goWindow.style.display = "flex";
 }
 
+function keepTrying(){
+  const kT = document.getElementById("keepTryingWindow");
+  kT.addEventListener('animationend', function () {kT.style.display = "none";})
+  void kT.offsetWidth;
+  document.getElementById('correct').textContent = totalCorrect;
+  document.getElementById('wrong').textContent = wrongConnections;
+  document.getElementById('missing').textContent = missingConnections;
+  document.getElementById('connector').textContent = (wrongConnections * missingConnections == 0) ? " but " : " and ";
+  document.getElementById('wrongGrammar').textContent = wrongConnections == 1 ? " connection is " : " connections are ";
+  document.getElementById('missingGrammar').textContent = missingConnections == 1 ? " connection is " : " connections are ";
+  kT.style.display = "flex";
+}
 
 let clickCount = 0;
 
