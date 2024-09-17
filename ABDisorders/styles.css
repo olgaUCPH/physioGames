@@ -105,7 +105,7 @@ body {
 }
 
 #title{
-    font-size: 1.3em;
+    font-size: 1.25em;
     font-weight: 700;
     margin: calc(min(1vh,1vw));
     padding-top: calc(min(1vh,1vw));
@@ -157,7 +157,13 @@ body {
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
     box-shadow: black 3px 3px 5px;
+    padding-top: 5px;
     font-size: medium;
+}
+
+#instructionsBox p{
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #checkButton {

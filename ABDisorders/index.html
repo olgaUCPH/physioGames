@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="height=device-height, initial-scale=1.0">
-        <title>Game3 - Physiology Games</title>
+        <title>Acid-Base Disorders - Physiology Games</title>
         <link rel="icon" type="image/vnd.icon" href="../assets/favicon.ico">
         <link rel="stylesheet" href="styles.css">
     </head>
@@ -11,7 +11,7 @@
         <script src="../leaderLine/leader-line.min.js"></script>
         <div id="leftColumn">
             <div id="titleBox" onclick="location.href='../index.html'">
-                <h1 id="title">Game 3</h1>
+                <h1 id="title">Acid-Base Disorders</h1>
                 <h2 id="author">Created by Carl Ferlay, under the supervision of Olga Sosnovtseva, Niels-Henrik Holstein-Rahtlou and Charlotte Mehlin Sørensen</h2>
             </div>
             <div id="scoreBox">
@@ -21,12 +21,10 @@
                 <h3 class="scoreText" style="bottom: 0px; right: 0px" id="highScore">0</h3>
             </div>
             <div id="instructionsBox">
-                <ul style="margin:10px; padding-top: 1vw;">
-                    <li>Drag and drop the labels in the corresponding boxes</li>
-                    <li>Set the threshold values using the top-left sliders</li>
-                    <li>Choose the direction of the BE and PCO₂ inequalities by clicking on the inequalities</li>
-                    <li>Click on the "Check" button to verify your answers !</li>
-                </ul>
+                <p>Acid–base balance is affected by multiple processes within the body, and dysfunction of the compensatory mechanisms leads to acid–base imbalance.</p>
+                <p>Drag and drop the correct boxes to their corresponding location on the diagram.</p>
+                <p>Set the threshold values for pH, BE and PCO₂ using the top-left sliders.</p>
+                <p>Click on the inequalities to change the direction of the thresholds.</p>
             </div>
             <div id="checkButton">Check</div>
         </div>
@@ -39,7 +37,7 @@
                     <span>PCO<sub>2</sub> threshold: </span><input class="slider" id="PCrange" type="range" min="0" max="95" value="0" step="5"> <char id="PCvalue">0</char> mmHg
                 </div>
                 <div class="line">
-                    <div class="rectangle smallBox" id="rec00"><p id="lab00">Arteriel blodprøve</p></div>
+                    <div class="rectangle smallBox" id="rec00"><p id="lab00">Arteriel blood test</p></div>
                 </div>
                 <div class="line" style="margin-bottom: 0.5vw;">
                     <div class="rectangle smallBox" id="rec20"></div>
@@ -86,12 +84,12 @@
             </div>
             <div id="arsenalContainer">
                 <div class="label smallBox" id="lab10">pH</div>
-                <div class="label smallBox" id="lab20">Acidose</div>
-                <div class="label smallBox" id="lab21">Alkalose</div>
-                <div class="label smallBox" id="lab30">Metabolisk</div>
-                <div class="label smallBox" id="lab31">Respiratorisk</div>
-                <div class="label smallBox" id="lab40">Respiratorisk Kompensation</div>
-                <div class="label smallBox" id="lab41">Renal Kompensation</div>
+                <div class="label smallBox" id="lab20">Acidosis</div>
+                <div class="label smallBox" id="lab21">Alkalosis</div>
+                <div class="label smallBox" id="lab30">Metabolic</div>
+                <div class="label smallBox" id="lab31">Respiratory</div>
+                <div class="label smallBox" id="lab40">Respiratory Compensation</div>
+                <div class="label smallBox" id="lab41">Renal Compensation</div>
             </div>
         </div>
         <script src="../color_script.js"></script>
