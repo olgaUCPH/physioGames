@@ -474,14 +474,3 @@ function switchTables(){
   
 }
 
-
-async function removeProblems(){
-  document.querySelectorAll(".smallShape").forEach(shape => {if (parseFloat(shape.style.width) < 1)
-    {let p = shape.parentNode;
-    shape.remove();
-    realignSmallShapes(p); }})
-  await delay(300);
-  removeProblems();
-}
-
-///removeProblems();
