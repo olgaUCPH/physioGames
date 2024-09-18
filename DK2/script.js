@@ -136,11 +136,12 @@ document.getElementById("arrowWrap").style.animation = "highlight 2s ease-in-out
 function startArrowMode(){
   let label = document.getElementById("newArrowLabel");
   if(label.style.opacity == 0.9){label.style.opacity = ""};
-  label.textContent = "Leave arrow mode";
+  label.textContent = "Enter build mode";
   document.getElementById("arrowWrap").style.animation = "";
   arrowMode = true;
   newArrow.removeEventListener("click", startArrowMode);
   newArrow.addEventListener("click",endArrowMode);
+  newArrow.src = "../assets/build.png";
   document.getElementById("AMOverlay").style.display = "block";
   document.getElementById("BMOverlay").style.display = "none";
 }
@@ -206,6 +207,7 @@ function endArrowMode(){
   arrowMode = false;
   newArrow.removeEventListener("click", endArrowMode);
   newArrow.addEventListener("click", startArrowMode);
+  newArrow.src = "../assets/NewArrow.png";
   document.getElementById("AMOverlay").style.display = "none";
   document.getElementById("BMOverlay").style.display = "block";
   if (arrowStart != "none") {arrowStart.classList.remove("selected");}
