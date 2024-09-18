@@ -31,6 +31,7 @@ var userX = 0;
 var userY = 0;
 
 let lastCreation = Date.now();
+let preventSelect = 0;
 
 allTransporters.forEach(transporter => {
     transporter.onmousedown = dragFunction(transporter);
@@ -41,26 +42,30 @@ allTransporters.forEach(transporter => {
 
 function dragFunction(element){
     return function(event){
+      if (element.parentNode.classList.contains('correctRectangle')){return 0;}
       userX = event.clientX || event.targetTouches[0].pageX;
       userY = event.clientY || event.targetTouches[0].pageY;
       let shiftX = userX - element.getBoundingClientRect().left;
       let shiftY = userY - element.getBoundingClientRect().top;
-
-      const newElement = element.cloneNode(true);
-      element.parentNode.appendChild(newElement);
-      newElement.onmousedown = dragFunction(newElement);
-      newElement.style.animation = "fadeIn 0.5s forwards";
-      newElement.addEventListener('touchstart', dragFunction(newElement));
-      newElement.ondragstart = function() {return false;};
-
+      let parent = element.parentNode;
+      if (!(element.classList.contains('smallShape'))){
+        const newElement = element.cloneNode(true);
+        element.parentNode.appendChild(newElement);
+        newElement.onmousedown = dragFunction(newElement);
+        newElement.style.animation = "fadeIn 0.5s forwards";
+        newElement.addEventListener('touchstart', dragFunction(newElement));
+        newElement.ondragstart = function() {return false;};
+      }
 
       element.style.pointerEvents = "none";
       element.style.position = "fixed";
       element.style.zIndex = 1000;
       moveAt(userX, userY);
       const startTime = Date.now();
+      element.style.transitionDuration = "0s";
   
     function moveAt(pageX, pageY) {
+      element.style.transitionDuration = "0s";
       element.style.left = pageX - shiftX + 'px';
       element.style.top = pageY - shiftY + 'px';
     }
@@ -76,26 +81,42 @@ function dragFunction(element){
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('touchend', onMouseUp);
   
-    function onMouseUp(event) {
+    async function onMouseUp(event) {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup',onMouseUp);
       document.removeEventListener('touchmove', onMouseMove);
       document.removeEventListener('touchend',onMouseUp);
-      element.style.pointerEvents = "auto";
-      element.onmouseup = null;
-      element.style.zIndex = 999;
-      if (Date.now() - startTime < 250){
-        clickShape(element);
-      };
-      gridRectangles.forEach(rectangle => {
-        const rect = rectangle.getBoundingClientRect();
-        if (userX >= rect.left && userX <= rect.right && userY >= rect.top && userY <= rect.bottom) {
-          if (appendableTransporter(rectangle, element)) { 
-            createSmallShape(rectangle, element, "slide");
-          }
+      if (Date.now() - startTime < 150){
+        if (element.classList.contains('smallShape')){
+          if (!parent.classList.contains('correctRectangle')){
+            preventSelect = parent;
+            element.style.animation = 'fadeOut 0.5s ease-in-out forwards';
+            element.addEventListener('animationend', () => {
+              element.remove();
+              realignSmallShapes(parent);
+          }); 
+        await delay(501);
+        realignSmallShapes(parent);
+        preventSelect = 0;
         }
-      });
+        }
+        else{
+          clickShape(element);
+        }
+      }
+      else{
+        gridRectangles.forEach(rectangle => {
+          const rect = rectangle.getBoundingClientRect();
+          if (userX >= rect.left && userX <= rect.right && userY >= rect.top && userY <= rect.bottom) {
+            if (appendableTransporter(rectangle, element) || rectangle == parent) { 
+              createSmallShape(rectangle, element, "slide");
+            }
+          }
+        });
+      }
+    realignSmallShapes(parent);
     element.remove();
+    realignSmallShapes(parent);
     };
     }
   }
@@ -149,19 +170,21 @@ async function createSmallShape(container, element, animation) {
     realignSmallShapes(container);
     smallShape.addEventListener('animationend', () => {
       realignSmallShapes(container);
-      smallShape.style.transitionDuration = "0.3s";
+      smallShape.style.transitionDuration = "0s";
     });
-    smallShape.addEventListener('click', (e) => {
-      e.stopPropagation();
-      removeShape(container,smallShape);
-    });
+    smallShape.style.transitionDuration = "0s";
+    smallShape.onmousedown = dragFunction(smallShape);
+    smallShape.ontouchstart = dragFunction(smallShape);
+    smallShape.addEventListener('touchstart', dragFunction(smallShape));
+    smallShape.ondragstart = function() {return false;};
+    ;
 } //Add a given transporter to a rectangle
   
 function removeShape(container, smallShape){
   if (!container.classList.contains('correctRectangle')){
     smallShape.style.animation = 'fadeOut 0.5s ease-in-out forwards';
     smallShape.addEventListener('animationend', () => {
-      container.removeChild(smallShape);
+      smallShape.remove();
       realignSmallShapes(container);
   }); }
 } //Remove a given transporter from a rectangle
@@ -169,6 +192,7 @@ function removeShape(container, smallShape){
 function realignSmallShapes(container) {
     const smallShapes = container.querySelectorAll('.smallShape');
     smallShapes.forEach(smallShape => {
+      smallShape.style.transitionDuration = "0.3s";
       let eP = endPosition(smallShape,container);
       smallShape.style.left = eP[0]+'px';
       smallShape.style.top = eP[1]+'px';
@@ -230,7 +254,7 @@ function clickShape(element){
 let formerColor = "var(--rectangle-light)";
 
 function selectRectangle(rectangle){
-  if (!rectangle.classList.contains('correctRectangle')){
+  if (!rectangle.classList.contains('correctRectangle') && rectangle != preventSelect){
     if (rectangle == selectedRectangle) {
       selectedRectangle.style.backgroundColor = formerColor;
       selectedRectangle = "none";
@@ -449,3 +473,15 @@ function switchTables(){
   }
   
 }
+
+
+async function removeProblems(){
+  document.querySelectorAll(".smallShape").forEach(shape => {if (parseFloat(shape.style.width) < 1)
+    {let p = shape.parentNode;
+    shape.remove();
+    realignSmallShapes(p); }})
+  await delay(300);
+  removeProblems();
+}
+
+///removeProblems();
