@@ -154,6 +154,9 @@ function arrowCandidateFunction(element){
     if (!arrowMode){
       return 0;
     }
+    if (element.classList.contains("correctRectangle")){
+      return 0;
+    }
     if (arrowStart == "none"){
       arrowStart = element;
       arrowStart.classList.add("selected");
@@ -311,6 +314,19 @@ async function verifyGrid() {
       allGood = false;
     }
   })
+
+  allLabels.forEach(lab =>{
+    let drawn = connections.filter(arrow => arrow.includes(lab.id));
+    let expected = connectionsVerif.filter(arrow => arrow.includes(lab.id));
+    console.log(lab.id, drawn, expected);
+    if (arraysEqual(drawn, expected)){
+      lab.classList.add("correctRectangle");
+    }})  
+
+  if (wrongConnections > 0 && trashButton.style.opacity < 1){
+    clickTrash();
+  }
+
   currentScore += correctConnections * (attempt == 1 ? 10 : attempt == 2 ? 5 : 1);
   currentScore -= wrongConnections * (attempt == 1 ? 1: attempt == 2 ? 2 : 3);
   currentScore -= missingConnections * (attempt == 1 ? 1: attempt == 2 ? 2 : 3);
@@ -333,6 +349,24 @@ correctConnections = 0;
 missingConnections = 0;
 }
 
+function arraysEqual(arr1, arr2) {
+  // Check if both arrays are the same length
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  // Sort both arrays and their sub-arrays
+  const sortedArr1 = arr1.map(subArr => [...subArr].sort()).sort();
+  const sortedArr2 = arr2.map(subArr => [...subArr].sort()).sort();
+
+  // Compare each sub-array
+  return sortedArr1.every((subArr1, index) => {
+    const subArr2 = sortedArr2[index];
+
+    // Check if each element in the sub-arrays is equal
+    return subArr1.every((element, subIndex) => element === subArr2[subIndex]);
+  });
+}
 
 
 /// LEVELS ////////////////////////////////////////////////////////////////////////////////
@@ -341,14 +375,11 @@ missingConnections = 0;
 function gameOver(){
   const goWindow = document.getElementById("gameOverWindow");
   document.getElementById('gameOverScore').textContent = ' '+currentScore+' ';
-  document.getElementById('gameOverPercent').textContent = ' '+Math.round(currentScore/140*100)+' ';
-  goWindow.addEventListener('animationend', function () {goWindow.style.display = "none";});
   goWindow.style.display = "flex";
 }
 
 function keepTrying(){
   const kT = document.getElementById("keepTryingWindow");
-  kT.addEventListener('animationend', function () {kT.style.display = "none";})
   void kT.offsetWidth;
   document.getElementById('correct').textContent = totalCorrect;
   document.getElementById('wrong').textContent = wrongConnections;

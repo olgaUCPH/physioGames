@@ -22,6 +22,7 @@
             </div>
             <div id="instructionsBox">
                 <p>Fill the diagram with the required administrative steps when coming to Denmark !</p>
+                <p>Note: only direct connections are necessary! If you need A and B to get C, but A is needed to get B, then only the connection from B to C is necessary.</p>
             </div>
             <div id="checkButton">Check</div>
         </div>
@@ -46,24 +47,19 @@
                     <div class = "box labelContainer"><div class="label smallBox no-select" id="lab05">Danish Lessons</div></div>
                 </div>
 
-                
-
-                <div class = "endWindow" id="congratulations">
-                    <h1>Congratulations !</h1>
-                    <h3>Press the arrow on the top-right of the screen to move on to the next level !</h3>
-                </div>
+            
 
                 <div class = "endWindow" id="keepTryingWindow">
                     <h1>Keep Trying !</h1>
                     <p>You got <span id = "correct" style = "margin-left: 5px; margin-right: 5px;">0</span> connections correct.</p>
                     <p><span id = "wrong" style = "margin-right: 5px;">0</span> <span id="wrongGrammar" style = "margin-left: 5px; margin-right: 5px;" > connections are </span> wrong,</p>
                     <p><span id = "connector"style = "margin-right: 5px;"> and </span> <span id = "missing" style = "margin-left: 5px; margin-right: 5px;">0</span> <span id="missingGrammar" style = "margin-left: 5px; margin-right: 5px;"> connections are </span> missing.</p>
+                    <button onclick="document.getElementById('keepTryingWindow').style.display = 'none'">Dismiss</button>
                 </div>
 
                 <div class = "endWindow" id="gameOverWindow">
                     <h1>Congratulations !</h1>
                     <p>You got a score of <span id = "gameOverScore" style = "margin-left: 5px; margin-right: 5px;">0</span> points. </p>
-                    <p>That's <span id="gameOverPercent" style="margin-left: 5px;">0</span>% of the maximum score !</br></p>
                     <p> Clicks: <span id="clicks">0</span></p>
                 </div>
 
@@ -74,7 +70,7 @@
                     </div>
                     <div class="buttonWrapper">
                         <img id="trashButton" style="opacity: 0.5;" src="../assets/trash.png">
-                        <span id="trashButtonLabel">Show removal buttons</span>
+                        <span id="trashButtonLabel">Show/Hide removal buttons</span>
                     </div>
                 </div>
             </div>

@@ -148,6 +148,7 @@ body {
     color: var(--pseudo-black);
     width: 100%;
     height: 57vh;
+    padding-top: 5px;
     text-align: justify;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -160,7 +161,7 @@ body {
 }
 
 #instructionsBox p{
-  font-size: 0.6em;
+  font-size: 2.5vh;
   padding: 20px;
 }
 
@@ -370,6 +371,7 @@ body {
   top: 0;
   display: flex;
   flex-direction: column;
+  z-index: 1000;
 }
 
 #buttonsColumn img{
@@ -393,6 +395,7 @@ body {
   white-space: nowrap;
   transition: opacity 0.2s ease-in-out;
   text-shadow: 1px 1px 2px white;
+  z-index: 1000;
 }
 
 .buttonWrapper:hover span {
@@ -468,7 +471,7 @@ body {
   z-index: 10;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
   background-color: var(--deep-highlight);
   color: var(--pseudo-white);
   padding: 0 3vw 0 3vw;
@@ -476,9 +479,9 @@ body {
   border-style: solid;
   border-width: 1vw;
   border-color: var(--pseudo-black);
-  animation: fade;
-  animation-duration: 5s;
   display: none;
+  animation: fadeIn;
+  animation-duration: 0.5s ;
 }
 
 .endWindow p{
@@ -489,23 +492,43 @@ body {
   margin-top: 0;
 }
 
-@keyframes fade {
+.endWindow button{
+  margin: 10px;
+  background-color: #111827;
+  border: 1px solid transparent;
+  border-radius: .75rem;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  padding: .75rem 1.2rem;
+  text-align: center;
+  transition-duration: .2s;
+  transition-property: background-color,border-color,color,fill,stroke;
+  transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
+  width: 200px;
+  font-family: Avenir;
+  font-weight: 300;
+  font-size: 14pt;
+}
+
+.endWindow button:hover {
+  background-color: #374151;
+}
+
+.endWindow button:focus {
+  box-shadow: none;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+@keyframes fadeIn {
   0%{
     scale: 0;
-  }
-  20%  {
-    scale: 1;
-    opacity: 1;
-    translate: 0;
-  }
-  80%  {
-    scale: 1;
-    opacity: 1;
-    translate: 0;
+    opacity: 0;
   }
   100%{
-    opacity: 0;
-    translate: 0 -15vw;
+    opacity: 1;
+    scale: 1;
   }
 }
 
@@ -593,4 +616,10 @@ body {
 
 #nextLevelButton{
   opacity: 0.3;
+}
+
+.correctRectangle{
+  background-color: darkgreen;
+  border-color: darkgreen;
+  color: var(--pseudo-white);
 }
