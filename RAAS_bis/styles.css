@@ -470,6 +470,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  flex-direction: column;
   background-color: var(--deep-highlight);
   color: var(--pseudo-white);
   padding: 0 3vw 0 3vw;

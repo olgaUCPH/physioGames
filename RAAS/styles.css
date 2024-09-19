@@ -530,6 +530,7 @@ body {
   border-radius: 2vw;
   border-style: solid;
   border-width: 1vw;
+  flex-direction: column;
   border-color: var(--pseudo-black);
   animation: fade;
   animation-duration: 5s;
