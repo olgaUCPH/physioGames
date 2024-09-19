@@ -410,6 +410,7 @@ body {
     border-style: solid;
     box-shadow: 5px 5px 10px black;
     transform-origin: top left;
+    flex-direction: column;
   }
 
 #gameOverWindow button{
@@ -528,3 +529,8 @@ body {
   animation-iteration-count: infinite;
 }
 
+.visualInstruction{
+  position: fixed;
+  opacity: 0.7;
+  transition: all 2s ease-in-out;
+}

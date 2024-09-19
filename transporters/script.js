@@ -136,6 +136,7 @@ function appendableTransporter(container, element){
 } //Can a transporter be added to a given rectangle ? (Unblocked and less than 6 transporters)
 
 async function createSmallShape(container, element, animation) {
+  bool_instruction = false;
     lastCreation = Date.now();
     const smallShape = document.createElement('img');
     smallShape.src = element.src;
@@ -173,6 +174,7 @@ async function createSmallShape(container, element, animation) {
       smallShape.style.transitionDuration = "0s";
     });
     smallShape.style.transitionDuration = "0s";
+    await delay(100);
     smallShape.onmousedown = dragFunction(smallShape);
     smallShape.ontouchstart = dragFunction(smallShape);
     smallShape.addEventListener('touchstart', dragFunction(smallShape));
@@ -437,6 +439,8 @@ let attempt2 = 0;
 let maxScore = 150;
 
 function switchTables(){
+  bool_instruction = false;
+
   if (currentTable == 1){
     document.querySelectorAll(".tableOne").forEach(element => {element.style.display = "none"});
     document.querySelectorAll(".tableTwo").forEach(element => {element.style.display = "flex"});
@@ -474,3 +478,57 @@ function switchTables(){
   
 }
 
+/// VISUAL INSTRUCTIONS /////////////////////////////////////////////////
+
+const cursor = document.createElement('img');
+cursor.src = "../assets/cursor_click.png";
+const shape = document.createElement('img');
+shape.src = "assets/yellowTriangle.png";
+shape.style.width = allTransporters[0].getBoundingClientRect().width+'px';
+shape.style.height = allTransporters[0].getBoundingClientRect().height+'px';
+cursor.style.width = "20px";
+cursor.style.height = "";
+cursor.classList.add('visualInstruction');
+shape.classList.add('visualInstruction');
+
+let cursor_position = [[0.5*allTransporters[0].getBoundingClientRect().left+'px', allTransporters[0].getBoundingClientRect().top+'px']];
+cursor_position.push([allTransporters[0].getBoundingClientRect().left+0.5*allTransporters[0].getBoundingClientRect().width+'px', allTransporters[0].getBoundingClientRect().top+0.5*allTransporters[0].getBoundingClientRect().height+'px']);
+cursor_position.push([allRectangles[0].getBoundingClientRect().left+0.5*allRectangles[0].getBoundingClientRect().width+'px', allRectangles[0].getBoundingClientRect().top+0.5*allRectangles[0].getBoundingClientRect().height+'px'])
+
+let shape_position = [[allTransporters[0].getBoundingClientRect().left+'px', allTransporters[0].getBoundingClientRect().top+'px']];
+shape_position.push(shape_position[0]);
+shape_position.push([parseFloat(cursor_position[2][0]) + parseFloat(shape_position[1][0]) - parseFloat(cursor_position[1][0])+'px',parseFloat(cursor_position[2][1]) + parseFloat(shape_position[1][1]) - parseFloat(cursor_position[1][1])+'px']);
+
+function setPosition(element, pos){
+  element.style.left = pos[0];
+  element.style.top = pos[1];
+}
+
+let count = 0;
+setPosition(cursor, cursor_position[0]);
+setPosition(shape, shape_position[0]);
+
+document.body.appendChild(cursor);
+document.body.appendChild(shape);
+
+async function instructions(){
+  await delay(2000);
+  count = (count+1)%3;
+  cursor.style.display = 'block';
+  shape.style.display = "block";
+  setPosition(cursor, cursor_position[count]);
+  setPosition(shape, shape_position[count]);
+  if (count == 0){
+    cursor.style.display = 'none';
+    shape.style.display = 'none';
+  }
+  if (count == 2){
+    await delay(1000);
+  }
+  if (bool_instruction) {instructions();}
+  else{cursor.style.display = "none";shape.style.display = "none";}
+}
+
+let bool_instruction = true;
+
+instructions();
