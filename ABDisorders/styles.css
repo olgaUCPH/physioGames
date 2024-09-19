@@ -460,6 +460,7 @@ body {
   background-color: var(--deep-highlight);
   color: var(--pseudo-white);
   padding: 0 3vw 0 3vw;
+  flex-direction: column;
   border-radius: 2vw;
   border-style: solid;
   border-width: 1vw;
