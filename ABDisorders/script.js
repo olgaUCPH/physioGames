@@ -3,6 +3,8 @@ const checkButton = document.getElementById('checkButton');
 const body = document.body;
 const arsenal = document.getElementById('arsenalContainer');
 
+let bool_slide = true;
+
 let gridRectangles = document.querySelectorAll('.rectangle');
 
 let solutions = ['lab00', 'lab20', 'lab10', 'lab21', 'lab30', 'lab31', 'lab30', 'lab31', 'lab40', 'lab41', 'lab40', 'lab41']
@@ -304,12 +306,14 @@ var signs = ['??','??','??','??','??','??','??','??'];
 var verifySigns = ['<','>','>','<','<','>','>','<'];
 
 function updatepH(){
+  bool_slide = false;
   let pHvalue = document.getElementById("pHvalue");
   pHvalue.textContent = pHrange.value;
   arrow1020.startLabel = LeaderLine.captionLabel(pHrange.value + " >");
   arrow1021.startLabel = LeaderLine.captionLabel("> "+pHrange.value);
 }
 function updateBE(){
+  bool_slide = false;
   let BEvalue = document.getElementById("BEvalue");
   BEvalue.textContent = BErange.value;
   arrow2030.middleLabel = LeaderLine.captionLabel("BE "+signs[0]+' '+BErange.value+" mM",{lineOffset: 30});
@@ -319,6 +323,7 @@ function updateBE(){
   clickableCaptions();
 }
 function updatePC(){
+  bool_slide = false;
   let PCvalue = document.getElementById("PCvalue");
   PCvalue.textContent = PCrange.value;
   arrow2031.middleLabel = LeaderLine.captionLabel("PCO₂ "+signs[1]+' '+PCrange.value+" mmHg",{lineOffset: 30});
@@ -337,6 +342,8 @@ PCrange.addEventListener('change', updatePC, false);
 updatepH();
 updateBE();
 updatePC();
+
+bool_slide = true;
 
 /// CLICKABLE THRESHOLDS ////////////////////////////////////////////////////////////////////////////::
 
@@ -367,6 +374,7 @@ function clickableCaptions(){
 
 function changeSign(cap,box,i){
   return function(){
+    removeClick();
     signs[i] = (signs[i] == '<' ? '>' : '<');
     cap.textContent = cap.textContent.replace('>','??');
     cap.textContent = cap.textContent.replace('<','>');
@@ -383,3 +391,44 @@ document.getElementById('PC2').addEventListener("click",changeSign(document.getE
 document.getElementById('BE2').addEventListener("click",changeSign(document.getElementById('BE2'),document.getElementById('BE2'),7));
 
 clickableCaptions();
+
+
+
+const slide = document.createElement('div');
+const click = document.createElement('div');
+
+slide.classList.add('visualInstruction');
+click.classList.add('visualInstruction');
+
+slide.textContent = "Slide !";
+click.textContent = "Click !";
+
+document.body.appendChild(slide);
+document.body.appendChild(click);
+
+slide.style.left = PCrange.getBoundingClientRect().left - slide.getBoundingClientRect().width/3 + 'px';
+slide.style.top = PCrange.getBoundingClientRect().top + 20 + 'px';
+
+async function slide_anim(){
+  slide.style.left = PCrange.getBoundingClientRect().left + PCrange.getBoundingClientRect().width - slide.getBoundingClientRect().width/3 + 'px'; 
+  if (!bool_slide){slide.style.display = 'none'};
+  await delay(1500);
+  slide.style.left = PCrange.getBoundingClientRect().left - slide.getBoundingClientRect().width/3 + 'px';
+  if (!bool_slide){slide.style.display = 'none'};
+  await delay(1500);
+  if (bool_slide) {slide_anim();}
+  else {slide.style.display = 'none'};
+}
+
+click.style.animation = 'click 3s 0.75s infinite forwards';
+click.style.top = gridRectangles[1].getBoundingClientRect().top + gridRectangles[1].getBoundingClientRect().height/4 + 'px';
+click.style.left = gridRectangles[4].getBoundingClientRect().left + 'px';
+
+let clickarrow = new LeaderLine(click, LeaderLine.pointAnchor(document.querySelectorAll(".clickBoxAux")[0], {x: 0, y: 0}), {color: "black", path: "straight", size: 2});
+
+slide_anim();
+
+function removeClick(){
+  click.style.display = "none";
+  clickarrow.hide("draw",{duration: 1});
+}
