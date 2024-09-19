@@ -138,6 +138,7 @@ function addLabel(container, element) {
     newElement.onmousedown = dragFunction(newElement);
     newElement.addEventListener('touchstart', dragFunction(newElement));
     newElement.ondragstart = function() {return false;};
+    bool_instruction = false;
   }
 
 }
@@ -462,3 +463,55 @@ for (const line of allArrows[0]){
 document.querySelectorAll('.lvl1, .lvl2').forEach(element => {
   element.style.display = 'none';
 });
+
+
+/// VISUAL INSTRUCTIONS /////////////////////////////////////////////////////
+const cursor = document.createElement('img');
+cursor.src = "../assets/cursor_click.png";
+const shape = document.getElementById('labXX');
+cursor.style.width = "20px";
+cursor.style.height = "";
+cursor.classList.add('visualInstruction');
+shape.classList.add('visualInstruction');
+
+let cursor_position = [[0.5*allLabels[0].getBoundingClientRect().left+'px', allLabels[0].getBoundingClientRect().top+'px']];
+cursor_position.push([allLabels[1].getBoundingClientRect().left+0.5*allLabels[1].getBoundingClientRect().width+'px', allLabels[1].getBoundingClientRect().top+0.5*allLabels[1].getBoundingClientRect().height+'px']);
+cursor_position.push([allRectangles[1].getBoundingClientRect().left+0.5*allRectangles[1].getBoundingClientRect().width+'px', allRectangles[1].getBoundingClientRect().top+0.5*allRectangles[1].getBoundingClientRect().height+'px'])
+
+let shape_position = [[allLabels[1].getBoundingClientRect().left - parseFloat(window.getComputedStyle(allLabels[1]).borderLeftWidth)+'px', allLabels[1].getBoundingClientRect().top - parseFloat(window.getComputedStyle(allLabels[1]).borderTopWidth)+'px']];
+shape_position.push(shape_position[0]);
+shape_position.push([parseFloat(cursor_position[2][0]) + parseFloat(shape_position[1][0]) - parseFloat(cursor_position[1][0])+'px',parseFloat(cursor_position[2][1]) + parseFloat(shape_position[1][1]) - parseFloat(cursor_position[1][1])+'px']);
+
+function setPosition(element, pos){
+  element.style.left = pos[0];
+  element.style.top = pos[1];
+}
+
+let count = 0;
+setPosition(cursor, cursor_position[0]);
+setPosition(shape, shape_position[0]);
+
+document.body.appendChild(cursor);
+document.body.appendChild(shape);
+
+async function instructions(){
+  await delay(2000);
+  count = (count+1)%3;
+  cursor.style.display = 'flex';
+  shape.style.display = "flex";
+  setPosition(cursor, cursor_position[count]);
+  setPosition(shape, shape_position[count]);
+  if (count == 0){
+    cursor.style.display = 'none';
+    shape.style.display = 'none';
+  }
+  if (count == 2){
+    await delay(1000);
+  }
+  if (bool_instruction) {instructions();}
+  else{cursor.style.display = "none";shape.style.display = "none";}
+}
+
+let bool_instruction = true;
+
+instructions();
