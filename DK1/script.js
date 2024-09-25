@@ -1,12 +1,21 @@
 const allRectangles = document.querySelectorAll('.rectangle');
-const allLabels = document.querySelectorAll('.label');
 const checkButton = document.getElementById('checkButton');
 const body = document.body;
 const arsenal = document.getElementById('arsenalContainer');
 
 let level = 0;
 let maxLevel = 0;
-let gridRectangles = document.querySelectorAll('.rectangle');
+let gridRectangles_0 = Array.from(document.querySelectorAll('.rectangle')).slice(0,2);
+let gridRectangles_1 = Array.from(document.querySelectorAll('.rectangle')).slice(2);
+let gridRectangles = allRectangles;
+
+const allLabels = document.querySelectorAll('.label');
+const allLabels_0 = Array.from(document.querySelectorAll('.label')).slice(0,2);
+let allLabels_1 = Array.from(document.querySelectorAll('.label')).slice(2);
+
+gridRectangles_1.forEach(rec => rec.style.display = "none");
+document.getElementById('rec00').style.display = 'none';
+allLabels_1.forEach(rec => rec.style.display = "none");
 
 /// CLICK AND DRAG ////////////////////////////////////////////////////////////////////////////
 
@@ -160,7 +169,7 @@ function addToArsenal(element, x){
 
 /// BUTTON ////////////////////////////////////////////////////////////////////////////////////
 
-checkButton.addEventListener('click',verifyGrid);
+checkButton.addEventListener('click',verifyGrid_0);
 
 let attempt = 0;
 let currentScore = 0;
@@ -170,12 +179,13 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-let acceptableAnswers = [[1],[2],[3,5],[4],[3,5],[6,7],[6,7],[8,9],[8,9],[10],[11],[12]];
+let acceptableAnswers_0 = [['A'], ['B']];
+let acceptableAnswers_1 = [[1],[2],[3,5],[4],[3,5],[6,7],[6,7],[8,9],[8,9],[10],[11],[12]];
 
-async function verifyGrid() {
+async function verifyGrid_0() {
   attempt += 1;
   let allGood = true;
-  gridRectangles.forEach((rectangle,i) => {
+  gridRectangles_0.forEach((rectangle,i) => {
     if (rectangle.children.length == 0){
       rectangle.style.animation = '';
       void rectangle.offsetWidth;
@@ -183,7 +193,46 @@ async function verifyGrid() {
       allGood = false;
     }
     else{
-      if (acceptableAnswers[i].includes(g(parseFloat(rectangle.firstChild.id.substring(3))))){
+      if (acceptableAnswers_0[i].includes(rectangle.firstChild.id.substring(3))){
+        removeAllEventListeners(rectangle.firstChild);
+        if (!rectangle.firstChild.classList.contains('correctRectangle')){
+          rectangle.firstChild.classList.add('correctRectangle');
+          rectangle.firstChild.style.backgroundColor = "var(--rectangle-deep)";
+        }
+      }
+      else{
+        rectangle.style.animation = '';
+        rectangle.style.animation = 'smallShake 0.5s ease-in-out forwards';
+        addToArsenal(rectangle.firstChild, rectangle.getBoundingClientRect().left);
+        allGood = false;
+      }
+    }
+  });
+  document.getElementById('currentScore').textContent = currentScore;
+  if (currentScore > highScore){
+    highScore = currentScore;
+    document.getElementById('highScore').textContent = highScore;
+  }
+  if (allGood){
+    level_1();
+    attempt = 0;
+  }
+}
+
+
+
+async function verifyGrid_1() {
+  attempt += 1;
+  let allGood = true;
+  gridRectangles_1.forEach((rectangle,i) => {
+    if (rectangle.children.length == 0){
+      rectangle.style.animation = '';
+      void rectangle.offsetWidth;
+      rectangle.style.animation = 'smallShake 0.5s ease-in-out forwards';
+      allGood = false;
+    }
+    else{
+      if (acceptableAnswers_1[i].includes(g(parseFloat(rectangle.firstChild.id.substring(3))))){
         removeAllEventListeners(rectangle.firstChild);
         if (!rectangle.firstChild.classList.contains('correctRectangle')){
           currentScore += (attempt == 1? 10: (attempt == 2? 5 : 1));
@@ -216,11 +265,23 @@ async function verifyGrid() {
 function gameOver(){
   const goWindow = document.getElementById("gameOverWindow");
   document.getElementById('gameOverScore').textContent = ' '+currentScore+' ';
-  document.getElementById('gameOverPercent').textContent = ' '+Math.round(currentScore/120*100)+' ';
   goWindow.style.display = "flex";
 }
 
-
+function level_1(){
+  allLabels_1 = Array.from(document.querySelectorAll('.label')).slice(2);
+  gridRectangles_0.forEach(rec => rec.style.display = "none");
+  gridRectangles_1.forEach(rec => rec.style.display = "");
+  document.getElementById('rec00').style.display = '';
+  allLabels_1.forEach(rec => rec.style.display = '');
+  for (const line of arrows){
+    line.position();
+    line.show("draw",{duration: 1000});
+  }
+  tutorial_arrow.hide('draw', {duration: 1});
+  checkButton.removeEventListener('click',verifyGrid_0);
+  checkButton.addEventListener('click',verifyGrid_1);
+}
 
 let arrows = [];
 
@@ -231,10 +292,10 @@ arrows.push(new LeaderLine(document.getElementById('rec02'),document.getElementB
 arrows.push(new LeaderLine(document.getElementById('rec02'),document.getElementById('rec04'),{color:"var(--pseudo-black)", path: "straight", hide:true}));
 arrows.push(new LeaderLine(document.getElementById('rec02'),document.getElementById('rec05'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', hide: true}));
 
-arrows.push(new LeaderLine(document.getElementById('rec04'),document.getElementById('rec06'),{color:"var(--pseudo-black)", startSocket: 'top', endSocket: 'left', hide: true}));
+arrows.push(new LeaderLine(document.getElementById('rec04'),document.getElementById('rec06'),{color:"var(--pseudo-black)", startSocket: 'top', endSocket: 'bottom', hide: true}));
 arrows.push(new LeaderLine(document.getElementById('rec04'),document.getElementById('rec07'),{color:"var(--pseudo-black)", path: "straight", hide:true}));
 arrows.push(new LeaderLine(document.getElementById('rec04'),document.getElementById('rec08'),{color:"var(--pseudo-black)", path: "straight", hide:true}));
-arrows.push(new LeaderLine(document.getElementById('rec04'),document.getElementById('rec09'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'left', hide: true}));
+arrows.push(new LeaderLine(document.getElementById('rec04'),document.getElementById('rec09'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'top', hide: true}));
 
 arrows.push(new LeaderLine(document.getElementById('rec10'),document.getElementById('rec06'),{color:"var(--pseudo-black)", path: "straight", hide:true}));
 arrows.push(new LeaderLine(document.getElementById('rec10'),document.getElementById('rec07'),{color:"var(--pseudo-black)", startSocket: 'bottom', endSocket: 'right', hide:true}));
@@ -244,9 +305,10 @@ arrows.push(new LeaderLine(document.getElementById('rec09'),document.getElementB
 
 arrows.push(new LeaderLine(document.getElementById('rec12'),document.getElementById('rec11'),{color:"var(--pseudo-black)", path: "straight", hide:true}));
 
-for (const line of arrows){
-  line.show("draw",{duration: 1000});
-}
+let tutorial_arrow = new LeaderLine(document.getElementById('recAA'),document.getElementById('recBB'),{color:"var(--pseudo-black)", path: "straight", hide:true});
+tutorial_arrow.show("draw",{duration: 1000});
+
+
 
 //// PERMUTATION /////////////////////////////////////////////////////////:
 
@@ -278,7 +340,7 @@ function g(n) {
   return inversePermutation[n - 1];
 }
 
-allLabels.forEach(lab => {lab.id = "lab"+f(parseFloat(lab.id.substring(3))).toString(); addToArsenal(lab,0)});
+allLabels_1.forEach(lab => {lab.id = "lab"+f(parseFloat(lab.id.substring(3))).toString(); addToArsenal(lab,0)});
 
 
 let clickCount = 0;
