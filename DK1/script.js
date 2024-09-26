@@ -5,13 +5,13 @@ const arsenal = document.getElementById('arsenalContainer');
 
 let level = 0;
 let maxLevel = 0;
-let gridRectangles_0 = Array.from(document.querySelectorAll('.rectangle')).slice(0,2);
-let gridRectangles_1 = Array.from(document.querySelectorAll('.rectangle')).slice(2);
+let gridRectangles_0 = Array.from(document.querySelectorAll('.rectangle')).slice(0,3);
+let gridRectangles_1 = Array.from(document.querySelectorAll('.rectangle')).slice(3);
 let gridRectangles = allRectangles;
 
 const allLabels = document.querySelectorAll('.label');
-const allLabels_0 = Array.from(document.querySelectorAll('.label')).slice(0,2);
-let allLabels_1 = Array.from(document.querySelectorAll('.label')).slice(2);
+const allLabels_0 = Array.from(document.querySelectorAll('.label')).slice(0,3);
+let allLabels_1 = Array.from(document.querySelectorAll('.label')).slice(3);
 
 gridRectangles_1.forEach(rec => rec.style.display = "none");
 document.getElementById('rec00').style.display = 'none';
@@ -179,7 +179,7 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-let acceptableAnswers_0 = [['A'], ['B']];
+let acceptableAnswers_0 = [['A'], ['B'], ['C']];
 let acceptableAnswers_1 = [[1],[2],[3,5],[4],[3,5],[6,7],[6,7],[8,9],[8,9],[10],[11],[12]];
 
 async function verifyGrid_0() {
@@ -269,7 +269,7 @@ function gameOver(){
 }
 
 function level_1(){
-  allLabels_1 = Array.from(document.querySelectorAll('.label')).slice(2);
+  allLabels_1 = Array.from(document.querySelectorAll('.label')).slice(3);
   gridRectangles_0.forEach(rec => rec.style.display = "none");
   gridRectangles_1.forEach(rec => rec.style.display = "");
   document.getElementById('rec00').style.display = '';
@@ -279,6 +279,7 @@ function level_1(){
     line.show("draw",{duration: 1000});
   }
   tutorial_arrow.hide('draw', {duration: 1});
+  tutorial_arrow_2.hide('draw', {duration: 1});
   checkButton.removeEventListener('click',verifyGrid_0);
   checkButton.addEventListener('click',verifyGrid_1);
 }
@@ -306,11 +307,13 @@ arrows.push(new LeaderLine(document.getElementById('rec09'),document.getElementB
 arrows.push(new LeaderLine(document.getElementById('rec12'),document.getElementById('rec11'),{color:"var(--pseudo-black)", path: "straight", hide:true}));
 
 let tutorial_arrow = new LeaderLine(document.getElementById('recAA'),document.getElementById('recBB'),{color:"var(--pseudo-black)", path: "straight", hide:true});
+let tutorial_arrow_2 = new LeaderLine(document.getElementById('recBB'),document.getElementById('recCC'),{color:"var(--pseudo-black)", path: "straight", hide:true});
 tutorial_arrow.show("draw",{duration: 1000});
+tutorial_arrow_2.show("draw",{duration: 1000});
 
 
 
-//// PERMUTATION /////////////////////////////////////////////////////////:
+//// PERMUTATION /////////////////////////////////////////////////////////
 
 function generatePermutation() {
   const arr = [...Array(12).keys()].map(x => x + 1);

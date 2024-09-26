@@ -22,7 +22,7 @@
             </div>
             <div id="instructionsBox">
                 <p>Fill the diagram with the required administrative steps when coming to Denmark !</p>
-                <p>Note: only direct connections are necessary! If you need A and B to get C, but A is needed to get B, then only the connection from B to C is necessary.</p>
+                <p>Note: only direct connections are necessary! For example, even though you need both a CPR and MitID to get a Tax Card, you don't need to draw an arrow from CPR to Tax Card (as it is already implicit in the CPR -> MitID -> Tax Card chain)</p>
             </div>
             <div id="checkButton">Check</div>
         </div>
@@ -32,6 +32,9 @@
                 <div id = "AMOverlay">Arrow Mode</br><span id="arrowInstruction" style ="font-size: 0.5em;">← Select arrow starting point →</span></div>
                 <div id = "BMOverlay">Build Mode</br><span style ="font-size: 0.5em;">Click & Drag to build your diagram</span></div>
                 <div class="lvlContainer">
+                    <div class = "box labelContainer" style="position: absolute; top: 35%; left: 50%; z-index: 500;"><div class="label box no-select" id="labC">Last Step</div></div>
+                    <div class = "box labelContainer" style="position: absolute; top: 40%; left: 40%; z-index: 501;"><div class="label box no-select" id="labA">First Step</div></div>
+                    <div class = "box labelContainer" style="position: absolute; top: 45%; left: 30%; z-index: 502;"><div class="label box no-select" id="labB">Middle Step</div></div>
                     <div class = "box labelContainer"><div class="label box no-select" id="lab00">Move in to Denmark</div></div>
                     <div class = "box labelContainer"><div class="label smallBox no-select" id="lab08">Tax Card</div></div>
                     <div class = "box labelContainer"><div class="label smallBox no-select" id="lab12">Job in Denmark</div></div>

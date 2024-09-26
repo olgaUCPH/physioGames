@@ -582,7 +582,7 @@ body {
   -ms-transition: scale 0.3s ease-in-out;
   transition: scale 0.3s ease-in-out;
   pointer-events: all;
-  z-index: 2;
+  z-index: 100;
 }
 
 .deleteButton:hover{

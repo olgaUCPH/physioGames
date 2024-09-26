@@ -10,7 +10,7 @@ let buttons = [];
 let buttonsUpdate = [];
 
 let connectionsVerif = [["lab00", "lab01"], ["lab01", "lab02"], ["lab02", "lab03"], ["lab02", "lab04"], ["lab02", "lab05"], ["lab04", "lab06"], ["lab04", "lab07"], ["lab04", "lab08"], ["lab04", "lab09"], ["lab10", "lab06"], ["lab10", "lab07"], ["lab08", "lab12"], ["lab09", "lab12"], ["lab12", "lab11"]];
-
+let tutorial_connectionsVerif = [["labA", "labB"], ["labB", "labC"]];
 
 let arrowMode = false;
 
@@ -19,6 +19,9 @@ function isMobile() {
   return /android|ipad|iphone|ipod/i.test(userAgent);
 }
 
+let allLabels_0 = Array.from(document.querySelectorAll('.label')).slice(0,3);
+let allLabels_1 = Array.from(document.querySelectorAll('.label')).slice(3);
+allLabels_1.forEach(rec => rec.style.display = "none");
 
 /// CLICK AND DRAG ////////////////////////////////////////////////////////////////////////////
 
@@ -274,7 +277,7 @@ let counter = 0;
 
 /// BUTTON ////////////////////////////////////////////////////////////////////////////////////
 
-checkButton.addEventListener('click',verifyGrid);
+checkButton.addEventListener('click',verifyGrid_0);
 
 let attempt = 0;
 let currentScore = 0;
@@ -288,6 +291,48 @@ let wrongConnections = 0;
 let missingConnections = 0;
 let correctConnections = 0;
 let totalCorrect = 0;
+
+async function verifyGrid_0(){
+  let allGood = true;
+  connections.forEach((connector,i) => {
+    if (contains(tutorial_connectionsVerif, connector)){
+      if (buttons[i].classList.contains('deleteElement')){
+        arrows[i].middleLabel.remove();
+      }
+      buttons[i].classList.remove("deleteElement");
+      buttons[i].style.display = 'none';
+      arrows[i].color = "darkgreen";
+    }
+    else{
+      allGood = false;
+      arrows[i].color = "maroon";
+    }
+  })
+  tutorial_connectionsVerif.forEach((connector,i) => {
+    if (!contains(connections, connector)){
+      allGood = false;
+      console.log('check');
+    }
+  })
+
+  if (allGood){
+    arrows.forEach(line => line.remove());
+    allLabels_0.forEach(lab => lab.style.display = "none");
+    allLabels_1.forEach(lab => lab.style.display = "");
+    checkButton.removeEventListener('click',verifyGrid_0);
+    checkButton.addEventListener('click',verifyGrid);
+    buttons.forEach(button => button.remove());
+    endArrowMode();
+    arrows = [];
+    connections = [];
+    buttons = [];
+    buttonsUpdate = [];
+    attempt = 0;
+  }
+  else{
+    if (trashButton.style.opacity != 1){clickTrash()};
+  }
+}
 
 async function verifyGrid() {
   attempt += 1;
@@ -306,6 +351,7 @@ async function verifyGrid() {
       allGood = false;
       arrows[i].color = "maroon";
       wrongConnections += 1;
+      if (trashButton.style.opacity != 1){clickTrash()};
     }
   })
   connectionsVerif.forEach((connector,i) => {

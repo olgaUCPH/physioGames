@@ -313,6 +313,7 @@ async function verifyGrid() {
       allGood = false;
       arrows[i].color = "maroon";
       wrongConnections += 1;
+      if (trashButton.style.opacity != 1){clickTrash()};
     }
   })
   connectionsVerif[level].forEach((connector,i) => {
