@@ -7,6 +7,19 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+/// CASE SELECTION /////////////////////////////////////////////////////////////////////////////
+
+let caseContainer = document.getElementById("case");
+allLabels.forEach(lab=> lab.style.display = "none");
+caseContainer.style.display = "none";
+
+function startCase(i){
+  document.getElementById("caseSelectionScreen").style.display = "none";
+  allLabels.forEach(lab=> lab.style.display = "");
+  caseContainer.style.display = "";
+  calculatePositions();
+}
+
 /// PART 1 - CLICK AND DRAG ///////////////////////////////////////////////////////////
 
 let lastTrigger = Date.now();
@@ -116,7 +129,7 @@ function consistencyCheck(){
     document.getElementById("totalFalse").style.display = "none";
     document.getElementById("totalTrue").style.display = "block";
   }
-  if (parseFloat(gridRectangles[0].textContent) * parseFloat(gridRectangles[1].textContent) != parseFloat(gridRectangles[2].textContent.replace(' ',''))){
+  if (Math.abs(parseFloat(gridRectangles[0].textContent) * parseFloat(gridRectangles[1].textContent) - parseFloat(gridRectangles[2].textContent.replace(' ',''))) > 20){
     consistent = false;
     document.getElementById("ecvTrue").style.display = "none";
     document.getElementById("ecvFalse").style.display = "block";
@@ -127,7 +140,7 @@ function consistencyCheck(){
     document.getElementById("ecvFalse").style.display = "none";
     document.getElementById("ecvTrue").style.display = "block";
   }
-  if (parseFloat(gridRectangles[3].textContent) * parseFloat(gridRectangles[4].textContent) != parseFloat(gridRectangles[5].textContent.replace(' ',''))){
+  if (Math.abs(parseFloat(gridRectangles[3].textContent) * parseFloat(gridRectangles[4].textContent) - parseFloat(gridRectangles[5].textContent.replace(' ',''))) > 20){
     consistent = false;
     document.getElementById("icvTrue").style.display = "none";
     document.getElementById("icvFalse").style.display = "block";
@@ -138,7 +151,7 @@ function consistencyCheck(){
     document.getElementById("icvFalse").style.display = "none";
     document.getElementById("icvTrue").style.display = "block";
   }
-  if (parseFloat(gridRectangles[6].textContent) * parseFloat(gridRectangles[7].textContent) != parseFloat(gridRectangles[8].textContent.replace(' ',''))){
+  if (Math.abs(parseFloat(gridRectangles[6].textContent) * parseFloat(gridRectangles[7].textContent) - parseFloat(gridRectangles[8].textContent.replace(' ',''))) > 20){
     consistent = false;
     document.getElementById("tbwTrue").style.display = "none";
     document.getElementById("tbwFalse").style.display = "block";
@@ -151,6 +164,8 @@ function consistencyCheck(){
   }
 }
 
+let answersRectangles = ["7.4", "329", "2 446", "14.9", "329", "4 891", "22.3", "329", "7 337"];
+
 function verifyGrid(){
   consistencyCheck();
   const cong = document.getElementById("congratulations");
@@ -158,9 +173,10 @@ function verifyGrid(){
   const kTtext = document.getElementById("kTtext");
   if (consistent){
     let allGood = true;
-    for (let i = 0; i++; i<9){
-      ///allGood = allGood && gridRectangles[i].textContent == answers[i];
-      allGood = allGood && true;
+    for (let i = 0; i<9; i++){
+      allGood = allGood && gridRectangles[i].textContent == answersRectangles[i];
+      console.log(allGood);
+      ///allGood = allGood && true;
     }
     if (allGood){
       cong.addEventListener('animationend', function () {cong.style.display = "none"; transition_01();})
@@ -196,37 +212,39 @@ function offsetLeft(element){
 function offsetTop(element){
   return element.offsetTop;
 }
+function calculatePositions(){
+  table0.push([offsetLeft(tables[0]),offsetTop(tables[0])]);
+  table1.push([offsetLeft(tables[1]),offsetTop(tables[1])]);
 
-table0.push([offsetLeft(tables[0]),offsetTop(tables[0])]);
-table1.push([offsetLeft(tables[1]),offsetTop(tables[1])]);
+  tables[0].style.left = "3vw";
+  tables[0].style.top  = table0[0][1]+'px';
 
-tables[0].style.left = "3vw";
-tables[0].style.top  = table0[0][1]+'px';
+  tables[1].style.right = "1vw";
+  tables[1].style.top  = table0[0][1]+'px';
 
-tables[1].style.right = "1vw";
-tables[1].style.top  = table0[0][1]+'px';
+  table0.push([offsetLeft(tables[0]),table0[0][1]]);
+  table1.push([offsetLeft(tables[1]),table0[0][1]]);
 
-table0.push([offsetLeft(tables[0]),table0[0][1]]);
-table1.push([offsetLeft(tables[1]),table0[0][1]]);
+  tables[0].style.position = "absolute";
+  tables[1].style.position = "absolute";
 
-tables[0].style.position = "absolute";
-tables[1].style.position = "absolute";
+  tables[0].style.left = table0[0][0]+'px';
+  tables[0].style.top  = table0[0][1]+'px';
 
-tables[0].style.left = table0[0][0]+'px';
-tables[0].style.top  = table0[0][1]+'px';
-
-tables[1].style.left = table1[0][0]+'px';
-tables[1].style.right = "";
-tables[1].style.top  = table1[0][1]+'px';
+  tables[1].style.left = table1[0][0]+'px';
+  tables[1].style.right = "";
+  tables[1].style.top  = table1[0][1]+'px';
 
 
-async function aux(){
-  await delay(1);
-  tables[0].classList.add("smoothTransitions");
-  tables[1].classList.add("smoothTransitions");
+  async function aux(){
+    await delay(1);
+    tables[0].classList.add("smoothTransitions");
+    tables[1].classList.add("smoothTransitions");
+  }
+
+  aux();
 }
-
-aux();
+  
 
 async function transition_01 (){
 
@@ -435,4 +453,5 @@ function setQuestion(i){
     document.getElementById("answer3").classList.add("activeButton");
   }
 
-}
+};
+
