@@ -2,6 +2,7 @@ const allLabels = document.querySelectorAll('.label');
 const arsenal = document.getElementById('arsenalContainer');
 const gridRectangles = document.querySelectorAll(".toFill");
 const checkButton = document.getElementById("checkButton");
+const referenceRectangles = Array.from(document.querySelectorAll(".rectangle")).slice(0,9);
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -18,7 +19,19 @@ function startCase(i){
   allLabels.forEach(lab=> lab.style.display = "");
   caseContainer.style.display = "";
   calculatePositions();
+  document.querySelectorAll(".case"+i.toString()).forEach(div => div.style.display = "flex");
+  let reference_values = (i==1)? reference_1 : (i==2) ? reference_2 : reference_3;
+  referenceRectangles.forEach((rec, i) => rec.textContent = reference_values[i]);
 }
+
+const reference_1 = [ '8.4', '290', '2 446', '16.9', '290', '4 891', '25.3', '290',  '7 337'];
+const reference_2 = ['11.9', '290', '3 456', '23.9', '290', '6 912', '35.8', '290', '10 368'];
+const reference_3 = ['14.6', '290', '4 234', '29.2', '290', '8 468', '43.8', '290', '12 702'];
+
+const answersRectangles_1 = [ "7.4", "329", "2 446", "14.9", "329", "4 891", "22.3", "329",  "7 337"];
+const answersRectangles_2 = ["11.5", "295", "3 386", "23.4", "295", "6 912", "34.9", "295", "10 298"];
+const answersRectangles_3 = ["15.4", "283", "4 346", "29.9", "283", "8 468", "45.3", "283", "12 814"];
+let answersRectangles = [];
 
 /// PART 1 - CLICK AND DRAG ///////////////////////////////////////////////////////////
 
@@ -164,7 +177,7 @@ function consistencyCheck(){
   }
 }
 
-let answersRectangles = ["7.4", "329", "2 446", "14.9", "329", "4 891", "22.3", "329", "7 337"];
+
 
 function verifyGrid(){
   consistencyCheck();

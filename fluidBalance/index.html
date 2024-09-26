@@ -21,7 +21,7 @@
                 <h3 class="scoreText" style="bottom: 0px; right: 0px" id="highScore">0</h3>
             </div>
             <div id="instructionsBox">
-                
+                <p>Note: Results are rounded to one decimal place.</p>
             </div>
             <div id="checkButton">Check</div>
         </div>
@@ -31,12 +31,22 @@
                 <div id="caseSelectionScreen">
                     <button onclick="startCase(1)">Case 1: Dehydrated Senior</button>
                     <button onclick="startCase(2)">Case 2: Athletic Hanne</button>
-                    <button onclick="startCase(3)">Case 3: Jordan at the Friday Bar</button>
+                    <button onclick="startCase(3)">Case 3: Jakob at the Friday Bar</button>
                 </div>
                 <div id="case" style="width: 100%;">
-                    <div id="caseDescription">
+                    <div id="caseDescription" class = "case1">
                         <h1>Case 1: Dehydrated senior</h1>
                         <p><i>Case description to be provided by NH.</i></p>
+                    </div>
+                    <div id="caseDescription" class = "case2">
+                        <h1>Case 2: Athletic Hanne</h1>
+                        <p>Hanne is studying medicine and is very interested in kidney physiology. One day she decides to measure how free water clearance looks after 2 hours of spinning. Hanne weighs 65 kg after emptying her bladder just before the start of the workout.</p>
+                        <p>After training, Hanne weighs 64.1 kg. She has lost 0.2 L of fluid via insensible perspiration, the rest is sweat. The osmolarity of the sweat is 100 mosmol/L.</p>
+                    </div>
+                    <div id="caseDescription" class = "case3">
+                        <h1>Case 3: Jakob at the Friday Bar</h1>
+                        <p>Jakob (73 kg) is thirsty and hungry after lugging crates of beer in the Friday bar. He quickly consumes 3 large 1⁄2 L draft beers and a 250 g bag of crisps.</p>
+                        <p>The crisps contain 1.3% salt (NaCl), which has a molecular weight of 58.45 g/mol. Other osmotically active substances in the crisps and beer as well as alcohol in the beer are ignored.</p>
                     </div>
                     <div class="table" style="top: 1vh; right: 5vw">
                         <div class="row">
@@ -151,18 +161,15 @@
                             </div>
                             <div class="xAxis"><span>Volume</span></div>
                         </div>
-                    </div>
-    
-                    <div id = "buttonsColumn">
-                        
-                        <div class="buttonWrapper">
-                            <img id="colorButton" src="../assets/colorIcon.png">
-                            <span>Change color theme</span>
-                        </div>
-                    </div>
-    
+                    </div>    
                 </div>
-                
+                <div id = "buttonsColumn">
+                        
+                    <div class="buttonWrapper">
+                        <img id="colorButton" src="../assets/colorIcon.png">
+                        <span>Change color theme</span>
+                    </div>
+                </div>
                 <div class="endWindow" id="congratulations">
                     <h1>Congratulations !</h1>
                     <h3>Hover over the table elements to see how they translate graphically, and answer a few questions!</h3>

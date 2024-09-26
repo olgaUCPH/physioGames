@@ -579,15 +579,16 @@ body {
 
 #caseDescription{
   position: absolute;
-  left: 3vw;
+  left: 5vw;
   top: 2vh;
   text-align: center;
   justify-content: center;
   display: flex;
   align-items: center;
-  width: 25vw;
+  width: 24vw;
   flex-direction: column;
   font-size: 0.9em;
+  display: none;
 }
 
 #caseDescription p{
