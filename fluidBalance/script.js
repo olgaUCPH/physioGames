@@ -20,8 +20,14 @@ function startCase(i){
   caseContainer.style.display = "";
   calculatePositions();
   document.querySelectorAll(".case"+i.toString()).forEach(div => div.style.display = "flex");
-  let reference_values = (i==1)? reference_1 : (i==2) ? reference_2 : reference_3;
+  ///let reference_values = (i==1)? reference_1 : (i==2) ? reference_2 : reference_3;
+  ///referenceRectangles.forEach((rec, i) => rec.textContent = reference_values[i]);
+  let reference_values = [];
+  let labels = [];
+  [reference_values, answersRectangles, labels] = (i==1)? case_1(): (i==2)? case_2() : case_3();
   referenceRectangles.forEach((rec, i) => rec.textContent = reference_values[i]);
+  allLabels.forEach((lab,i) => lab.textContent = labels[i]);
+  
 }
 
 const reference_1 = [ '8.4', '290', '2 446', '16.9', '290', '4 891', '25.3', '290',  '7 337'];
@@ -32,6 +38,168 @@ const answersRectangles_1 = [ "7.4", "329", "2 446", "14.9", "329", "4 891", "22
 const answersRectangles_2 = ["11.5", "295", "3 386", "23.4", "295", "6 912", "34.9", "295", "10 298"];
 const answersRectangles_3 = ["15.4", "283", "4 346", "29.9", "283", "8 468", "45.3", "283", "12 814"];
 let answersRectangles = [];
+
+function round_1(x){
+  return Math.round(x*10)/10;
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    // Generate a random index between 0 and i
+    const j = Math.floor(Math.random() * (i + 1));
+    
+    // Swap elements at index i and j
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function randRange(min, max, step) {
+  const steps = Math.floor((max - min) / step) + 1;
+  const randomStep = Math.floor(Math.random() * steps);
+  return min + randomStep * step;
+}
+
+function case_1(){
+  /// Straight loss of water: TBW goes down, mosmol stays the same; recalculate ECV & ICV, then concentration
+  const weight = randRange(48,66,3);
+  const water_ratio = 0.46;
+  const lost_water = randRange(1.5, 3.9, 0.3);
+
+  let desc = document.getElementById("caseDescription1");
+  let p = document.createElement("p");
+  p.innerHTML = `Ingrid is an elderly 65 year-old woman living alone. She usually weights ${weight} kg when healthy, but has stopped drinking water over the weekend and has lost ${lost_water} L of water.`;
+  let p2 = document.createElement("p");
+  p2.innerHTML = "Her usual fluid balance is reported on the top table. Calculate her fluid balance at the end of the weekend.";
+  desc.appendChild(p);
+  desc.appendChild(p2);
+
+  const concentration_0 = 290;
+
+  const TBW_0 = round_1(water_ratio*weight);
+
+  const TBM_0 = Math.round(TBW_0*concentration_0);
+  const ECM_0 = Math.round(TBM_0/3);
+  const ICM_0 = Math.round(2*TBM_0/3);
+
+  const ECV_0 = round_1(TBW_0*ECM_0/TBM_0);
+  const ICV_0 = round_1(TBW_0*ICM_0/TBM_0);
+
+  let reference = [ECV_0, concentration_0, ECM_0, ICV_0, concentration_0, ICM_0, TBW_0, concentration_0, TBM_0];
+
+  const TBW_1 = round_1(TBW_0 - lost_water);
+
+  const TBM_1 = TBM_0;
+  const ECM_1 = ECM_0;
+  const ICM_1 = ICM_0;
+
+  const concentration_1 = Math.round(TBM_1/TBW_1);
+
+  const ECV_1 = round_1(TBW_1*ECM_1/TBM_1);
+  const ICV_1 = round_1(TBW_1*ICM_1/TBM_1);
+
+  let answers = [ECV_1, concentration_1, ECM_1, ICV_1, concentration_1, ICM_1, TBW_1, concentration_1, TBM_1];
+
+  let V_labels = [TBW_0, TBW_1, ECV_0, ECV_1, ICV_0, ICV_1];
+  V_labels.push(round_1(TBW_0 - lost_water*water_ratio), round_1((TBW_0 - lost_water*water_ratio)/3), round_1(2*(TBW_0 - lost_water*water_ratio)/3));
+  V_labels.push(round_1(ECV_0 - lost_water), round_1(ICV_0 - lost_water), round_1(ECV_0 - lost_water/2), round_1(ICV_0 - lost_water/2));
+
+  let C_labels = [concentration_0, concentration_1];
+  C_labels.push(Math.round(TBM_1/round_1(TBW_0 - lost_water*water_ratio)));
+  C_labels.push(Math.round(TBW_1*concentration_0/TBW_0));
+  C_labels.push(Math.round(ECM_0/(ECV_0 - lost_water)), Math.round(ICM_0/(ICV_0 - lost_water)), Math.round(ECM_0/(ECV_0 - lost_water/2)), Math.round(ICM_0/(ICV_0 - lost_water/2)));
+  C_labels.push(Math.round(1.1*concentration_0), Math.round(0.9*concentration_0));
+
+  let M_labels = [TBM_0, ECM_0, ICM_0];
+  M_labels.push(Math.round(TBW_1*concentration_0),Math.round(ECV_1*concentration_0),Math.round(ICV_1*concentration_0));
+  M_labels.push(Math.round(TBW_0*concentration_1),Math.round(ECV_0*concentration_1),Math.round(ICV_0*concentration_1));
+  M_labels.push(Math.round(ECM_0 - lost_water*concentration_0), Math.round(ICM_0 - lost_water*concentration_0), Math.round(ECM_0 - lost_water*concentration_0/2));
+
+  let labels = [...shuffleArray(V_labels), ...shuffleArray(C_labels), ...shuffleArray(M_labels)];
+
+  return [reference, answers, labels]
+}
+
+function case_2(){
+  const weight = randRange(55,70,1);
+  const water_ratio = 0.55;
+  
+  const total_water_loss = randRange(0.5, 1.5, 0.1);
+  const ip_loss = randRange(round_1(total_water_loss/5), round_1(total_water_loss/3), 0.1);
+  const sw_concentration = 100;
+
+  const new_weight = weight - total_water_loss;
+  const sw_loss = total_water_loss - ip_loss;
+  const mosm_loss = sw_loss*sw_concentration;
+
+  let desc = document.getElementById("caseDescription2");
+  let p = document.createElement("p");
+  p.innerHTML = `Hanne is studying medicine and is very interested in kidney physiology. One day she decides to measure how free water clearance looks after 2 hours of spinning. Hanne weighs ${weight} kg after emptying her bladder just before the start of the workout.`;
+  let p2 = document.createElement("p");
+  p2.innerHTML = `After training, Hanne weighs ${new_weight} kg. She has lost ${ip_loss} L of fluid via insensible perspiration, the rest is sweat. The osmolarity of the sweat is ${sw_concentration} mosmol/L.`;
+  desc.appendChild(p);
+  desc.appendChild(p2);
+
+  const concentration_0 = 290;
+
+  const TBW_0 = round_1(water_ratio*weight);
+
+  const TBM_0 = Math.round(TBW_0*concentration_0);
+  const ECM_0 = Math.round(TBM_0/3);
+  const ICM_0 = Math.round(2*TBM_0/3);
+
+  const ECV_0 = round_1(TBW_0*ECM_0/TBM_0);
+  const ICV_0 = round_1(TBW_0*ICM_0/TBM_0);
+
+  let reference = [ECV_0, concentration_0, ECM_0, ICV_0, concentration_0, ICM_0, TBW_0, concentration_0, TBM_0];
+  
+  const TBW_1 = round_1(TBW_0 - total_water_loss);
+
+  const TBM_1 = round_1(TBM_0 - mosm_loss);
+  const ECM_1 = round_1(ECM_0 - mosm_loss);
+  const ICM_1 = ICM_0;
+
+  const concentration_1 = Math.round(TBM_1/TBW_1);
+
+  const ECV_1 = round_1(TBW_1*ECM_1/TBM_1);
+  const ICV_1 = round_1(TBW_1*ICM_1/TBM_1);
+
+  let answers = [ECV_1, concentration_1, ECM_1, ICV_1, concentration_1, ICM_1, TBW_1, concentration_1, TBM_1];
+
+  let V_labels = [TBW_0, TBW_1, ECV_0, ECV_1, ICV_0, ICV_1];
+  V_labels.push(round_1((ICM_0 - mosm_loss)/TBM_1*TBW_1),round_1(ECM_0/TBM_1*TBW_1));
+  V_labels.push(round_1(new_weight*water_ratio));
+  V_labels.push(round_1((ECM_0 - (total_water_loss*water_ratio-0.2)*sw_concentration)/(TBM_0 - (total_water_loss*water_ratio-0.2)*sw_concentration)*new_weight*water_ratio));
+  V_labels.push(round_1(ICM_1/(TBM_0 - (total_water_loss*water_ratio-0.2)*sw_concentration)*new_weight*water_ratio));
+  V_labels.push(round_1(ECV_0 - total_water_loss));
+  V_labels.push(round_1(ICV_0 - total_water_loss));
+
+  let C_labels = [concentration_0, concentration_1];
+  C_labels.push(Math.round((TBM_0 - total_water_loss*sw_concentration)/TBW_1));
+  C_labels.push(Math.round((TBM_1)/(TBW_0 - sw_loss)));
+  C_labels.push(Math.round((TBM_0 - total_water_loss*sw_concentration)/(TBW_0 - sw_loss)));
+  C_labels.push(Math.round(TBM_1/TBW_0));
+  C_labels.push(Math.round(TBM_0/TBW_1));
+  C_labels.push(Math.round((TBM_0 - (total_water_loss*water_ratio-0.2)*sw_concentration)/(new_weight*water_ratio)));
+  C_labels.push(Math.round(ECM_1/ECV_0), Math.round(ECM_0/ECM_1));
+  
+
+  let M_labels = [TBM_0, ECM_0, ICM_0, TBM_1, ECM_1];
+  M_labels.push(Math.round(TBM_0 - total_water_loss*sw_concentration), Math.round(ECM_0 - total_water_loss*sw_concentration));
+  M_labels.push(Math.round(ICM_0 - mosm_loss));
+  M_labels.push(Math.round(ECM_0/TBM_0*TBM_1),Math.round(ICM_0/TBM_0*TBM_1));
+  M_labels.push(Math.round(TBM_0 - (total_water_loss*water_ratio-0.2)*sw_concentration), Math.round(ECM_0 - (total_water_loss*water_ratio-0.2)*sw_concentration));
+  
+  
+  let labels = [...shuffleArray(V_labels), ...shuffleArray(C_labels), ...shuffleArray(M_labels)];
+
+  return [reference, answers, labels];
+}
+
+
+function case_3(){
+  return 0;
+}
 
 /// PART 1 - CLICK AND DRAG ///////////////////////////////////////////////////////////
 
@@ -113,7 +281,7 @@ function consistencyCheck(){
   let bool = true;
   const kTtext = document.getElementById("kTtext");
   kTtext.innerHTML = "Your results are inconsistent.</br>";
-  if (parseFloat(gridRectangles[0].textContent) + parseFloat(gridRectangles[3].textContent) != parseFloat(gridRectangles[6].textContent)){
+  if (round_1(parseFloat(gridRectangles[0].textContent) + parseFloat(gridRectangles[3].textContent)) != parseFloat(gridRectangles[6].textContent)){
     consistent = false;
     document.getElementById("volumeTrue").style.display = "none";
     document.getElementById("volumeFalse").style.display = "block";
@@ -133,7 +301,7 @@ function consistencyCheck(){
     document.getElementById("concentrationFalse").style.display = "none";
     document.getElementById("concentrationTrue").style.display = "block";
   }
-  if (parseFloat(gridRectangles[2].textContent.replace(' ','')) + parseFloat(gridRectangles[5].textContent.replace(' ','')) != parseFloat(gridRectangles[8].textContent.replace(' ',''))){
+  if (round_1(parseFloat(gridRectangles[2].textContent.replace(' ','')) + parseFloat(gridRectangles[5].textContent.replace(' ',''))) != parseFloat(gridRectangles[8].textContent.replace(' ',''))){
     consistent = false;
     document.getElementById("totalTrue").style.display = "none";
     document.getElementById("totalFalse").style.display = "block";
@@ -267,7 +435,7 @@ async function transition_01 (){
   document.querySelectorAll(".checkWrapper").forEach(element => element.style.display = "none");
   tables[0].style.top  = table0[1][1]+'px';
   tables[1].style.top  = table1[1][1]+'px';
-  document.getElementById("caseDescription").style.display = "none";
+  document.querySelectorAll(".caseDescription").forEach(element=> element.style.display = "none");
   await delay(500);
   document.getElementById("diagramContainer").style.opacity = 1;
   document.getElementById('arsenalContainer').style.backgroundColor="var(--light-highlight)";

@@ -282,7 +282,7 @@ body {
   border-style: solid;
   border-color: var(--pseudo-black);
   position: relative;
-  margin: 0.5vw;
+  margin: 0.25vw;
   display: flex;
   padding: 7px;
   font-size: 1.15vw;
@@ -577,7 +577,7 @@ body {
   -webkit-filter: drop-shadow(0 0 1px black);
 }
 
-#caseDescription{
+.caseDescription{
   position: absolute;
   left: 5vw;
   top: 2vh;
@@ -591,7 +591,7 @@ body {
   display: none;
 }
 
-#caseDescription p{
+.caseDescription p{
   text-align: justify;
   margin: 5px;
 }
