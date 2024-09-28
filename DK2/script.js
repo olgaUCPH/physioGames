@@ -402,8 +402,8 @@ function arraysEqual(arr1, arr2) {
   }
 
   // Sort both arrays and their sub-arrays
-  const sortedArr1 = arr1.map(subArr => [...subArr].sort()).sort();
-  const sortedArr2 = arr2.map(subArr => [...subArr].sort()).sort();
+  const sortedArr1 = arr1.map(subArr => [...subArr]).sort();
+  const sortedArr2 = arr2.map(subArr => [...subArr]).sort();
 
   // Compare each sub-array
   return sortedArr1.every((subArr1, index) => {
