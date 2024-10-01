@@ -40,7 +40,7 @@ const answersRectangles_3 = ["15.4", "283", "4 346", "29.9", "283", "8 468", "45
 let answersRectangles = [];
 
 function round_1(x){
-  return Math.round(x*10)/10;
+  return Math.round(x*100)/100;
 }
 
 function shuffleArray(array) {
@@ -57,7 +57,7 @@ function shuffleArray(array) {
 function randRange(min, max, step) {
   const steps = Math.floor((max - min) / step) + 1;
   const randomStep = Math.floor(Math.random() * steps);
-  return min + randomStep * step;
+  return round_1(min + randomStep * step);
 }
 
 function case_1(){
@@ -155,9 +155,9 @@ function case_2(){
   
   const TBW_1 = round_1(TBW_0 - total_water_loss);
 
-  const TBM_1 = round_1(TBM_0 - mosm_loss);
   const ECM_1 = round_1(ECM_0 - mosm_loss);
   const ICM_1 = ICM_0;
+  const TBM_1 = Math.round(ECM_1+ICM_1);
 
   const concentration_1 = Math.round(TBM_1/TBW_1);
 
@@ -198,7 +198,74 @@ function case_2(){
 
 
 function case_3(){
-  return 0;
+  const weight = randRange(65,80,2);
+  const beers = randRange(1,4,1);
+  const crisps = 250;
+  const salt_concentration = randRange(0.9,1.4,0.1);
+
+  const mol_weight = 58.45;
+  const water_ratio = 0.6;
+  
+  const water_drunk = beers*0.5;
+  const salt_weight = salt_concentration*crisps/100;
+  const salt_mol = salt_weight/mol_weight;
+  const salt_mosmol = salt_mol * 2000;
+
+  let desc = document.getElementById("caseDescription3");
+  let p = document.createElement("p");
+  p.innerHTML = `Jakob (${weight} kg) is thirsty and hungry after lugging crates of beer in the Friday bar. He quickly consumes ${beers} large 1⁄2 L draft beers and a ${crisps} g bag of crisps.`;
+  let p2 = document.createElement("p");
+  p2.innerHTML = `The crisps contain ${salt_concentration}% salt (NaCl), which has a molecular weight of ${mol_weight} g/mol. Other osmotically active substances in the crisps and beer as well as alcohol in the beer are ignored.`;
+  desc.appendChild(p);
+  desc.appendChild(p2);
+
+  const concentration_0 = 290;
+
+  const TBW_0 = round_1(water_ratio*weight);
+
+  const TBM_0 = Math.round(TBW_0*concentration_0);
+  const ECM_0 = Math.round(TBM_0/3);
+  const ICM_0 = Math.round(2*TBM_0/3);
+
+  const ECV_0 = round_1(TBW_0*ECM_0/TBM_0);
+  const ICV_0 = round_1(TBW_0*ICM_0/TBM_0);
+
+  let reference = [ECV_0, concentration_0, ECM_0, ICV_0, concentration_0, ICM_0, TBW_0, concentration_0, TBM_0];
+
+  const TBW_1 = round_1(TBW_0 + water_drunk);
+  
+  const ECM_1 = Math.round(ECM_0 + salt_mosmol);
+  const ICM_1 = ICM_0;
+  const TBM_1 = Math.round(ECM_1+ICM_1);
+
+  const concentration_1 = Math.round(TBM_1/TBW_1);
+
+  const ECV_1 = round_1(TBW_1*ECM_1/TBM_1);
+  const ICV_1 = round_1(TBW_1*ICM_1/TBM_1);
+
+  let answers = [ECV_1, concentration_1, ECM_1, ICV_1, concentration_1, ICM_1, TBW_1, concentration_1, TBM_1];
+
+  let V_labels = [TBW_0, TBW_1, ECV_0, ECV_1, ICV_0, ICV_1];
+  V_labels.push(round_1((ECM_0 + salt_mosmol/2)/(TBM_0 + salt_mosmol/2)*TBW_1), round_1((ICM_0 + salt_mosmol/2)/(TBM_0 + salt_mosmol/2)*TBW_1));
+  V_labels.push(round_1((ECM_0)/(TBM_1)*TBW_1), round_1((ICM_0 + salt_mosmol)/(TBM_1)*TBW_1));
+  V_labels.push(round_1((ECM_0)/(TBM_0 + salt_mosmol/2)*TBW_1), round_1((ICM_0)/(TBM_0 + salt_mosmol/2)*TBW_1));
+  V_labels.push(round_1(TBW_0 + water_ratio*water_drunk));
+
+  let C_labels = [concentration_0, concentration_1];
+  C_labels.push(Math.round((TBM_0 + salt_mosmol/2)/TBW_1));
+  C_labels.push(Math.round((TBM_0 + salt_mosmol/2)/TBW_0));
+  C_labels.push(Math.round(TBM_1/TBW_0), Math.round(TBM_0/TBW_1));
+  C_labels.push(Math.round((TBM_0 + crisps/mol_weight*2000)/TBW_1), Math.round((TBM_0 + crisps/mol_weight*2000)/TBW_0));
+  C_labels.push(Math.round(1.1*concentration_0), Math.round(0.9*concentration_0));
+
+  let M_labels = [TBM_0, ECM_0, ICM_0, TBM_1, ECM_1];
+  M_labels.push(Math.round(TBM_0 + salt_mosmol/2), Math.round(ECM_0 + salt_mosmol/2));
+  M_labels.push(Math.round(ICM_0 + salt_mosmol), Math.round(ICM_0 + salt_mosmol/2));
+  M_labels.push(Math.round(concentration_0 * TBW_1), Math.round(TBM_0 + crisps/mol_weight*2000), Math.round(ECM_0 + crisps/mol_weight*2000));
+  
+  let labels = [...shuffleArray(V_labels), ...shuffleArray(C_labels), ...shuffleArray(M_labels)];
+
+  return [reference, answers, labels];  
 }
 
 /// PART 1 - CLICK AND DRAG ///////////////////////////////////////////////////////////
