@@ -1,6 +1,7 @@
 const allLabels = document.querySelectorAll('.label');
 const arsenal = document.getElementById('arsenalContainer');
-const gridRectangles = document.querySelectorAll(".toFill");
+let gridRectangles = document.querySelectorAll(".toFill");
+let toFill = document.querySelectorAll(".toFill");
 const checkButton = document.getElementById("checkButton");
 const referenceRectangles = Array.from(document.querySelectorAll(".rectangle")).slice(0,9);
 
@@ -14,29 +15,28 @@ let caseContainer = document.getElementById("case");
 allLabels.forEach(lab=> lab.style.display = "none");
 caseContainer.style.display = "none";
 
+let caseID = -1;
+
 function startCase(i){
+  caseID = i;
   document.getElementById("caseSelectionScreen").style.display = "none";
   allLabels.forEach(lab=> lab.style.display = "");
   caseContainer.style.display = "";
-  calculatePositions();
-  document.querySelectorAll(".case"+i.toString()).forEach(div => div.style.display = "flex");
-  ///let reference_values = (i==1)? reference_1 : (i==2) ? reference_2 : reference_3;
-  ///referenceRectangles.forEach((rec, i) => rec.textContent = reference_values[i]);
-  let reference_values = [];
-  let labels = [];
-  [reference_values, answersRectangles, labels] = (i==1)? case_1(): (i==2)? case_2() : case_3();
-  referenceRectangles.forEach((rec, i) => rec.textContent = reference_values[i]);
-  allLabels.forEach((lab,i) => lab.textContent = labels[i]);
+  if (i==0){
+    case_0();
+  }
+  else{
+    calculatePositions();
+    document.getElementById("caseDescription").style.display = "flex";
+    let reference_values = [];
+    let labels = [];
+    [reference_values, answersRectangles, labels] = (i==1)? case_1(): (i==2)? case_2() : case_3();
+    referenceRectangles.forEach((rec, i) => rec.textContent = reference_values[i]);
+    allLabels.forEach((lab,i) => lab.textContent = labels[i]);
+  }
+  checkButton.addEventListener("click", verifyGrid);
   
 }
-
-const reference_1 = [ '8.4', '290', '2 446', '16.9', '290', '4 891', '25.3', '290',  '7 337'];
-const reference_2 = ['11.9', '290', '3 456', '23.9', '290', '6 912', '35.8', '290', '10 368'];
-const reference_3 = ['14.6', '290', '4 234', '29.2', '290', '8 468', '43.8', '290', '12 702'];
-
-const answersRectangles_1 = [ "7.4", "329", "2 446", "14.9", "329", "4 891", "22.3", "329",  "7 337"];
-const answersRectangles_2 = ["11.5", "295", "3 386", "23.4", "295", "6 912", "34.9", "295", "10 298"];
-const answersRectangles_3 = ["15.4", "283", "4 346", "29.9", "283", "8 468", "45.3", "283", "12 814"];
 let answersRectangles = [];
 
 function round_1(x){
@@ -66,11 +66,14 @@ function case_1(){
   const water_ratio = 0.46;
   const lost_water = randRange(1.5, 3.9, 0.3);
 
-  let desc = document.getElementById("caseDescription1");
+  let desc = document.getElementById("caseDescription");
+  let h1 = document.createElement("h1"); 
+  h1.innerHTML = "Case 1 : Dehydrated Senior";
   let p = document.createElement("p");
   p.innerHTML = `Ingrid is an elderly 65 year-old woman living alone. She usually weights ${weight} kg when healthy, but has stopped drinking water over the weekend and has lost ${lost_water} L of water.`;
   let p2 = document.createElement("p");
   p2.innerHTML = "Her usual fluid balance is reported on the top table. Calculate her fluid balance at the end of the weekend.";
+  desc.appendChild(h1);
   desc.appendChild(p);
   desc.appendChild(p2);
 
@@ -132,11 +135,14 @@ function case_2(){
   const sw_loss = total_water_loss - ip_loss;
   const mosm_loss = sw_loss*sw_concentration;
 
-  let desc = document.getElementById("caseDescription2");
+  let desc = document.getElementById("caseDescription");
+  let h1 = document.createElement("h1"); 
+  h1.innerHTML = "Case 2 : Athletic Hanne";
   let p = document.createElement("p");
   p.innerHTML = `Hanne is studying medicine and is very interested in kidney physiology. One day she decides to measure how free water clearance looks after 2 hours of spinning. Hanne weighs ${weight} kg after emptying her bladder just before the start of the workout.`;
   let p2 = document.createElement("p");
   p2.innerHTML = `After training, Hanne weighs ${new_weight} kg. She has lost ${ip_loss} L of fluid via insensible perspiration, the rest is sweat. The osmolarity of the sweat is ${sw_concentration} mosmol/L.`;
+  desc.appendChild(h1);
   desc.appendChild(p);
   desc.appendChild(p2);
 
@@ -211,11 +217,14 @@ function case_3(){
   const salt_mol = salt_weight/mol_weight;
   const salt_mosmol = salt_mol * 2000;
 
-  let desc = document.getElementById("caseDescription3");
+  let desc = document.getElementById("caseDescription");
+  let h1 = document.createElement("h1"); 
+  h1.innerHTML = "Case 3 : Jakob at the Friday Bar";
   let p = document.createElement("p");
   p.innerHTML = `Jakob (${weight} kg) is thirsty and hungry after lugging crates of beer in the Friday bar. He quickly consumes ${beers} large 1⁄2 L draft beers and a ${crisps} g bag of crisps.`;
   let p2 = document.createElement("p");
   p2.innerHTML = `The crisps contain ${salt_concentration}% salt (NaCl), which has a molecular weight of ${mol_weight} g/mol. Other osmotically active substances in the crisps and beer as well as alcohol in the beer are ignored.`;
+  desc.appendChild(h1);
   desc.appendChild(p);
   desc.appendChild(p2);
 
@@ -318,7 +327,7 @@ function dragFunction(element){
       document.removeEventListener('touchend',onMouseUp);
       newElement.style.pointerEvents = "auto";
       newElement.onmouseup = null;
-      gridRectangles.forEach(rectangle => {
+      toFill.forEach(rectangle => {
       const rect = rectangle.getBoundingClientRect();
       if (userX >= rect.left && userX <= rect.right && userY >= rect.top && userY <= rect.bottom) {
         if (rectangle != newElement.parentNode){
@@ -426,6 +435,7 @@ function verifyGrid(){
       console.log(allGood);
       ///allGood = allGood && true;
     }
+    if (caseID == 0){allGood = true};
     if (allGood){
       cong.addEventListener('animationend', function () {cong.style.display = "none"; transition_01();})
       void cong.offsetWidth;
@@ -519,9 +529,6 @@ async function transition_01 (){
 
   document.getElementById("questionStart").style.display = "flex";
 }
-
-
-checkButton.addEventListener("click", verifyGrid);
 
 const allRectangles = document.querySelectorAll(".rectangle");
 
@@ -703,3 +710,87 @@ function setQuestion(i){
 
 };
 
+/// CASE 0 /////////////////////////////////////////////////////////////////////////////
+
+function case_0(){
+  let tables = document.querySelectorAll(".table");
+  tables[0].style.display = "none";
+  tables[1].style.position = "relative";
+  tables[1].style.right = "";
+  tables[1].style.top = "";
+
+  const weight = randRange(50,80,1);
+  const water_ratio = 0.6;
+
+  E_ratio = randRange(0.25,0.35,0.01);
+
+  const concentration_0 = Math.round(randRange(280,330,5));
+
+  const TBW_0 = round_1(water_ratio*weight);
+
+  const TBM_0 = Math.round(TBW_0*concentration_0);
+  const ECM_0 = Math.round(TBM_0*E_ratio);
+  const ICM_0 = Math.round(TBM_0*(1-E_ratio));
+
+  const ECV_0 = round_1(TBW_0*ECM_0/TBM_0);
+  const ICV_0 = round_1(TBW_0*ICM_0/TBM_0);
+
+  let reference = [ECV_0, concentration_0, ECM_0, ICV_0, concentration_0, ICM_0, TBW_0, concentration_0, TBM_0];
+  let pattern = randPattern();
+  
+  pattern.forEach(i => gridRectangles[i].textContent = reference[i]);
+
+  let answers = reference.filter((_, index) => !pattern.includes(index));
+  toFill = Array.from(toFill).filter((_, index) => !pattern.includes(index));
+
+  let V_labels = [TBW_0, ECV_0, ICV_0].concat(generateLabels(ECV_0, TBW_0, 10, round_1));
+  
+
+  let C_labels = [concentration_0].concat(generateLabels(concentration_0/2, concentration_0*1.5, 9, Math.round));
+  
+  let M_labels = [TBM_0, ECM_0, ICM_0].concat(generateLabels(ECM_0, TBM_0, 9, Math.round));
+  
+  let labels = [...shuffleArray(V_labels), ...shuffleArray(C_labels), ...shuffleArray(M_labels)];
+
+  allLabels.forEach((lab,i) => lab.textContent = labels[i]);
+  
+}
+
+function randPattern() {
+  const gridIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+
+  function isValid(triplet) {
+      const [a, b, c] = triplet;
+      const rowCheck = (Math.round(a / 3) === Math.round(b / 3) && Math.round(b / 3) === Math.round(c / 3));
+      const columnCheck = (a % 3 === b % 3 && a % 3 === c % 3);
+      const middleColumnCheck = [1, 4, 7].filter(index => triplet.includes(index)).length <= 1;
+      const containsMiddleColumn = triplet.some(index => [1, 4, 7].includes(index));
+      let noSameRowIfMiddleColumn = true;
+
+      if (containsMiddleColumn) {
+        const [d,e] = triplet.filter(index => ![1, 4, 7].includes(index));
+        noSameRowIfMiddleColumn = !(Math.round(d / 3) === Math.round(e / 3)
+          );
+        }
+      return !rowCheck && !columnCheck && middleColumnCheck && noSameRowIfMiddleColumn;
+  }
+
+  let validTriplet = [];
+  while (true) {
+      const shuffled = gridIndices.sort(() => Math.random() - 0.5);
+      const triplet = shuffled.slice(0, 3);
+      if (isValid(triplet)) {
+          validTriplet = triplet;
+          break;
+      }
+  }
+  return validTriplet;
+}
+
+function generateLabels(A,B,n, round_fn){
+  let lab = [];
+  for (let i = 0; i < n; i++){
+    lab.push(round_fn(randRange(0.75*A,1.25*B,(B-A)/20)));
+  }
+  return lab;
+}

@@ -576,7 +576,18 @@ body {
   -webkit-filter: drop-shadow(0 0 1px black);
 }
 
-.caseDescription{
+#case{
+  position: relative;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  padding-right: 4vw;
+}
+
+#caseDescription{
   position: absolute;
   left: 5vw;
   top: 2vh;
@@ -590,7 +601,7 @@ body {
   display: none;
 }
 
-.caseDescription p{
+#caseDescription p{
   text-align: justify;
   margin: 5px;
 }
