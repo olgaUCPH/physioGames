@@ -441,6 +441,8 @@ body {
   filter: brightness(5);
 }
 
+
+
 @keyframes rotate {
   0%  {rotate: 0deg;}
   15% {rotate: 380deg;}
@@ -476,6 +478,13 @@ body {
   animation-iteration-count: infinite;
 }
 
+
+#resetButton:hover{
+  animation: rotate;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+}
+
 .endWindow{
   position: absolute;
   width: 30vw;
@@ -503,6 +512,31 @@ body {
   justify-content: center;
   margin-bottom: 5px; 
   margin-top: 0;
+}
+
+.endWindow button{
+  margin: 20px;
+  background-color: var(--pseudo-black);
+  border-radius: .75rem;
+  box-sizing: border-box;
+  color: var(--pseudo-white);
+  padding: .75rem 1.2rem;
+  text-align: center;
+  transition-duration: .5s;
+  transition-property: background-color,border-color,color,fill,stroke,scale;
+  font-family: Avenir;
+  font-weight: 300;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+
+.endWindow button:hover {
+  filter: brightness(1.5);
+  transform: scale(1.05);
+}
+
+.endWindow button:active {
+  filter: brightness(2);
 }
 
 .table{

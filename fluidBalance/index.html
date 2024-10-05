@@ -158,6 +158,10 @@
                         <img id="colorButton" src="../assets/colorIcon.png">
                         <span>Change color theme</span>
                     </div>
+                    <div class="buttonWrapper">
+                        <img id="resetButton" src="../assets/resetIcon.png" onclick="location.reload()">
+                        <span>Go back to case selection</span>
+                    </div>
                 </div>
                 <div class="endWindow" id="congratulations">
                     <h1>Congratulations !</h1>
@@ -167,6 +171,13 @@
                 <div class="endWindow" id="keepTrying">
                     <h1>Keep trying !</h1>
                     <h3 id="kTtext"></h3>
+                </div>
+
+                <div class="endWindow" id="return">
+                    <h1>Congratulations !</h1>
+                    <h3>You've completed the case !</h3>
+                    <button onclick="location.reload();">Return to menu</button>
+                    <button onclick="document.getElementById('return').style.display = 'none';">Dismiss</button>
                 </div>
 
             </div>

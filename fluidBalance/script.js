@@ -8,6 +8,25 @@ const referenceRectangles = Array.from(document.querySelectorAll(".rectangle")).
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+/// SCORING ////////////////////////////////////////////////////////////////////////////////////
+let currentScore = 0;
+let highScore = 0;
+
+let highScore_0 = 0;
+let highScore_1 = 0;
+let highScore_2 = 0;
+let highScore_3 = 0;
+
+document.addEventListener("DOMContentLoaded", function() {
+  highScore_0 = parseInt(localStorage.getItem('FB_highScore_0')) || 0;
+  highScore_1 = parseInt(localStorage.getItem('FB_highScore_1')) || 0;
+  highScore_2 = parseInt(localStorage.getItem('FB_highScore_2')) || 0;
+  highScore_3 = parseInt(localStorage.getItem('FB_highScore_3')) || 0;
+  document.getElementById('highScore').textContent = highScore;
+}); //Get stored values
+
+
+
 
 /// CASE SELECTION /////////////////////////////////////////////////////////////////////////////
 
@@ -61,6 +80,8 @@ function randRange(min, max, step) {
 }
 
 function case_1(){
+  highScore = highScore_1;
+  document.getElementById('highScore').textContent = highScore;
   /// Straight loss of water: TBW goes down, mosmol stays the same; recalculate ECV & ICV, then concentration
   const weight = randRange(48,66,3);
   const water_ratio = 0.46;
@@ -124,6 +145,8 @@ function case_1(){
 }
 
 function case_2(){
+  highScore = highScore_2;
+  document.getElementById('highScore').textContent = highScore;
   const weight = randRange(55,70,1);
   const water_ratio = 0.55;
   
@@ -204,6 +227,8 @@ function case_2(){
 
 
 function case_3(){
+  highScore = highScore_3;
+  document.getElementById('highScore').textContent = highScore;
   const weight = randRange(65,80,2);
   const beers = randRange(1,4,1);
   const crisps = 250;
@@ -421,40 +446,60 @@ function consistencyCheck(){
   }
 }
 
-
+let attempt = 0;
+let firstConsistent = true;
 
 function verifyGrid(){
+  attempt += 1;
   consistencyCheck();
   const cong = document.getElementById("congratulations");
   const kT = document.getElementById("keepTrying");
   const kTtext = document.getElementById("kTtext");
+  const returnW = document.getElementById("return");
   if (consistent){
     let allGood = true;
+    setScore(currentScore + firstConsistent ? Math.max(6 - attempt, 1) * 10 : 0);
+    firstConsistent = false;
     for (let i = 0; i<9; i++){
       allGood = allGood && gridRectangles[i].textContent == answersRectangles[i];
       console.log(allGood);
       ///allGood = allGood && true;
     }
-    if (caseID == 0){allGood = true};
-    if (allGood){
-      cong.addEventListener('animationend', function () {cong.style.display = "none"; transition_01();})
-      void cong.offsetWidth;
-      cong.style.display = "flex";
+    if (caseID == 0){
+      returnW.style.animationDuration = '0s';
+      returnW.style.display = "flex";
     }
     else{
-      kTtext.textContent = "Your results are consistent, but the values are not the ones we are looking for. Keep looking !";
+      if (allGood){
+        setScore(currentScore + Math.max(6 - attempt, 1) * 10);
+        cong.addEventListener('animationend', function () {cong.style.display = "none"; transition_01();})
+        void cong.offsetWidth;
+        cong.style.display = "flex";
+      }
+      else{
+        kTtext.textContent = "Your results are consistent, but the values are not the ones we are looking for. Keep looking !";
+        kT.addEventListener('animationend', function () {kT.style.display = "none";})
+        void kT.offsetWidth;
+        kT.style.display = "flex";
+      }
+    }}
+    else{
       kT.addEventListener('animationend', function () {kT.style.display = "none";})
       void kT.offsetWidth;
       kT.style.display = "flex";
     }
-  }
-  else{
-    kT.addEventListener('animationend', function () {kT.style.display = "none";})
-    void kT.offsetWidth;
-    kT.style.display = "flex";
-  }
-}
+    }
 
+
+function setScore(n){
+  currentScore = n;
+  if (currentScore > highScore){
+    highScore = currentScore;
+  }
+  document.getElementById('currentScore').textContent = currentScore;
+  document.getElementById('highScore').textContent = highScore;
+  localStorage.setItem('FB_highScore_'+caseID.toString(), highScore)
+}
 
 /// PART 2 - GRAPHICAL VISUALIZATION /////////////////////////////////////////////////
 
@@ -506,6 +551,7 @@ function calculatePositions(){
 
 async function transition_01 (){
 
+  document.getElementById('caseDescription').style.display = "none";
   tables[0].style.left = table0[1][0]+'px';
   tables[1].style.left = table1[1][0]+'px';
   await delay(500);
@@ -653,6 +699,7 @@ correctAnswers.push(3);
 
 function sendAnswer(n){
   if (userAnswers.length < currentQ) {
+    if (n == correctAnswers[userAnswers.length]) {setScore(currentScore + 10)};
     userAnswers.push(n);
     maxQ = Math.min(maxQ+1,questions.length);
   }
@@ -660,7 +707,12 @@ function sendAnswer(n){
 }
 
 function setQuestion(i){
-  if (i < 1 || i > maxQ){return 0;}
+  if (i < 1 || i > maxQ ){return 0;}
+  if (userAnswers.length == questions.length){
+    const returnW = document.getElementById("return");
+    returnW.style.animationDuration = '0s';
+    returnW.style.display = "flex";
+  }
   document.querySelectorAll(".singleAnswer > .checkWrapper").forEach(element => element.style.display = "none");
   document.querySelectorAll(".checkWrapper > img").forEach(element => element.style.display = "none");
   currentQ = i;
@@ -713,6 +765,8 @@ function setQuestion(i){
 /// CASE 0 /////////////////////////////////////////////////////////////////////////////
 
 function case_0(){
+  highScore = highScore_0;
+  document.getElementById('highScore').textContent = highScore;
   let tables = document.querySelectorAll(".table");
   tables[0].style.display = "none";
   tables[1].style.position = "relative";
@@ -756,25 +810,25 @@ function case_0(){
   
 }
 
+
+
+function isValid(triplet) {
+  const [a, b, c] = triplet;
+  const rowCheck = (Math.floor(a / 3) === Math.floor(b / 3) && Math.floor(b / 3) === Math.floor(c / 3));
+  const columnCheck = (a % 3 === b % 3 && a % 3 === c % 3);
+  const middleColumnCheck = [1, 4, 7].filter(index => triplet.includes(index)).length <= 1;
+  const containsMiddleColumn = triplet.some(index => [1, 4, 7].includes(index));
+  let noSameRowIfMiddleColumn = true;
+
+  if (containsMiddleColumn) {
+    const [d,e] = triplet.filter(index => ![1, 4, 7].includes(index));
+    noSameRowIfMiddleColumn = !(Math.floor(d / 3) === Math.floor(e / 3));
+    }
+  return !rowCheck && !columnCheck && middleColumnCheck && noSameRowIfMiddleColumn;
+}
+
 function randPattern() {
   const gridIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-
-  function isValid(triplet) {
-      const [a, b, c] = triplet;
-      const rowCheck = (Math.round(a / 3) === Math.round(b / 3) && Math.round(b / 3) === Math.round(c / 3));
-      const columnCheck = (a % 3 === b % 3 && a % 3 === c % 3);
-      const middleColumnCheck = [1, 4, 7].filter(index => triplet.includes(index)).length <= 1;
-      const containsMiddleColumn = triplet.some(index => [1, 4, 7].includes(index));
-      let noSameRowIfMiddleColumn = true;
-
-      if (containsMiddleColumn) {
-        const [d,e] = triplet.filter(index => ![1, 4, 7].includes(index));
-        noSameRowIfMiddleColumn = !(Math.round(d / 3) === Math.round(e / 3)
-          );
-        }
-      return !rowCheck && !columnCheck && middleColumnCheck && noSameRowIfMiddleColumn;
-  }
-
   let validTriplet = [];
   while (true) {
       const shuffled = gridIndices.sort(() => Math.random() - 0.5);
