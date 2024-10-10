@@ -59,7 +59,7 @@ function startCase(i){
 let answersRectangles = [];
 
 function round_1(x){
-  return Math.round(x*100)/100;
+  return Math.round(x*10)/10;
 }
 
 function shuffleArray(array) {
@@ -210,7 +210,7 @@ function case_2(){
   C_labels.push(Math.round(TBM_1/TBW_0));
   C_labels.push(Math.round(TBM_0/TBW_1));
   C_labels.push(Math.round((TBM_0 - (total_water_loss*water_ratio-0.2)*sw_concentration)/(new_weight*water_ratio)));
-  C_labels.push(Math.round(ECM_1/ECV_0), Math.round(ECM_0/ECM_1));
+  C_labels.push(Math.round(ECM_1/ECV_0), Math.round(ECM_0/ECV_1));
   
 
   let M_labels = [TBM_0, ECM_0, ICM_0, TBM_1, ECM_1];

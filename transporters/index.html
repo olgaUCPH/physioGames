@@ -8,6 +8,8 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
+        <!-- Left Column -->
+
         <div id="leftColumn">
             <div id="titleBox" onclick="location.href='../index.html'">
                 <h1 id="title">Transporters</h1>
@@ -28,8 +30,10 @@
             <div id="checkButton">Check</div>
         </div>
 
+        <!-- Right Column. tableOne and tableTwo classes define what shows up in each table -->
 
         <div id="rightColumn">
+            <!-- Interaction Area: Contains the table -->
             <div id="gridContainer">
                 <span class="tableOne" style="position: absolute; left: -3vw; top: 32vh; transform: rotate(-90deg);">Apical Membrane</span>
                 <div class="row" style="margin-top: 10px;">
@@ -103,6 +107,9 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Arsenal Area: Contains the transporters. Each transporter has a top label, an image, and a bottom label -->
+
             <div id="arsenalContainer">
                 <div class="transporter tableOne">
                     <span class="transporterLabel" style="top:0px;">Na<sup>+</sup>/H<sup>+</sup><br/>Exchanger</span>
@@ -196,7 +203,7 @@
                 </div>
             </div>
         </div>
-        <script src="../color_script.js"></script>
+        <script src="../color_script.js"></script> <!-- Color theme handler (shared) -->
         <script src="script.js"></script>
     </body>
 </html>
