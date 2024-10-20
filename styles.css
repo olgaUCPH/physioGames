@@ -64,7 +64,6 @@ body {
     -o-transition: background-color 0.5s ease-in-out;
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
-    overflow-y: hidden; /* Blocks vertical scrolling */
     overflow-x: auto;
     flex-wrap: wrap;
     font-size: max(1.35vh,0.8vw);
