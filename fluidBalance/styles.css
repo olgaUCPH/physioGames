@@ -90,7 +90,7 @@ body {
     margin: calc(min(1vh,1vw));
     background-color: var(--deep-highlight);
     color: var(--pseudo-white);
-    height: 16vh;
+    height: 16dvh;
     width: 100%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -125,7 +125,7 @@ body {
     background-color: var(--light-highlight);
     color: var(--pseudo-black);
     width: 100%;
-    height: 10vh;
+    height: 10dvh;
     position: relative;
     -webkit-transition: background-color 0.5s ease-in-out;
     -moz-transition: background-color 0.5s ease-in-out;
@@ -147,7 +147,7 @@ body {
     background-color: var(--pseudo-white);
     color: var(--pseudo-black);
     width: 100%;
-    height: 57vh;
+    height: 57dvh;
     text-align: justify;
     padding-top: 5px;
     border-bottom-left-radius: 10px;
@@ -185,7 +185,7 @@ body {
   color: var(--pseudo-white);
   cursor: pointer;
   display: inline-block;
-  font-size: 7vh;
+  font-size: 7dvh;
   font-weight: 700;
   letter-spacing: -.24px;
   margin: 0 1vh 0 1vh;
@@ -224,7 +224,7 @@ body {
 
 #gridContainer{
     width: 99%;
-    height: 64vh;
+    height: 64dvh;
     margin: calc(min(1vh,1vw));
     background-color: var(--pseudo-white);
     border-top-left-radius: 10px;
@@ -244,7 +244,7 @@ body {
 
 #arsenalContainer{
     width:99%;
-    height: 28vh;
+    height: 28dvh;
     margin: calc(min(1vh,1vw));
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -260,7 +260,7 @@ body {
 }
 
 .arsenalTile{
-  height: 28vh;
+  height: 28dvh;
   background-color: var(--light-highlight);
   box-shadow: 3px 3px 5px black;
   justify-content: center;
@@ -555,7 +555,7 @@ body {
 
 .rectangle{
   width: 9vw;
-  height: 5vh;
+  height: 5dvh;
   font-size: 1em;
   background-color: var(--rectangle-light);
   justify-content: center;
@@ -568,7 +568,7 @@ body {
 
 .rowLabel{
   width: 4vw;
-  height: 5vh;
+  height: 5dvh;
   font-size: 1em;
   background-color: var(--rectangle-deep);
   justify-content: center;
@@ -581,7 +581,7 @@ body {
 
 .columnLabel{
   width: 9vw;
-  height: 6vh;
+  height: 6dvh;
   font-size: 1em;
   background-color: var(--rectangle-deep);
   justify-content: center;
@@ -602,7 +602,7 @@ body {
 }
 
 .checkWrapper img{
-  height: 3vh;
+  height: 3dvh;
   width: auto;
   position: absolute;
   display: none;
@@ -642,7 +642,7 @@ body {
 
 .tableCorner{
   width: 4vw;
-  height: 6vh;
+  height: 6dvh;
   margin: 3px;
 }
 
@@ -677,7 +677,7 @@ body {
   align-items: center;
   justify-content: center;
   width: 20vw;
-  height: 15vh;
+  height: 15dvh;
 }
 
 .diagram div{
@@ -693,7 +693,7 @@ body {
 
 #ECV0{
   width: calc(17/42*20vw);
-  height: 15vh;
+  height: 15dvh;
   background-color: var(--deep-highlight);
   color: var(--pseudo-white);
   position: absolute;
@@ -703,7 +703,7 @@ body {
 
 #ICV0{
   width: calc(25/42*20vw);
-  height: 15vh;
+  height: 15dvh;
   background-color: var(--light-highlight);
   position: absolute;
   left: calc(17/42*20vw);
@@ -712,7 +712,7 @@ body {
 
 .ECVX{
   width: calc(17/42*20vw);
-  height: 15vh;
+  height: 15dvh;
   box-sizing: border-box;
   position: absolute;
   right: calc(25/42*20vw);
@@ -721,7 +721,7 @@ body {
 
 .ICVX{
   width: calc(25/42*20vw);
-  height: 15vh;
+  height: 15dvh;
   box-sizing: border-box;
   position: absolute;
   left: calc(17/42*20vw);
@@ -730,7 +730,7 @@ body {
 
 #ECV1{
   width: calc(17/42*20vw);
-  height: 15vh;
+  height: 15dvh;
   position: absolute;
   right: calc(25/42*20vw);
   top: 0;
@@ -742,7 +742,7 @@ body {
 
 #ICV1{
   width: calc(25/42*20vw);
-  height: 15vh;
+  height: 15dvh;
   position: absolute;
   left: calc(17/42*20vw);
   top: 0;
@@ -769,7 +769,7 @@ body {
 
 .yAxis{
   width: 0;
-  height: 20vh;
+  height: 20dvh;
   position: absolute;
   left: -2vw;
   bottom: 0;
@@ -787,7 +787,7 @@ body {
 
 .boxContainer{
   width: 20vw;
-  height: 15vh;
+  height: 15dvh;
   position: absolute;
 }
 
