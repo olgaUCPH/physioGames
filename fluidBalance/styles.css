@@ -79,7 +79,7 @@ body {
     left: 0px;
     margin: calc(min(1vh,1vw));
     width: calc(max(16vw,34vh));
-    height: 95%;
+    height: 95dvh;
     flex-wrap:wrap;
     justify-content: center;
     align-items: center;
@@ -215,7 +215,7 @@ body {
 #rightColumn{
     margin: calc(min(1vh,1vw));
     width: calc(max(100vw - 17vw,100vh - 50vh));
-    height: 95%;
+    height: 95dvh;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
