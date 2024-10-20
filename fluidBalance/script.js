@@ -211,7 +211,16 @@ function case_2(){
   C_labels.push(Math.round(TBM_0/TBW_1));
   C_labels.push(Math.round((TBM_0 - (total_water_loss*water_ratio-0.2)*sw_concentration)/(new_weight*water_ratio)));
   C_labels.push(Math.round(ECM_1/ECV_0), Math.round(ECM_0/ECV_1));
-  
+
+  const replaceDuplicates = (list) => {
+    const uniqueNumbers = new Set();
+    const min = Math.min(...list), max = Math.max(...list);
+    return list.map(value => uniqueNumbers.has(value) 
+        ? (uniqueNumbers.add(value = randRange(Math.round(min * 0.9), Math.round(max * 1.1), 1)), value) 
+        : (uniqueNumbers.add(value), value));
+};
+
+  C_labels = replaceDuplicates(C_labels);
 
   let M_labels = [TBM_0, ECM_0, ICM_0, TBM_1, ECM_1];
   M_labels.push(Math.round(TBM_0 - total_water_loss*sw_concentration), Math.round(ECM_0 - total_water_loss*sw_concentration));
@@ -220,7 +229,7 @@ function case_2(){
   M_labels.push(Math.round(TBM_0 - (total_water_loss*water_ratio-0.2)*sw_concentration), Math.round(ECM_0 - (total_water_loss*water_ratio-0.2)*sw_concentration));
   
   
-  let labels = [...shuffleArray(V_labels), ...shuffleArray(C_labels), ...shuffleArray(M_labels)];
+  let labels = [...shuffleArray(V_labels), ...C_labels, ...shuffleArray(M_labels)];
 
   return [reference, answers, labels];
 }
@@ -230,9 +239,9 @@ function case_3(){
   highScore = highScore_3;
   document.getElementById('highScore').textContent = highScore;
   const weight = randRange(65,80,2);
-  const beers = randRange(1,4,1);
+  const beers = randRange(2,5,1);
   const crisps = 250;
-  const salt_concentration = randRange(0.9,1.4,0.1);
+  const salt_concentration = randRange(0.6,1.1,0.1);
 
   const mol_weight = 58.45;
   const water_ratio = 0.6;
@@ -278,7 +287,7 @@ function case_3(){
   const ICV_1 = round_1(TBW_1*ICM_1/TBM_1);
 
   let answers = [ECV_1, concentration_1, ECM_1, ICV_1, concentration_1, ICM_1, TBW_1, concentration_1, TBM_1];
-
+  console.log(answers);
   let V_labels = [TBW_0, TBW_1, ECV_0, ECV_1, ICV_0, ICV_1];
   V_labels.push(round_1((ECM_0 + salt_mosmol/2)/(TBM_0 + salt_mosmol/2)*TBW_1), round_1((ICM_0 + salt_mosmol/2)/(TBM_0 + salt_mosmol/2)*TBW_1));
   V_labels.push(round_1((ECM_0)/(TBM_1)*TBW_1), round_1((ICM_0 + salt_mosmol)/(TBM_1)*TBW_1));
