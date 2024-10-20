@@ -1,3 +1,5 @@
+/* Global */
+
 :root {
     --rectangle-light: #e1f7f5;
     --rectangle-deep: #9ac8cd;
@@ -75,22 +77,28 @@ body {
     -ms-user-select: none; /* IE 10+ */
 }
 
+/* OVERALL LAYOUT **************************************************************** */
+
+/* Left Column ********************** */
+
 #leftColumn{
     left: 0px;
     margin: calc(min(1vh,1vw));
     width: calc(max(16vw,34vh));
-    height: 95%;
+    height: 95dvh;
     flex-wrap:wrap;
     justify-content: center;
     align-items: center;
     font-size: calc(max(1.6vw,2.9vh));
 }
 
+/* Title Box *********** */
+
 #titleBox{
     margin: calc(min(1vh,1vw));
     background-color: var(--deep-highlight);
     color: var(--pseudo-white);
-    height: 16vh;
+    height: 16dvh;
     width: 100%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -120,12 +128,14 @@ body {
     margin: calc(min(1vh,1vw));
 }
 
+/* Score Box *********** */
+
 #scoreBox{
     margin: calc(min(1vh,1vw));
     background-color: var(--light-highlight);
     color: var(--pseudo-black);
     width: 100%;
-    height: 10vh;
+    height: 10dvh;
     position: relative;
     -webkit-transition: background-color 0.5s ease-in-out;
     -moz-transition: background-color 0.5s ease-in-out;
@@ -142,12 +152,14 @@ body {
     position: absolute;
 }
 
+/* Instructions Box **** */
+
 #instructionsBox{
     margin: calc(min(1vh,1vw));
     background-color: var(--pseudo-white);
     color: var(--pseudo-black);
     width: 100%;
-    height: 57vh;
+    height: 57dvh;
     text-align: justify;
     padding-top: 5px;
     border-bottom-left-radius: 10px;
@@ -225,11 +237,12 @@ body {
   box-shadow: black 5px 5px 6px inset, white -5px -5px 6px inset;
 }
 
+/* Right Column ********************** */
 
 #rightColumn{
     margin: calc(min(1vh,1vw));
     width: calc(max(100vw - 17vw,100vh - 50vh));
-    height: 95%;
+    height: 95dvh;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -238,7 +251,7 @@ body {
 
 #gridContainer{
     width: 99%;
-    height: 64vh;
+    height: 64dvh;
     margin: calc(min(1vh,1vw));
     background-color: var(--pseudo-white);
     border-top-left-radius: 10px;
@@ -258,7 +271,7 @@ body {
 
 #arsenalContainer{
     width:99%;
-    height: 28vh;
+    height: 28dvh;
     margin: calc(min(1vh,1vw));
     background-color: var(--light-highlight);
     border-bottom-left-radius: 10px;
@@ -276,10 +289,12 @@ body {
     box-shadow: black 3px 3px 5px;
 }
 
+/* General rectangles */
+
 .box{
     width: calc(0.135*max(100vw - 17vw,100vh - 50vh));
     margin: calc(min(1vh,1vw));
-    height: 12.6vh;
+    height: 12.6dvh;
     background-color: var(--rectangle-light);
     border-radius: calc(2*max(0.5vw,1vh));
     border-width: calc(max(0.5vw,1vh));
@@ -297,7 +312,7 @@ body {
 .smallBox{
   width: calc(0.135*max(100vw - 17vw,100vh - 50vh));
   margin: calc(min(1vh,1vw));
-  height: 10vh;
+  height: 10dvh;
   background-color: var(--rectangle-light);
   border-radius: calc(2*max(0.5vw,1vh));
   border-width: calc(max(0.5vw,1vh));
@@ -312,6 +327,8 @@ body {
   z-index: 500;
 }
 
+/* Fade animations (used in JS) */
+
 @keyframes fadeIn {
   0%{opacity: 0;}
   100%{opacity: 1;}
@@ -322,6 +339,7 @@ body {
   100%{opacity: 0;}
 }
 
+/* Rectangles in Grid*/
 
 #gridContainer .smallBox{
   -webkit-transition: all 1s ease-in-out;
@@ -343,6 +361,21 @@ body {
     scale: 1.05;
   }
 
+.correctRectangle{
+    position: absolute;
+    cursor: pointer;
+  }
+
+
+@keyframes smallShake{
+    20% {rotate: 5deg;}
+    40%{rotate:-5deg;}
+    60%{rotate: 5deg;}
+    80%{rotate:-5deg;}
+    100%{rotate: 0deg;}
+  }
+
+/* Rectangles in Arsenal*/
 
 .label{
     display: flex;
@@ -365,16 +398,64 @@ body {
     transition: border-color 0.5s ease-in-out;
 }
 
-
 .label:hover {
     scale: 1.05;
   }
 
-.correctRectangle{
-  position: absolute;
-  cursor: pointer;
-}
+/* Label texts*/
 
+.big{
+    font-size: 2.5em;
+  }
+  
+.arrow{
+    vertical-align: 0.2em;
+    padding-bottom: 0.25em;
+  }
+  
+.box p{
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  
+.box{
+    cursor: pointer;
+  }
+
+/* Label colors*/
+
+  .red{
+    background-color: pink;
+    border-color: maroon;
+  }
+  
+  .blue{
+    background-color: lightskyblue;
+    border-color: navy;
+  }
+  
+  .green{
+    background-color: darkseagreen;
+    border-color: darkgreen;
+  }
+  
+  .yellow{
+    background-color: moccasin;
+    border-color: darkgoldenrod;
+  }
+  
+  .gray{
+    background-color: gainsboro;
+    border-color: darkslategray;
+  }
+  
+  .hideColors{
+    background-color: var(--rectangle-light);
+    border-color: var(--pseudo-black);
+  }
+  
+
+/* Right side button column */
 
 #buttonsColumn{
   position: absolute;
@@ -419,35 +500,6 @@ body {
 #buttonsColumn img:hover{
   scale: 1.05;
   filter: brightness(5);
-}
-
-@keyframes rotate {
-  0%  {rotate: 0deg;}
-  15% {rotate: 380deg;}
-  30% {rotate: 360deg;}
-  100%{rotate: 360deg;}
-}
-
-@keyframes switch{
-  0%{transform: rotate3d(-1,-1,0,0deg);}
-  15%{transform: rotate3d(-1,-1,0,180deg);}
-  30%{transform: rotate3d(-1,-1,0,0deg);}
-}
-
-@keyframes shake{
-  10% {rotate: 20deg;}
-  20%{rotate:-20deg;}
-  30%{rotate: 20deg;}
-  40%{rotate:-20deg;}
-  50%{rotate: 0deg;}
-}
-
-@keyframes smallShake{
-  20% {rotate: 5deg;}
-  40%{rotate:-5deg;}
-  60%{rotate: 5deg;}
-  80%{rotate:-5deg;}
-  100%{rotate: 0deg;}
 }
 
 #colorButton:hover{
@@ -498,23 +550,15 @@ body {
   }
 }
 
-.big{
-  font-size: 2.5em;
+@keyframes shake{
+  10% {rotate: 20deg;}
+  20%{rotate:-20deg;}
+  30%{rotate: 20deg;}
+  40%{rotate:-20deg;}
+  50%{rotate: 0deg;}
 }
 
-.arrow{
-  vertical-align: 0.2em;
-  padding-bottom: 0.25em;
-}
-
-.box p{
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.box{
-  cursor: pointer;
-}
+/* End windows */
 
 .endWindow{
   position: absolute;
@@ -565,35 +609,7 @@ body {
   }
 }
 
-.red{
-  background-color: pink;
-  border-color: maroon;
-}
-
-.blue{
-  background-color: lightskyblue;
-  border-color: navy;
-}
-
-.green{
-  background-color: darkseagreen;
-  border-color: darkgreen;
-}
-
-.yellow{
-  background-color: moccasin;
-  border-color: darkgoldenrod;
-}
-
-.gray{
-  background-color: gainsboro;
-  border-color: darkslategray;
-}
-
-.hideColors{
-  background-color: var(--rectangle-light);
-  border-color: var(--pseudo-black);
-}
+/* Visual Instructions */
 
 .visualInstruction{
   position: fixed;

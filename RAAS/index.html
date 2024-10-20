@@ -8,7 +8,10 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <script src="../leaderLine/leader-line.min.js"></script>
+        <script src="../leaderLine/leader-line.min.js"></script> <!-- Arrow Plugin by Anseki -->
+
+        <!-- Left Column -->
+
         <div id="leftColumn">
             <div id="titleBox" onclick="location.href='../index.html'">
                 <h1 id="title">RAAS</h1>
@@ -29,13 +32,18 @@
             <div id="checkButton">Check</div>
         </div>
 
+        <!-- Right Column -->
+
         <div id="rightColumn">
             <div id="gridContainer">
+
+                <!-- Level 0 (Tutorial) -->
 
                 <div class="rectangle box lvl0" id="rec00"></div>
                 <div class="rectangle box lvl0" id="rec01"></div>
                 <div class="rectangle box lvl0" id="rec02"></div>
                 
+                <!-- Level 1 -->
 
                 <div class="rectangle smallBox lvl1" id="rec10" style="left: calc(0.19*max(100vw - 17vw,100vh - 50vh)); top: 8.5vh"></div>
                 <div class="rectangle smallBox lvl1" id="rec11" style="top: 1vh"></div>
@@ -48,6 +56,7 @@
                 
                 <div class="rectangle smallBox lvl1" id="rec17" style="bottom: 1.8vh"></div>
 
+                <!-- Level 2 -->
 
                 <div class="rectangle smallBox lvl2" id="rec20" style="top: 1.8vh"></div>
 
@@ -60,6 +69,8 @@
                 <div class="rectangle smallBox lvl2" id="rec25" style="top: 1.8vh; right: 4vw"></div>
                 <div class="rectangle smallBox lvl2" id="rec26" style="right: 4vw"></div>
 
+                <!-- End windows popups -->
+
                 <div class = "endWindow" id="congratulations">
                     <h1>Congratulations !</h1>
                     <h3>Press the arrow on the top-right of the screen to move on to the next level !</h3>
@@ -71,6 +82,8 @@
                     <p>That's <span id="gameOverPercent" style="margin-left: 5px;">0</span>% of the maximum score !</p>
                     <p>Refresh the page to try again !</p>
                 </div>
+
+                <!-- Right side button column -->
 
                 <div id = "buttonsColumn">
                     <div class="buttonWrapper">
@@ -87,10 +100,18 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Arsenal (all labels) -->
+
             <div id="arsenalContainer">
+
+                <!-- Level 0 -->
+
                 <div class="label box lvl0 red hideColors" id="lab00"><p><span class = "arrow up">↑</span>Renin Secretion</br><span class = "arrow up">↑</span>cAMP   Ca<sup>2+</sup><span class = "arrow down">↓</span></p></div>
                 <div class="label box lvl0 red hideColors" id="lab01"><span class = "big arrow up">↑</span><p>Blood Volume</br>Blood Pressure</p></div>
                 <div class="label box lvl0 red hideColors" id="lab02"><span class = "big arrow down">↓</span><p>Blood Volume</br>Blood Pressure</p></div>
+
+                <!-- Level 1 -->
 
                 <div class="label smallBox lvl1 blue hideColors" id="lab10">ß-Adrenergetic Receptors</br> Justaglomerular Cells</p></div>
                 <div class="label smallBox lvl1 blue hideColors" id="lab11">Renal Vasoconstriction </br> α1 Receptors AA</p></div>
@@ -101,6 +122,8 @@
                 <div class="label smallBox lvl1 green hideColors" id="lab16"><span class = "big arrow down">↓</span><p>NaCl load</br>Macula densa</p></div>
                 <div class="label smallBox lvl1 yellow hideColors" id="lab17">Renal Baroreceptors</br> AA</p></div>
 
+                <!-- Level 2 -->
+
                 <div class="label smallBox lvl2 gray hideColors" id="lab20"><p><span class = "arrow up">↑</span>Aldosterone Secretion</p></div>
                 <div class="label smallBox lvl2 gray hideColors" id="lab21"><p><span class = "arrow up">↑</span>ADH Thirst Center</p></div>
                 <div class="label smallBox lvl2 gray hideColors" id="lab22"><p><span class = "arrow up">↑</span>Plasma AngII</p></div>
@@ -110,7 +133,7 @@
                 <div class="label smallBox lvl2 gray hideColors" id="lab26"><p><span class = "arrow up">↑</span> Total Peripheral Resistance</p></div>
             </div>
         </div>
-        <script src="../color_script.js"></script>
+        <script src="../color_script.js"></script>  <!-- Shared color theme handler -->
         <script src="script.js"></script>
     </body>
 </html>
