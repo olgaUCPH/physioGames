@@ -1,7 +1,7 @@
 /// MAIN FUNCTIONALITIES
 
 // - Click and Drag of Transporters
-// - Transporter positoning : adding/removing to rectangle
+// - Transporter positioning : adding/removing to rectangle
 // - Grid verification & Scoring
 
 /// GENERAL ALL PURPOSE & TECHNICAL FUNCTIONS ///////////////////////////////////////////////////
