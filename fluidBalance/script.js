@@ -53,7 +53,7 @@ function startCase(i){
     referenceRectangles.forEach((rec, i) => rec.textContent = reference_values[i]);
     allLabels.forEach((lab,i) => lab.textContent = labels[i]);
   }
-  checkButton.addEventListener("click", verifyGrid);
+  checkButton.addEventListener("click", transition_01);
   
 }
 let answersRectangles = [];
@@ -98,6 +98,8 @@ function case_1(){
   desc.appendChild(p);
   desc.appendChild(p2);
 
+  document.getElementById("topDescription").innerHTML = `<b style='font-weight: 700'>Case 1 Summary</b>:  Ingrid | F | 65 years old | ${weight} kg healthy | Stopped drinking | ${lost_water} L of water lost`;
+
   const concentration_0 = 290;
 
   const TBW_0 = round_1(water_ratio*weight);
@@ -122,7 +124,7 @@ function case_1(){
   const ECV_1 = round_1(TBW_1*ECM_1/TBM_1);
   const ICV_1 = round_1(TBW_1*ICM_1/TBM_1);
 
-  let answers = [ECV_1, concentration_1, ECM_1, ICV_1, concentration_1, ICM_1, TBW_1, concentration_1, TBM_1];
+  let table_answers = [ECV_1, concentration_1, ECM_1, ICV_1, concentration_1, ICM_1, TBW_1, concentration_1, TBM_1];
 
   let V_labels = [TBW_0, TBW_1, ECV_0, ECV_1, ICV_0, ICV_1];
   V_labels.push(round_1(TBW_0 - lost_water*water_ratio), round_1((TBW_0 - lost_water*water_ratio)/3), round_1(2*(TBW_0 - lost_water*water_ratio)/3));
@@ -141,7 +143,19 @@ function case_1(){
 
   let labels = [...shuffleArray(V_labels), ...shuffleArray(C_labels), ...shuffleArray(M_labels)];
 
-  return [reference, answers, labels]
+  questions.push("In the reference table, Ingrid's TBW is 45% of her body weight. Which of the following statements is true ?");
+  answers.push(["Ingrid is dehydrated", "Ingrid's TBW is normal for her weight and age", "Ingrid's ECV is reduced"]);
+  correctAnswers.push(2);
+
+  questions.push("What determines the distribution of fluid between the ECV and the ICV ?");
+  answers.push(["The osmolarity", "The amount of osmoles in the two compartments", "The amount of total body water"]);
+  correctAnswers.push(2);
+
+  questions.push("What determines the osmolarity of the body fluids ?");
+  answers.push(["The amount of total body water", "The amount of osmoles and total body water", "The amount of osmoles"]);
+  correctAnswers.push(2);
+
+  return [reference, table_answers, labels]
 }
 
 function case_2(){
@@ -164,10 +178,12 @@ function case_2(){
   let p = document.createElement("p");
   p.innerHTML = `Hanne is studying medicine and is very interested in kidney physiology. One day she decides to measure how free water clearance looks after 2 hours of spinning. Hanne weighs ${weight} kg after emptying her bladder just before the start of the workout.`;
   let p2 = document.createElement("p");
-  p2.innerHTML = `After training, Hanne weighs ${new_weight} kg. She has lost ${ip_loss} L of fluid via insensible perspiration, the rest is sweat. The osmolarity of the sweat is ${sw_concentration} mosmol/L.`;
+  p2.innerHTML = `After training, Hanne weighs ${new_weight} kg. She has lost ${ip_loss} L of fluid via perspiration insensibilis, the rest is sweat. The osmolarity of the sweat is ${sw_concentration} mosmol/L.`;
   desc.appendChild(h1);
   desc.appendChild(p);
   desc.appendChild(p2);
+
+  document.getElementById("topDescription").innerHTML = `<b style='font-weight: 700'>Case 2 Summary</b>:  Hanne | F | ${weight} kg | ${new_weight} kg after workout | ${ip_loss} L loss via perspiration insensibilis, rest is sweat | ${sw_concentration} mosmol/L sweat osmolarity`;
 
   const concentration_0 = 290;
 
@@ -193,7 +209,7 @@ function case_2(){
   const ECV_1 = round_1(TBW_1*ECM_1/TBM_1);
   const ICV_1 = round_1(TBW_1*ICM_1/TBM_1);
 
-  let answers = [ECV_1, concentration_1, ECM_1, ICV_1, concentration_1, ICM_1, TBW_1, concentration_1, TBM_1];
+  let table_answers = [ECV_1, concentration_1, ECM_1, ICV_1, concentration_1, ICM_1, TBW_1, concentration_1, TBM_1];
 
   let V_labels = [TBW_0, TBW_1, ECV_0, ECV_1, ICV_0, ICV_1];
   V_labels.push(round_1((ICM_0 - mosm_loss)/TBM_1*TBW_1),round_1(ECM_0/TBM_1*TBW_1));
@@ -231,7 +247,20 @@ function case_2(){
   
   let labels = [...shuffleArray(V_labels), ...C_labels, ...shuffleArray(M_labels)];
 
-  return [reference, answers, labels];
+
+  questions.push("What would you expect happens with the osmolarity of Hannes urine after the spinning?");
+  answers.push(["It is increased", "It is unchanged", "It is decreased"]);
+  correctAnswers.push(1);
+
+  questions.push("Why is the number of osmoles in ICV unchanged?");
+  answers.push(["The loss of intracellular Na+ is compensated by a similar cellular uptake of K+", "The osmoles (NaCl) lost in the sweat are all derived from the ECV", "The losses from ICV are isosmolar"]);
+  correctAnswers.push(2);
+
+  questions.push("What is the osmolarity of the perspiration insensibilis?");
+  answers.push(["It is isosmolar with plasma", "It is hyposmolar", "The osmolarity is 0 mosm/L"]);
+  correctAnswers.push(3);
+
+  return [reference, table_answers, labels];
 }
 
 
@@ -262,6 +291,8 @@ function case_3(){
   desc.appendChild(p);
   desc.appendChild(p2);
 
+  document.getElementById("topDescription").innerHTML = `<b style='font-weight: 700'>Case 3 Summary</b>:  Jakob | M | ${weight} kg | ${beers} 1⁄2 L beers | ${crisps} g crisps, ${salt_concentration}% salt | NaCl:  ${mol_weight} g/mol`;
+
   const concentration_0 = 290;
 
   const TBW_0 = round_1(water_ratio*weight);
@@ -286,7 +317,7 @@ function case_3(){
   const ECV_1 = round_1(TBW_1*ECM_1/TBM_1);
   const ICV_1 = round_1(TBW_1*ICM_1/TBM_1);
 
-  let answers = [ECV_1, concentration_1, ECM_1, ICV_1, concentration_1, ICM_1, TBW_1, concentration_1, TBM_1];
+  let table_answers = [ECV_1, concentration_1, ECM_1, ICV_1, concentration_1, ICM_1, TBW_1, concentration_1, TBM_1];
   console.log(answers);
   let V_labels = [TBW_0, TBW_1, ECV_0, ECV_1, ICV_0, ICV_1];
   V_labels.push(round_1((ECM_0 + salt_mosmol/2)/(TBM_0 + salt_mosmol/2)*TBW_1), round_1((ICM_0 + salt_mosmol/2)/(TBM_0 + salt_mosmol/2)*TBW_1));
@@ -308,7 +339,23 @@ function case_3(){
   
   let labels = [...shuffleArray(V_labels), ...shuffleArray(C_labels), ...shuffleArray(M_labels)];
 
-  return [reference, answers, labels];  
+  questions.push("Why is the osmolarity decreasing?");
+  answers.push(["The loss of NaCl exceeds the loss of water", "Because of hypotonic volume expansion", "Because of hypertonic volume expansion"]);
+  correctAnswers.push(2);
+
+  questions.push("What happens to Jakob’s free water clearance after drinking beer and eating crisps?");
+  answers.push(["It is decreased", "It is unchanged", "It is increased"]);
+  correctAnswers.push(3);
+
+  questions.push("Why is the relative increase in ECV greater than that of the ICV?");
+  answers.push(["Because of a loss of intracellular osmoles", "Because of an osmotically induced water flow from ICV to ECV", "Because of an increase in the number of extracellular osmoles"]);
+  correctAnswers.push(3);
+
+  questions.push("If Jakob does not eat the crisps, but has the same intake of water");
+  answers.push(["The relative increase in ICV would be greater than the relative increase in ECV", "The relative increase in the volumes of ECV and ICV would be equal", "The relative increase in ICV would be less than the relative increase in ECV"]);
+  correctAnswers.push(2);
+
+  return [reference, table_answers, labels];  
 }
 
 /// PART 1 - CLICK AND DRAG ///////////////////////////////////////////////////////////
@@ -529,13 +576,13 @@ function calculatePositions(){
   table1.push([offsetLeft(tables[1]),offsetTop(tables[1])]);
 
   tables[0].style.left = "3vw";
-  tables[0].style.top  = table0[0][1]+'px';
+  tables[0].style.top  = "9dvh";
 
   tables[1].style.right = "1vw";
-  tables[1].style.top  = table0[0][1]+'px';
+  tables[1].style.top  = "9dvh";
 
-  table0.push([offsetLeft(tables[0]),table0[0][1]]);
-  table1.push([offsetLeft(tables[1]),table0[0][1]]);
+  table0.push([offsetLeft(tables[0]),offsetTop(tables[0])]);
+  table1.push([offsetLeft(tables[1]),offsetTop(tables[1])]);
 
   tables[0].style.position = "absolute";
   tables[1].style.position = "absolute";
@@ -578,11 +625,12 @@ async function transition_01 (){
   document.querySelectorAll('.arsenalTile').forEach(element => element.style.display = "none");
   document.getElementById('arsenalContainer').style.boxShadow = "3px 3px 5px black";
   getScales();
-
+  document.getElementById('topDescription').style.display = "flex";
   ECV_animation();
   ICV_animation();
 
   document.getElementById("questionStart").style.display = "flex";
+  setQuestion(currentQ);
 }
 
 const allRectangles = document.querySelectorAll(".rectangle");
@@ -686,25 +734,7 @@ let correctAnswers = [];
 
 let userAnswers = [];
 
-questions.push("What is the first letter of the alphabet ?");
-answers.push(["D", "A", "Q"]);
-correctAnswers.push(2);
 
-questions.push("What is 7×8 ?");
-answers.push(["56", "55", "54"]);
-correctAnswers.push(1);
-
-questions.push("Which is the correct expression ?");
-answers.push(["It's raining chairs and tables.", "It's raining apples and oranges.", "It's raining cats and dogs."]);
-correctAnswers.push(3);
-
-questions.push("Which of these sports was not at the Paris Olympics ?");
-answers.push(["Breakdance", "Baseball", "Golf"]);
-correctAnswers.push(2);
-
-questions.push("Which of these is not a type of french cheese ?");
-answers.push(["Morbier", "Saint Marcellin", "Clairette de Die"]);
-correctAnswers.push(3);
 
 function sendAnswer(n){
   if (userAnswers.length < currentQ) {
@@ -715,12 +745,15 @@ function sendAnswer(n){
   setQuestion(currentQ);
 }
 
+let firstEnd = true;
+
 function setQuestion(i){
   if (i < 1 || i > maxQ ){return 0;}
-  if (userAnswers.length == questions.length){
+  if (userAnswers.length == questions.length && firstEnd){
     const returnW = document.getElementById("return");
     returnW.style.animationDuration = '0s';
     returnW.style.display = "flex";
+    firstEnd = false;
   }
   document.querySelectorAll(".singleAnswer > .checkWrapper").forEach(element => element.style.display = "none");
   document.querySelectorAll(".checkWrapper > img").forEach(element => element.style.display = "none");
