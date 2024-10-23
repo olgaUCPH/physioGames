@@ -313,15 +313,7 @@ async function verifyGrid_0(){
       allGood = false;
       console.log('check');
     }
-  })
-
-  allLabels.forEach(lab =>{
-    let drawn = connections.filter(arrow => arrow.includes(lab.id));
-    let expected = tutorial_connectionsVerif.filter(arrow => arrow.includes(lab.id));
-    console.log(lab.id, drawn, expected);
-    if (arraysEqual(drawn, expected)){
-      lab.classList.add("correctRectangle");
-    }})  
+  }) 
 
   if (allGood){
     arrows.forEach(line => line.remove());
