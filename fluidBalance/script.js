@@ -1,3 +1,5 @@
+
+
 const allLabels = document.querySelectorAll('.label');
 const arsenal = document.getElementById('arsenalContainer');
 let gridRectangles = document.querySelectorAll(".toFill");
@@ -53,8 +55,7 @@ function startCase(i){
     referenceRectangles.forEach((rec, i) => rec.textContent = reference_values[i]);
     allLabels.forEach((lab,i) => lab.textContent = labels[i]);
   }
-  checkButton.addEventListener("click", transition_01);
-  
+  checkButton.addEventListener("click", verifyGrid);
 }
 let answersRectangles = [];
 

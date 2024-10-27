@@ -8,7 +8,10 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <script src="../leaderLine/leader-line.min.js"></script>
+        <script src="../leaderLine/leader-line.min.js"></script> <!-- Import leaderline plugin by Anseki -->
+
+        <!-- Left Column -->
+
         <div id="leftColumn">
             <div id="titleBox" onclick="location.href='../index.html'">
                 <h1 id="title">Acid-Base Disorders</h1>
@@ -29,6 +32,8 @@
             <div id="checkButton">Check</div>
         </div>
 
+        <!-- Right column: sliders, diagram, arsenal. Inequalities are created in JS -->
+
         <div id="rightColumn">
             <div id="gridContainer">
                 <div id="sliders">
@@ -36,32 +41,35 @@
                     <span>BE threshold: </span><input id="BErange" class="slider" type="range" min="-10" max="10" value="0" step="1"> <char id="BEvalue">0</char> mM
                     <span>PCO<sub>2</sub> threshold: </span><input class="slider" id="PCrange" type="range" min="0" max="95" value="0" step="5"> <char id="PCvalue">0</char> mmHg
                 </div>
-                <div class="line">
+                <div class="row">
                     <div class="rectangle smallBox" id="rec00"><p id="lab00">Arterial blood test</p></div>
                 </div>
-                <div class="line" style="margin-bottom: 0.5vw;">
+                <div class="row" style="margin-bottom: 0.5vw;">
                     <div class="rectangle smallBox" id="rec20"></div>
                     <div class="rectangle smallBox" id="rec10" style="position: absolute;"></div>
                     <div class="rectangle smallBox" id="rec21"></div>
                 </div>
-                <div class="line" style="margin-top: 0.5vw;">
+                <div class="row" style="margin-top: 0.5vw;">
                     <div class="rectangle smallBox" id="rec30"></div>
                     <div class="rectangle smallBox" id="rec31"></div>
                     <div class="rectangle smallBox" id="rec32"></div>
                     <div class="rectangle smallBox" id="rec33"></div>
                 </div>
-                <div class="line">
+                <div class="row">
                     <div class="rectangle smallBox" id="rec40"></div>
                     <div class="rectangle smallBox" id="rec41"></div>
                     <div class="rectangle smallBox" id="rec42"></div>
                     <div class="rectangle smallBox" id="rec43"></div>
                 </div>
-                <div class="line">
+                <div class="row">
                     <span id="PC1" class="clickBox">PCO₂ ?? 0 mmHg</span>
                     <span id="BE1" class="clickBox">BE ?? 0 mM</span>
                     <span id="PC2" class="clickBox">PCO₂ ?? 0 mmHg</span>
                     <span id="BE2" class="clickBox">BE ?? 0 mM</span>
                 </div>
+
+                <!-- End windows, to be displayed after clicking checks -->
+
                 <div class = "endWindow" id="ktWindow">
                     <h1>Keep Trying !</h1>
                     <h3 id = "signError">Some inequalities are wrong</h3>
@@ -75,6 +83,8 @@
                     <p>Refresh the page to try again !</p>
                 </div>
 
+                <!-- Right side buttons column -->
+
                 <div id = "buttonsColumn">
                     <div class="buttonWrapper">
                         <img id="colorButton" src="../assets/colorIcon.png">
@@ -82,6 +92,9 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Arsenal, containing all labels -->
+
             <div id="arsenalContainer">
                 <div class="label smallBox" id="lab10">pH</div>
                 <div class="label smallBox" id="lab20">Acidosis</div>

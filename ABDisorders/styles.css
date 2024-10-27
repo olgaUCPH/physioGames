@@ -1,3 +1,6 @@
+/*************** GENERAL STUFF *****************/
+
+
 :root {
     --rectangle-light: #e1f7f5;
     --rectangle-deep: #9ac8cd;
@@ -74,6 +77,8 @@ body {
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE 10+ */
 }
+
+/*************** LEFT COLUMN *****************/
 
 #leftColumn{
     left: 0px;
@@ -204,6 +209,7 @@ body {
   box-shadow: black 5px 5px 6px inset, white -5px -5px 6px inset;
 }
 
+/*************** RIGHT COLUMN *****************/
 
 #rightColumn{
     margin: calc(min(1vh,1vw));
@@ -214,6 +220,8 @@ body {
     justify-content: center;
     align-items: center;    
 }
+
+/******************** Grid container */
 
 #gridContainer{
     width: 99%;
@@ -235,59 +243,6 @@ body {
     box-shadow: black 3px 3px 5px;
 }
 
-.line{
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-}
-
-.line span{
-  width: calc(0.13*max(100vw - 17vw,100vh - 50vh));
-  text-align: center;
-  margin: auto;
-  margin-top: -1vw;
-  cursor: pointer;
-}
-
-#arsenalContainer{
-    width:99%;
-    height: 28dvh;
-    margin: calc(min(1vh,1vw));
-    background-color: var(--light-highlight);
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 5px;
-    -webkit-transition: background-color 0.5s ease-in-out;
-    -moz-transition: background-color 0.5s ease-in-out;
-    -o-transition: background-color 0.5s ease-in-out;
-    -ms-transition: background-color 0.5s ease-in-out;
-    transition: background-color 0.5s ease-in-out;
-    box-shadow: black 3px 3px 5px;
-}
-
-.smallBox{
-  width: calc(0.13*max(100vw - 17vw,100vh - 50vh));
-  height: 9dvh;
-  background-color: var(--rectangle-light);
-  margin: auto;
-  border-radius: calc(2*max(0.5vw,1vh));
-  border-width: calc(max(0.5vw,1vh));
-  border-style: solid;
-  border-color: var(--pseudo-black);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 500;
-}
-
 #gridContainer .smallBox{
   -webkit-transition: all 1s ease-in-out;
   -moz-transition: all 1s ease-in-out;
@@ -297,83 +252,41 @@ body {
 }
 
 .rectangle:hover {
-    scale: 1.05;
-  }
-
-
-.label{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    text-align: center;
-    position: relative;
-    cursor: pointer;
-    margin-left: 2vw;
-    margin-right: 2vw;
-    -webkit-transition: background-color 0.5s ease-in-out;
-    -moz-transition: background-color 0.5s ease-in-out;
-     -o-transition: background-color 0.5s ease-in-out;
-    -ms-transition: background-color 0.5s ease-in-out;
-    transition: background-color 0.5s ease-in-out;
-    -webkit-transition: border-color 0.5s ease-in-out;
-    -moz-transition: border-color 0.5s ease-in-out;
-     -o-transition: border-color 0.5s ease-in-out;
-    -ms-transition: border-color 0.5s ease-in-out;
-    transition: border-color 0.5s ease-in-out;
+  scale: 1.05;
 }
-
-
-.label:hover {
-    scale: 1.05;
-  }
 
 .correctRectangle{
   position: absolute;
   cursor: pointer;
 }
 
+@keyframes smallShake{
+  20% {rotate: 5deg;}
+  40%{rotate:-5deg;}
+  60%{rotate: 5deg;}
+  80%{rotate:-5deg;}
+  100%{rotate: 0deg;}
+}
 
-#buttonsColumn{
-  position: absolute;
-  right: 0.5vw;
-  top: 0;
+/* Row wrapper for diagram alignment */
+
+.row{
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
-#buttonsColumn img{
+.row span{
+  width: calc(0.13*max(100vw - 17vw,100vh - 50vh));
+  text-align: center;
+  margin: auto;
+  margin-top: -1vw;
   cursor: pointer;
-  width: 2.25vw;
-  height: auto;
-  padding: calc(max(0.5vw,1vh));
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
 }
 
-.buttonWrapper span {
-  position: absolute;
-  right: 100%;
-  margin-top: 1.125vw;
-  margin-left: 10px;
-  opacity: 0;
-  white-space: nowrap;
-  transition: opacity 0.2s ease-in-out;
-  text-shadow: 1px 1px 2px white;
-  background-color: var(--pseudo-white);
-  border-radius: 5px;
-}
-
-.buttonWrapper:hover span {
-  opacity: 1;
-}
-
-#buttonsColumn img:hover{
-  scale: 1.05;
-  filter: brightness(5);
-}
+/* Sliders */
 
 #sliders{
   position: absolute;
@@ -427,6 +340,142 @@ body {
   cursor: pointer;
 }
 
+/************** Clickable Inequalities */
+
+.clickBox{
+  background-color: var(--deep-highlight);
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--pseudo-black);
+  z-index: 1;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -ms-user-select: none; 
+  user-select: none;
+  color: var(--pseudo-white);
+}
+
+.clickBox:hover{
+  filter: brightness(1.2);
+}
+
+/******************* Arsenal container */
+
+#arsenalContainer{
+    width:99%;
+    height: 28dvh;
+    margin: calc(min(1vh,1vw));
+    background-color: var(--light-highlight);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 5px;
+    -webkit-transition: background-color 0.5s ease-in-out;
+    -moz-transition: background-color 0.5s ease-in-out;
+    -o-transition: background-color 0.5s ease-in-out;
+    -ms-transition: background-color 0.5s ease-in-out;
+    transition: background-color 0.5s ease-in-out;
+    box-shadow: black 3px 3px 5px;
+}
+
+.smallBox{
+  width: calc(0.13*max(100vw - 17vw,100vh - 50vh));
+  height: 9dvh;
+  background-color: var(--rectangle-light);
+  margin: auto;
+  border-radius: calc(2*max(0.5vw,1vh));
+  border-width: calc(max(0.5vw,1vh));
+  border-style: solid;
+  border-color: var(--pseudo-black);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 500;
+}
+
+.label{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    -webkit-transition: background-color 0.5s ease-in-out;
+    -moz-transition: background-color 0.5s ease-in-out;
+     -o-transition: background-color 0.5s ease-in-out;
+    -ms-transition: background-color 0.5s ease-in-out;
+    transition: background-color 0.5s ease-in-out;
+    -webkit-transition: border-color 0.5s ease-in-out;
+    -moz-transition: border-color 0.5s ease-in-out;
+     -o-transition: border-color 0.5s ease-in-out;
+    -ms-transition: border-color 0.5s ease-in-out;
+    transition: border-color 0.5s ease-in-out;
+}
+
+.label:hover {
+    scale: 1.05;
+  }
+
+/******************* Right side buttons column*/
+
+#buttonsColumn{
+  position: absolute;
+  right: 0.5vw;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#buttonsColumn img{
+  cursor: pointer;
+  width: 2.25vw;
+  height: auto;
+  padding: calc(max(0.5vw,1vh));
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.buttonWrapper span {
+  position: absolute;
+  right: 100%;
+  margin-top: 1.125vw;
+  margin-left: 10px;
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.2s ease-in-out;
+  text-shadow: 1px 1px 2px white;
+  background-color: var(--pseudo-white);
+  border-radius: 5px;
+}
+
+.buttonWrapper:hover span {
+  opacity: 1;
+}
+
+#buttonsColumn img:hover{
+  scale: 1.05;
+  filter: brightness(5);
+}
+
+#colorButton:hover{
+  animation: shake;
+  animation-duration: 2.5s;
+  animation-iteration-count: infinite;
+}
+
 @keyframes shake{
   10% {rotate: 20deg;}
   20%{rotate:-20deg;}
@@ -435,19 +484,7 @@ body {
   50%{rotate: 0deg;}
 }
 
-@keyframes smallShake{
-  20% {rotate: 5deg;}
-  40%{rotate:-5deg;}
-  60%{rotate: 5deg;}
-  80%{rotate:-5deg;}
-  100%{rotate: 0deg;}
-}
-
-#colorButton:hover{
-  animation: shake;
-  animation-duration: 2.5s;
-  animation-iteration-count: infinite;
-}
+/************** End Windows */
 
 .endWindow{
   position: absolute;
@@ -498,25 +535,7 @@ body {
   }
 }
 
-.clickBox{
-  background-color: var(--deep-highlight);
-  border-radius: 5px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--pseudo-black);
-  z-index: 1;
-  text-align: center;
-  justify-content: center;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -ms-user-select: none; 
-  user-select: none;
-  color: var(--pseudo-white);
-}
-
-.clickBox:hover{
-  filter: brightness(1.2);
-}
+/******************************* Visual Instructions */
 
 .visualInstruction{
   background-color: black;
