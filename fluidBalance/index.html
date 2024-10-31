@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <script src="../leaderLine/leader-line.min.js"></script>
+        <!-- Left Column -->
         <div id="leftColumn">
             <div id="titleBox" onclick="location.href='../index.html'">
                 <h1 id="title">Fluid Balance</h1>
@@ -25,20 +25,25 @@
             </div>
             <div id="checkButton">Check</div>
         </div>
-
+        <!-- Right Column -->
         <div id="rightColumn">
             <div id="gridContainer">
+
+                <!-- Case Selection -->
                 <div id="caseSelectionScreen">
                     <button onclick="startCase(0)">Case 0: Build Table</button>
                     <button onclick="startCase(1)">Case 1: Dehydrated Senior</button>
                     <button onclick="startCase(2)">Case 2: Athletic Hanne</button>
                     <button onclick="startCase(3)">Case 3: Jakob at the Friday Bar</button>
                 </div>
+
+                <!-- Generic case container -->
                 <div id="case" style="width: 100%;">
                     <div id="caseDescription">
                     </div>
                     <div id="topDescription">
                     </div>
+                    <!-- Reference table -->
                     <div class="table" style="top: 1vh; right: 5vw">
                         <div class="row">
                             <div class="tableCorner" style="height: 2vh"></div>
@@ -69,7 +74,8 @@
                             <div class="rectangle" style="border-bottom-right-radius: 5px;" onmouseover="x_highlight('TBW0_X'); y_highlight('ECV0_Y')" onmouseout="x_restore('TBW0_X');y_restore('ECV0_Y')">7 337</div>
                         </div>
                     </div>
-    
+                    
+                    <!-- Empty table to fill-->
                     <div class="table" style="bottom: 5vh; right: 5vw">
                         <div class="row">
                             <div class="tableCorner" style="height: 2vh"></div>
@@ -109,7 +115,10 @@
                             <div class="checkWrapper"><img src="assets/cross.png" id="totalFalse"><img src="assets/check.png" id="totalTrue"></div>
                         </div>
                     </div>
+
+                    <!-- Diagrams for step 2, with elements to animate while hovering -->
                     <div id="diagramContainer">
+                        <!-- Reference diagram -->
                         <div class="diagram" style="left: 8vw">
                             <div class="yAxis"><span>Osmolarity</span></div>
                             <div class="boxContainer">
@@ -127,6 +136,7 @@
                             </div>
                             <div class="xAxis"><span>Volume</span></div>
                         </div>
+                        <!-- Study diagram -->
                         <div class="diagram" style="right: 6vw">
                             <div class="yAxis"><span>Osmolarity</span></div>
                             <div class="boxContainer">
@@ -154,8 +164,8 @@
                         </div>
                     </div>    
                 </div>
+                <!-- Right-side buttons column -->
                 <div id = "buttonsColumn">
-                        
                     <div class="buttonWrapper">
                         <img id="colorButton" src="../assets/colorIcon.png">
                         <span>Change color theme</span>
@@ -165,6 +175,8 @@
                         <span>Go back to case selection</span>
                     </div>
                 </div>
+
+                <!-- Pop-up end windows -->
                 <div class="endWindow" id="congratulations">
                     <h1>Congratulations !</h1>
                     <h3>Hover over the table elements to see how they translate graphically, and answer a few questions!</h3>
@@ -181,8 +193,9 @@
                     <button onclick="location.reload();">Return to menu</button>
                     <button onclick="document.getElementById('return').style.display = 'none';">Dismiss</button>
                 </div>
-
             </div>
+
+            <!-- Arsenal: Contains 3 arsenal tiles (for 3 different columns) that merge for step 2 and display questions-->
             <div id="arsenalContainer">
                 <div class="arsenalTile" style="border-bottom-left-radius: 10px; margin-left: 0; width: 35%">
                     <div class="tileTitle">Volume (L)</div>
@@ -228,6 +241,8 @@
                     <div class="label">4 321</div>
                     <div class="label">4 891</div>
                 </div>
+
+                <!-- Questions handler, with generic first question and answers to be replaced-->
                 <div id="questionStart" style="display:none;">
                     <h1>Are you ready to answer some questions ?</h1>
                     <button id = "qStart" class="qButton activeButton" onclick="document.getElementById('questionStart').style.display = 'none'; document.getElementById('mcqWrapper').style.display = 'flex';">Let's go !</button>
@@ -257,7 +272,7 @@
             </div>
             
         </div>
-        <script src="../color_script.js"></script>
+        <script src="../color_script.js"></script>      <!-- Shared color handler -->
         <script src="script.js"></script>
     </body>
 </html>
