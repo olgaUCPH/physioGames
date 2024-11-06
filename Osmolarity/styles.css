@@ -299,6 +299,7 @@ body {
     border-style: solid;
     border-color: var(--pseudo-black);
     z-index: 1;
+    cursor: pointer;
 }
 
 .xAxis{
