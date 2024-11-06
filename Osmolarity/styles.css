@@ -295,7 +295,7 @@ body {
     width: 1vw;
     position: absolute;
     border-radius: 1vw;
-    background-color: var(--deep-highlight);
+    background-color: var(--light-highlight);
     border-style: solid;
     border-color: var(--pseudo-black);
     z-index: 1;
