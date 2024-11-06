@@ -139,7 +139,7 @@ function dragFunction(element){
       let shiftY = userY - element.getBoundingClientRect().top;                       //Compute relative position of mouse to dragged element (y)
     parent = element.parentNode;
     document.body.appendChild(element);                                               //Pull element out of its parent (for positioning)
-    element.style.pointerEvents = "none";                                             //Remove pointer events (removes click through)
+    
     element.style.position = "fixed";                                                 //Fixed position (for positioning)
     element.style.zIndex = 1000;                                                      //Bring element to front side
     document.body.classList.add('no-select');                                         //Disable text selection
@@ -177,7 +177,7 @@ function dragFunction(element){
         parent.appendChild(element);                                                  //Add element to initial parent (useful for switching)
         lastTrigger = Date.now();                                                     //Update trigger date (bug fix)
         document.body.classList.remove('no-select');                                  //Restore text selection
-        element.style.pointerEvents = "auto";                                         //Restore pointer events
+        
         element.onmouseup = null;                                                     //bug fix (might be useless)        
     }
     if (element.getBoundingClientRect().top < graph.getBoundingClientRect().top){
