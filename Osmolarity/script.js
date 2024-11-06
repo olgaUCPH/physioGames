@@ -13,6 +13,8 @@ let cP = document.querySelectorAll('.controlPoint');                        //Po
 
 let curve = document.createElementNS("http://www.w3.org/2000/svg", 'svg');  //Create curve for further modification
 
+let graph = document.querySelector('.fullGraph');
+
 /// VARIABLE DEFINITIONS //////////////////////////////////////////////////////////////////////
 
 let canvasW = canvas.getBoundingClientRect().width;                         //Canvas width, for curve scaling
@@ -146,10 +148,16 @@ function dragFunction(element){
     function moveAt(pageX, pageY) {                                                   //Move the element to a given position
       element.style.left = pageX - shiftX + 'px';                                     //Set x position
       element.style.top = pageY - shiftY + 'px';                                      //Set y position
+      if (element.getBoundingClientRect().top < graph.getBoundingClientRect().top){
+        element.style.top = graph.getBoundingClientRect().top + "px";
+      }
+      if (element.getBoundingClientRect().bottom > graph.getBoundingClientRect().bottom){
+        element.style.top = element.getBoundingClientRect().top - (element.getBoundingClientRect().bottom - graph.getBoundingClientRect().bottom) + "px";
+      }
     }
   
     function onMouseMove(event) {                                                     //Drag handling function
-      userX = event.clientX || event.targetTouches[0].pageX;                          //Get current mouse x position                           
+      //userX = event.clientX || event.targetTouches[0].pageX;                        //Restrict to vertical movement
       userY = event.clientY || event.targetTouches[0].pageY;                          //Get current mouse y position
       moveAt(userX, userY);                                                           //Move element
       updateCurve();
@@ -171,5 +179,13 @@ function dragFunction(element){
         document.body.classList.remove('no-select');                                  //Restore text selection
         element.style.pointerEvents = "auto";                                         //Restore pointer events
         element.onmouseup = null;                                                     //bug fix (might be useless)        
-    }}
+    }
+    if (element.getBoundingClientRect().top < graph.getBoundingClientRect().top){
+      element.style.top = graph.getBoundingClientRect().top + "px";
+    }
+    if (element.getBoundingClientRect().bottom > graph.getBoundingClientRect().bottom){
+      element.style.top = element.getBoundingClientRect().top - (element.getBoundingClientRect().bottom - graph.getBoundingClientRect().bottom) + "px";
+    }
+    updateCurve();
+  }
 }}

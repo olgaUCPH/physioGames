@@ -500,7 +500,7 @@ function switchTables(){
 
 //Create elements for visual instructions
 const cursor = document.createElement('img');                                 //Mouse cursor
-cursor.src = "../.assets/cursor_click.png";                                    //Add image
+cursor.src = "../assets/cursor_click.png";                                    //Add image
 const shape = document.createElement('img');                                  //Transparent shape
 shape.src = "assets/yellowTriangle.png";                                      //Add image
 shape.style.width = allTransporters[0].getBoundingClientRect().width+'px';    //Set image size

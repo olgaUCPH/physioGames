@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Osmolarity - Physiology Games</title>
-        <link rel="icon" type="image/vnd.icon" href="../.assets/favicon.ico">
+        <link rel="icon" type="image/vnd.icon" href="../assets/favicon.ico">
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
@@ -30,17 +30,53 @@
         <div id="rightColumn">
             <div id="gridContainer">
                 <!-- Graph -->
+                <div class = 'fullGraph'>
+                    <div class="xAxis"></div>
+                    <div class="yAxis">
+                        <span style="bottom:0%">0</span>
+                        <span style="bottom:7.5%">100</span>
+                        <span style="bottom:15%">200</span>
+                        <span style="bottom:22.5%">300</span>
+                        <span style="bottom:45%">600</span>
+                        <span style="bottom:67.5%">900</span>
+                        <span style="bottom:90%">1200</span>
+                    </div>
+                    <div class="subGraph" style="width: 20%">
+                        <div class="controlPoint" style="left: -0.75vw; bottom: 22.5%"></div>
+                        <span>Proksimal Tubulus</span>
+                    </div>
+                    <div class="subGraph" style="width: 20%">
+                        <div class="controlPoint" style="left: -0.75vw; bottom: 22.5%"></div>
+                        <div class="controlPoint" style="bottom: 22.5%"></div>
+                        <span>Henles Slynge</span></div>
+                    <div class="subGraph" style="width: 20%">
+                        <div class="controlPoint" style="left: -0.75vw; bottom: 22.5%"></div>
+                        <span>Distale Tubulus</span>
+                    </div>
+                    <div class="subGraph" style="width: 20%">
+                        <div class="controlPoint" style="left: -0.75vw; bottom: 22.5%"></div>
+                        <div class="subGraph" style="width: 50%">
+                            <p>kortikale</p>
+                            <div class="controlPoint" style="right: -0.75vw; bottom: 22.5%"></div>
+                        </div>
+                        <div class="subGraph" style="width: 50%; border-right-style: none;">
+                            <p>medullære</p>
 
-                <div class="controlPoint" style="left: 10vw"></div>
-                <div class="controlPoint" style="left: 15vw; top: 10dvh;"></div>
-                <div class="controlPoint" style="top: 5dvh"></div>
-                <div class="controlPoint" style="right: 20vw; bottom: 4dvh"></div>
-                <div class="controlPoint" style="right: 5vw; top: 3dvh;"></div>
+                        </div>
+                        <span>Samlerør</span>
+                    </div>
+                    <div class="subGraph" style="width: 20%">
+                        <div class="controlPoint" style="left: -0.75vw; bottom: 22.5%"></div>
+                        <div class="controlPoint" style="right: -0.75vw; bottom: 22.5%"></div>
+                        <span>Urin</span>
+                    </div>
+                </div>
+                
 
                 <!-- Right-side buttons column -->
                 <div id = "buttonsColumn">
                     <div class="buttonWrapper">
-                        <img id="colorButton" src="../.assets/colorIcon.png">
+                        <img id="colorButton" src="../assets/colorIcon.png">
                         <span>Change color theme</span>
                     </div>
                 </div>
