@@ -230,16 +230,15 @@ function updateCurve_VI(){                                                //Redr
   curve_VI.innerHTML = svgPath(cPcoords_VI);                              //Draw path using bezier curves
 }
 
-initializeCurve_VI();
-
-async function animate_VI(){
+async function animate_VI(){                                              //Animate movement of one of the points with a sinusoid
   cP_VI[1].style.top = cP_VI[0].getBoundingClientRect().top - graph.getBoundingClientRect().top + 20*Math.cos(Date.now()/300)+'px';
-  updateCurve_VI();
+  updateCurve_VI();                                                       //Redraw curve
   await delay(15);
-  if (bool_vl){animate_VI();}
+  if (bool_vl){animate_VI();}                                             //Loop until disabled
   else{
-    document.querySelectorAll(".visualInstruction").forEach(element => element.remove());
+    document.querySelectorAll(".visualInstruction").forEach(element => element.remove()); //Remove all elements
   }
 }
 
+initializeCurve_VI();
 animate_VI();
