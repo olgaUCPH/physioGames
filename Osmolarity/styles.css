@@ -300,6 +300,21 @@ body {
     border-color: var(--pseudo-black);
     z-index: 1;
     cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+}
+
+.controlPoint .label{
+  position: absolute;
+  background-color: var(--pseudo-white);
+  top: -4dvh;
+  border-radius: 5px;
+  color: var(--pseudo-black);
+  transform-origin: center;
+  padding: 3px;
+
 }
 
 .xAxis{
@@ -418,4 +433,11 @@ body {
   30%{rotate: 20deg;}
   40%{rotate:-20deg;}
   50%{rotate: 0deg;}
+}
+
+
+/* VISUAL INSTRUCTIONS */
+
+.visualInstruction{
+  opacity: 0.5;
 }

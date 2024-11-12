@@ -5,13 +5,18 @@
 
 /// GENERAL ALL PURPOSE & TECHNICAL FUNCTIONS ///////////////////////////////////////////////////
 
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 /// RELEVANT HTML ELEMENTS ////////////////////////////////////////////////////////////////////
 
 const canvas = document.getElementById("gridContainer");                    //Where the curve should be drawn
-let cP = document.querySelectorAll('.controlPoint');                        //Points controlled by the user to define the curve
+let cP = document.querySelectorAll('.controlPoint:not(.visualInstruction)');//Points controlled by the user to define the curve
+let cP_VI = document.querySelectorAll('.controlPoint.visualInstruction');   //Points for visual instructions
 
 let curve = document.createElementNS("http://www.w3.org/2000/svg", 'svg');  //Create curve for further modification
+let curve_VI = document.createElementNS("http://www.w3.org/2000/svg", 'svg');//Create curve for visual instructions
 
 let graph = document.querySelector('.fullGraph');
 
@@ -21,7 +26,9 @@ let canvasW = canvas.getBoundingClientRect().width;                         //Ca
 let canvasH = canvas.getBoundingClientRect().height;                        //Canvas height, for curve scaling
 
 let cPcoords = [];                                                          //Array containing coordinates of all control points
+let cPcoords_VI = [];                                                       //Array containing coordinates of all control points
 
+let bool_vl = true;                                                         //Bool indicating if visual instructions should be displayed
 let lastTrigger = Date.now();                                               //Last time click & drag was triggered (bug fix)
 
 /// EVENT LISTENERS //////////////////////////////////////////////////////////////////////////
@@ -85,6 +92,25 @@ const bezierCommand = (point, i, a) => {                                    //Ge
     return `C ${cpsX},${cpsY} ${cpeX},${cpeY} ${point[0]},${point[1]}`  
   }
 
+function initializeCurve(){
+    getPoints();                                                            //Compute initial point coordinates
+    curve.id = "curve";                                                     //Style curve
+    curve.setAttribute("width", canvasW);                                   //Set to canvas width for correct scaling
+    curve.setAttribute("height", canvasH);                                  //Set to canvas height for correct scaling
+    curve.innerHTML = svgPath(cPcoords);                                    //Draw path using bezier curves; interpolate(cPcoords,200)
+    canvas.appendChild(curve);                                              //Display on webpage
+}
+
+function updateCurve(){                                                     //Redraw curve when moving control points
+    getPoints();                                                            //Calculate coordinates
+    curve.innerHTML = svgPath(cPcoords);                                    //Update curve; interpolate(cPcoords,200)
+}
+
+initializeCurve();
+
+
+/// B-SPLINE INTERPOLATION (USELESS? DOES NOT SEEM TO WORK AS INTENDED) /////////////////////////////////////
+
 const b3 = (x) => {
   return Math.abs(x) < 1 ? 2/3 - x**2 + Math.abs(x)**3/2 : Math.abs(x) < 2 ? ((2-Math.abs(x))**3)/6 : 0;
 }
@@ -112,22 +138,6 @@ function interpolate(points, N){
   }
   return points_i;
 }
-  
-function initializeCurve(){
-    getPoints();                                                            //Compute initial point coordinates
-    curve.id = "curve";                                                     //Style curve
-    curve.setAttribute("width", canvasW);                                   //Set to canvas width for correct scaling
-    curve.setAttribute("height", canvasH);                                  //Set to canvas height for correct scaling
-    curve.innerHTML = svgPath(cPcoords);                                    //Draw path using bezier curves; interpolate(cPcoords,200)
-    canvas.appendChild(curve);                                              //Display on webpage
-}
-
-function updateCurve(){                                                     //Redraw curve when moving control points
-    getPoints();                                                            //Calculate coordinates
-    curve.innerHTML = svgPath(cPcoords);                                    //Update curve; interpolate(cPcoords,200)
-}
-
-initializeCurve();
 
 /// CLICK AND DRAG ////////////////////////////////////////////////////////////////////////////
 
@@ -144,23 +154,31 @@ function dragFunction(element){
     element.style.zIndex = 1000;                                                      //Bring element to front side
     document.body.classList.add('no-select');                                         //Disable text selection
     moveAt(userX, userY);                                                             //bug fix
-  
+      
+    let label = document.createElement('div');                                        //Create value label
+    label.classList.add('label');                                                     //Style it
+    element.appendChild(label);                                                       //Add it to the control point
+    label.textContent = getValue(element);                                            //Display correct value
+    
+
     function moveAt(pageX, pageY) {                                                   //Move the element to a given position
       element.style.left = pageX - shiftX + 'px';                                     //Set x position
       element.style.top = pageY - shiftY + 'px';                                      //Set y position
-      if (element.getBoundingClientRect().top < graph.getBoundingClientRect().top){
+      if (element.getBoundingClientRect().top < graph.getBoundingClientRect().top){   //Restrict movement to top of the graph
         element.style.top = graph.getBoundingClientRect().top + "px";
       }
-      if (element.getBoundingClientRect().bottom > graph.getBoundingClientRect().bottom){
+      if (element.getBoundingClientRect().bottom > graph.getBoundingClientRect().bottom){ //Restrict movement to bottom of the graph
         element.style.top = element.getBoundingClientRect().top - (element.getBoundingClientRect().bottom - graph.getBoundingClientRect().bottom) + "px";
       }
     }
   
-    function onMouseMove(event) {                                                     //Drag handling function
+    function onMouseMove(event) {      
+      bool_vl = false;                                                                //Disable visual instructions                                               //Drag handling function
       //userX = event.clientX || event.targetTouches[0].pageX;                        //Restrict to vertical movement
       userY = event.clientY || event.targetTouches[0].pageY;                          //Get current mouse y position
       moveAt(userX, userY);                                                           //Move element
-      updateCurve();
+      updateCurve();                                                                  //Update position of curve
+      label.textContent = getValue(element);                                          //Update value of label
     }
 
     document.addEventListener('mousemove', onMouseMove);                              //Drag listener (mouse)
@@ -180,12 +198,48 @@ function dragFunction(element){
         
         element.onmouseup = null;                                                     //bug fix (might be useless)        
     }
-    if (element.getBoundingClientRect().top < graph.getBoundingClientRect().top){
-      element.style.top = graph.getBoundingClientRect().top + "px";
-    }
-    if (element.getBoundingClientRect().bottom > graph.getBoundingClientRect().bottom){
-      element.style.top = element.getBoundingClientRect().top - (element.getBoundingClientRect().bottom - graph.getBoundingClientRect().bottom) + "px";
-    }
-    updateCurve();
+    label.remove();                                                                   //Remove label
   }
 }}
+
+function getValue(cp){
+  const y = cp.getBoundingClientRect().top + cp.getBoundingClientRect().height/2;
+  const ymax = graph.getBoundingClientRect().top + cp.getBoundingClientRect().height/2;
+  const ymin = graph.getBoundingClientRect().top + graph.getBoundingClientRect().height - cp.getBoundingClientRect().height/2;
+  return Math.round((1-(ymax-y)/(ymax - ymin))*1200);
+}
+
+/// VISUAL INSTRUCTION ///////////////////////////////////////////////////////////////////////
+
+function getPoints_VI(){                                                  //Gets X/Y coordinates of all the control points
+  cPcoords_VI = [];                                                          
+  cP_VI.forEach(point => cPcoords_VI.push(getPosition(point)));
+}
+
+function initializeCurve_VI(){
+  curve_VI.id = "curve";                                                  //Style curve
+  curve_VI.classList.add("visualInstruction");                            //Style curve
+  curve_VI.setAttribute("width", canvasW);                                //Set to canvas width for correct scaling
+  curve_VI.setAttribute("height", canvasH);                               //Set to canvas height for correct scaling
+  canvas.appendChild(curve_VI);                                           //Display on webpage
+  updateCurve_VI();                                                       //Calculate position and draw path
+}
+
+function updateCurve_VI(){                                                //Redraw curve when moving control points
+  getPoints_VI();                                                         //Calculate coordinates
+  curve_VI.innerHTML = svgPath(cPcoords_VI);                              //Draw path using bezier curves
+}
+
+initializeCurve_VI();
+
+async function animate_VI(){
+  cP_VI[1].style.top = cP_VI[0].getBoundingClientRect().top - graph.getBoundingClientRect().top + 20*Math.cos(Date.now()/300)+'px';
+  updateCurve_VI();
+  await delay(15);
+  if (bool_vl){animate_VI();}
+  else{
+    document.querySelectorAll(".visualInstruction").forEach(element => element.remove());
+  }
+}
+
+animate_VI();
