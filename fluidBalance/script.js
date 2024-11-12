@@ -138,6 +138,9 @@ function startCase(i){
 
 function case_0(){
 
+  document.getElementById("topDescription").innerHTML = `<b style='font-weight: 700'>Case 0</b>:  Training! Drag & Drop the correct values to make the table internally consistent! (Values do not have any physiological significance)`;
+  document.getElementById('topDescription').style.display = "flex";                                 //Display short-hand description
+  document.getElementById('topDescription').style.top = "4dvh";                                 //Display short-hand description
   //Generates random values and creates case 0
 
   highScore = highScore_0;                                                    //Get correct highscore
@@ -250,7 +253,7 @@ function case_1(){
   //Generate case description
   //Title
   let h1 = document.createElement("h1");          
-  h1.innerHTML = "Case 1 : Dehydrated Senior";
+  h1.innerHTML = "Case 1 : Dehydrated Ingrid";
   //First paragraph
   let p = document.createElement("p");
   p.innerHTML = `Ingrid is an elderly 65 year-old woman living alone. She usually weights ${weight} kg when healthy, but has stopped drinking water over the weekend and has lost ${lost_water} L of water.`;
