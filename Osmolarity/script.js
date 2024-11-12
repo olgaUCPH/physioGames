@@ -202,10 +202,12 @@ function dragFunction(element){
   }
 }}
 
-function getValue(cp){
-  const y = cp.getBoundingClientRect().top + cp.getBoundingClientRect().height/2;
+function getValue(cp){                                                                //Get value of a control point
+  const y = cp.getBoundingClientRect().top + cp.getBoundingClientRect().height/2;     //Get position of point
+  //Get boundaries
   const ymax = graph.getBoundingClientRect().top + cp.getBoundingClientRect().height/2;
   const ymin = graph.getBoundingClientRect().top + graph.getBoundingClientRect().height - cp.getBoundingClientRect().height/2;
+  //Compute corresponding value
   return Math.round((1-(ymax-y)/(ymax - ymin))*1200);
 }
 
