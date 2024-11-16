@@ -179,11 +179,8 @@ body {
 }
 
 #instructionsBox h2{
-  -webkit-transition: background-color 0.5s ease-in-out;
-  -moz-transition: background-color 0.5s ease-in-out;
-  -o-transition: background-color 0.5s ease-in-out;
-  -ms-transition: background-color 0.5s ease-in-out;
-  transition: background-color 0.5s ease-in-out;
+  font-size: 0.8em;
+  padding: 20px;
 }
 
 #checkButton {
@@ -247,11 +244,11 @@ body {
     position: relative;
     justify-content: center;
     align-items: center;
-    -webkit-transition: background-color 0.5s ease-in-out;
-    -moz-transition: background-color 0.5s ease-in-out;
-    -o-transition: background-color 0.5s ease-in-out;
-    -ms-transition: background-color 0.5s ease-in-out;
-    transition: background-color 0.5s ease-in-out;
+    -webkit-transition: background-color, height 0.5s ease-in-out;
+    -moz-transition: background-color, height 0.5s ease-in-out;
+    -o-transition: background-color, height 0.5s ease-in-out;
+    -ms-transition: background-color, height 0.5s ease-in-out;
+    transition: background-color, height 0.5s ease-in-out;
     box-shadow: black 3px 3px 5px;
 }
 
@@ -267,12 +264,57 @@ body {
     justify-content: center;
     align-items: center;
     padding-bottom: 5px;
-    -webkit-transition: background-color 0.5s ease-in-out;
-    -moz-transition: background-color 0.5s ease-in-out;
-    -o-transition: background-color 0.5s ease-in-out;
-    -ms-transition: background-color 0.5s ease-in-out;
-    transition: background-color 0.5s ease-in-out;
+    -webkit-transition: background-color, height 0.5s ease-in-out;
+    -moz-transition: background-color, height 0.5s ease-in-out;
+    -o-transition: background-color, height 0.5s ease-in-out;
+    -ms-transition: background-color, height 0.5s ease-in-out;
+    transition: background-color, height 0.5s ease-in-out;
     box-shadow: black 3px 3px 5px;
+}
+
+/* CASE SELECTION SCREEN */
+
+#caseSelectionScreen{
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+#caseSelectionScreen button{
+  margin: 20px;
+  background-color: var(--pseudo-black);
+  border-radius: .75rem;
+  box-sizing: border-box;
+  color: var(--pseudo-white);
+  padding: .75rem 1.2rem;
+  text-align: center;
+  transition-duration: .5s;
+  transition-property: background-color,border-color,color,fill,stroke,scale;
+  font-family: Avenir;
+  font-weight: 300;
+  font-size: 2em;
+  cursor: pointer;
+}
+
+#caseSelectionScreen button:hover {
+  filter: brightness(1.5);
+  transform: scale(1.05);
+}
+
+#caseSelectionScreen button:active {
+  filter: brightness(2);
+}
+
+.case1{
+  display: none;
+}
+
+.case2{
+  display: none;
+}
+
+.case3{
+  display: none;
 }
 
 /* Graph */
@@ -281,7 +323,7 @@ body {
     width: 80%;
     height: 80%;
     position: absolute;
-    display: flex;
+    display: none;
 }
 
 #curve{
@@ -309,12 +351,48 @@ body {
 .controlPoint .label{
   position: absolute;
   background-color: var(--pseudo-white);
-  top: -4dvh;
+  right: -6dvh;
   border-radius: 5px;
   color: var(--pseudo-black);
   transform-origin: center;
   padding: 3px;
 
+}
+
+.controlPoint img{
+  position: absolute;
+  width: 1vw;
+  height: 1vw;
+}
+
+@keyframes upArrow {
+  10%{
+    translate: 0 -0.5vh;
+  }
+  20%{
+    translate: 0 0vh;
+  }
+  30%{
+    translate: 0 -0.5vh;
+  }
+  40%{
+    translate: 0 0vh;
+  }
+}
+
+@keyframes downArrow {
+  10%{
+    translate: 0 +0.5vh;
+  }
+  20%{
+    translate: 0 0vh;
+  }
+  30%{
+    translate: 0 +0.5vh;
+  }
+  40%{
+    translate: 0 0vh;
+  }
 }
 
 .xAxis{
@@ -372,6 +450,135 @@ body {
   transform: rotate(-90deg);
   top: 2dvh;
 }
+
+
+/* QUESTIONS ** */
+
+#mcqWrapper{
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+
+#questionStart{
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.questionWrapper{
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.questionWrapper h2{
+  width: 90%;
+  text-align: center;
+  position: absolute;
+  top: 0vh;
+}
+
+.questionWrapper h1{
+  width: 95%;
+  text-align: center;
+  position: absolute;
+  top: 5.5dvh;
+  font-size: 1.7em;
+}
+
+.questionWrapper button{
+  position: absolute;
+  bottom: 2vh;
+}
+
+.answerWrapper{
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.singleAnswer{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.qButton{
+  margin: 5px;
+  background-color: var(--pseudo-black);
+  border-radius: .75rem;
+  box-sizing: border-box;
+  color: var(--pseudo-white);
+  padding: .75rem 1.2rem;
+  text-align: center;
+  transition-duration: .5s;
+  transition-property: background-color,border-color,color,fill,stroke,scale;
+  font-family: Avenir;
+  font-weight: 300;
+  font-size: 1em;
+}
+
+.activeButton{
+  cursor: pointer;
+}
+
+.activeButton:hover {
+  filter: brightness(1.5);
+  transform: scale(1.05);
+}
+
+.activeButton:active {
+  filter: brightness(2);
+}
+
+.answerWrapper button{
+  width: 80%;
+}
+
+.inactiveButton{
+  opacity: 0.5;
+}
+
+.selectedButton{
+  border-style: solid;
+  border-width: 5px;
+  border-color: var(--pseudo-white);
+  box-shadow: 4px 4px 2px black;
+  transform: scale(1.05);
+}
+
+.checkWrapper{
+  width: 9vw;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 3px;
+  display: flex;
+}
+
+.checkWrapper img{
+  height: 3dvh;
+  width: auto;
+  position: absolute;
+  display: none;
+  filter: drop-shadow(0 0 2px black);
+  -webkit-filter: drop-shadow(0 0 1px black);
+}
+
 
 /* Right side button column */
 

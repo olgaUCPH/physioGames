@@ -22,13 +22,28 @@
                 <h3 class="scoreText" style="bottom: 0px; right: 0px" id="highScore">0</h3>
             </div>
             <div id="instructionsBox">
-                <p></p>
+                <h2 class="case1">Case 1: Antidiuresis (High ADH)</h2>
+                <p class="case1">Drag the control points to shape the curve !</p>
+
+                <h2 class="case2">Case 2: Water Diuresis (Low ADH)</h2>
+                <p class="case2">Drag the control points to shape the curve !</p>
+
+                <h2 class="case3">Case 3: Inhibition of Na<sup>+</sup>/K<sup>+</sup>/2Cl<sup>-</sup> transporters</h2>
+                <p class="case3">Drag the control points to shape the curve !</p>
             </div>
             <div id="checkButton">Check</div>
         </div>
         <!-- Right Column -->
         <div id="rightColumn">
             <div id="gridContainer">
+
+                <!-- Case Selection -->
+                <div id="caseSelectionScreen">
+                    <button onclick="startCase(1)">Case 1: Antidiuresis (High ADH)</button>
+                    <button onclick="startCase(2)">Case 2: Water Diuresis (Low ADH)</button>
+                    <button onclick="startCase(3)">Case 3: Transporter Inhibition</button>
+                </div>
+
                 <!-- Graph -->
                 <div class = 'fullGraph'>
                     <div class="xAxis"></div>
@@ -42,37 +57,51 @@
                         <span style="bottom:90%">1200</span>
                     </div>
                     <div class="subGraph" style="width: 20%">
-                        <div class="controlPoint visualInstruction" style="left: -0.75vw; bottom: 22.5%"></div>
-                        <div class="controlPoint" style="left: -0.75vw; bottom: 22.5%"></div>
-                        <span>Proksimal Tubulus</span>
+                        <div class="controlPoint visualInstruction" style="left: -0.75vw; bottom: 24%"></div>
+                        <div class="controlPoint" style="left: -0.75vw; bottom: 24%"></div>
+                        <span>Proximal Tubule</span>
                     </div>
                     <div class="subGraph" style="width: 20%">
-                        <div class="controlPoint visualInstruction" style="left: -0.75vw; bottom: 22.5%"></div>
-                        <div class="controlPoint" style="left: -0.75vw; bottom: 22.5%"></div>
-                        <div class="controlPoint visualInstruction" style="bottom: 22.5%"></div>
-                        <div class="controlPoint" style="bottom: 22.5%"></div>
-                        <span>Henles Slynge</span></div>
-                    <div class="subGraph" style="width: 20%">
-                        <div class="controlPoint visualInstruction" style="left: -0.75vw; bottom: 22.5%"></div>
-                        <div class="controlPoint" style="left: -0.75vw; bottom: 22.5%"></div>
-                        <span>Distale Tubulus</span>
-                    </div>
-                    <div class="subGraph" style="width: 20%">
-                        <div class="controlPoint" style="left: -0.75vw; bottom: 22.5%"></div>
-                        <div class="subGraph" style="width: 50%; border-right-color: grey;">
-                            <p>kortikale</p>
-                            <div class="controlPoint" style="right: -0.75vw; bottom: 22.5%"></div>
+                        <div class="subGraph" style="width: 50%; border-right-color: gray;">
+                            <div class="controlPoint visualInstruction" style="left: -0.75vw; bottom: 24%"></div>
+                            <div class="controlPoint" style="left: -0.75vw; bottom: 24%"></div>
+                            <p>descending</p>
                         </div>
                         <div class="subGraph" style="width: 50%; border-right-style: none;">
-                            <p>medullære</p>
-
+                            <p>ascending</p>
+                            <div class="controlPoint visualInstruction" style="left: -0.75vw; bottom: 24%"></div>
+                            <div class="controlPoint" style="left: -0.75vw; bottom: 24%"></div>
                         </div>
-                        <span>Samlerør</span>
+                        <span>Loop of Henle</span></div>
+                    <div class="subGraph" style="width: 20%">
+                        <div class="controlPoint visualInstruction" style="left: -0.75vw; bottom: 24%"></div>
+                        <div class="controlPoint" style="left: -0.75vw; bottom: 24%"></div>
+                        <span>Distal Tubule</span>
                     </div>
                     <div class="subGraph" style="width: 20%">
-                        <div class="controlPoint" style="left: -0.75vw; bottom: 22.5%"></div>
-                        <div class="controlPoint" style="right: -0.75vw; bottom: 22.5%"></div>
-                        <span>Urin</span>
+                        <div class="subGraph" style="width: 50%; border-right-color: grey;">
+                            <div class="controlPoint" style="left: -0.75vw; bottom: 24%"></div>
+                            <p>cortical</p>
+                        </div>
+                        <div class="subGraph" style="width: 50%; border-right-style: none;">
+                            <div class="controlPoint" style="left: -0.75vw; bottom: 24%"></div>
+                            <p>medullary</p>
+                        </div>
+                        <span>Collecting Duct</span>
+                    </div>
+                    <div class="subGraph" style="width: 20%">
+                        <div class="controlPoint" style="left: -0.75vw; bottom: 24%"></div>
+                        <div class="controlPoint" style="right: -0.75vw; bottom: 24%"></div>
+                        <div class="subGraph" style="width: 33.33%; border-right-style: none;">
+                            <p>ureter</p>
+                        </div>
+                        <div class="subGraph" style="width: 33.34%; border-right-style: none;">
+                            <p>bladder</p>
+                        </div>
+                        <div class="subGraph" style="width: 33.33%; border-right-style: none;">
+                            <p>urethra</p>
+                        </div>
+                        <span>Urine</span>
                     </div>
                 </div>
                 
@@ -85,7 +114,35 @@
                     </div>
                 </div>
             </div>
-            <div id="arsenalContainer"></div>
+            <div id="arsenalContainer">
+                <!-- Questions handler, with generic first question and answers to be replaced-->
+                <div id="questionStart" style="display: none;">
+                    <h1 style="font-style: italic;">Adjust the graph to unlock the question module!</h1>
+                </div>
+                <div id="mcqWrapper" style="display:none;">
+                    <div class="questionWrapper">
+                        <h2 id="qNumber">Question 1</h2>
+                        <h1 id="qTitle">What is the first letter of the alphabet ?</h1>
+                        <button id="previousQ" style="font-size: 1em; left: 2.5vw;" class="qButton inactiveButton" onclick="setQuestion(currentQ - 1)">← Previous Question</button>
+                        <button id="nextQ" style="font-size: 1em; right: 2.5vw;" class="qButton inactiveButton" onclick="setQuestion(currentQ + 1)">Next Question →</button>
+                    </div>
+                    <div class="answerWrapper">
+                        <div class="singleAnswer">
+                            <div class="checkWrapper" style="position: absolute; left: -4vw"><img src="assets/cross.png" id="a1False"><img src="assets/check.png" id="a1True"></div> 
+                            <button id="answer1" class="qButton activeButton" onclick="sendAnswer(1)">D</button>
+                        </div>
+                        <div class="singleAnswer">
+                            <div class="checkWrapper" style="position: absolute; left: -4vw"><img src="assets/cross.png" id="a2False"><img src="assets/check.png" id="a2True"></div>
+                            <button id="answer2" class="qButton activeButton" onclick="sendAnswer(2)">A</button>
+                        </div>
+                        <div class="singleAnswer">
+                            <div class="checkWrapper" style="position: absolute; left: -4vw"><img src="assets/cross.png" id="a3False"><img src="assets/check.png" id="a3True"></div>
+                            <button id="answer3" class="qButton activeButton" onclick="sendAnswer(3)">Q</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
         <script src="../color_script.js"></script>      <!-- Shared color handler -->
         <script src="script.js"></script>

@@ -9,10 +9,18 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function removeAllEventListeners(element) {
+  const newElement = element.cloneNode(true);                                 //Clone element (static, only style)
+  element.parentNode.replaceChild(newElement, element);                       //Swap old element for new one
+  element.remove();                                                           //Remove old element
+  return newElement;                                                          //Return new element for later use
+} //Remove all event listener from given element by cloning it
+
+
 /// RELEVANT HTML ELEMENTS ////////////////////////////////////////////////////////////////////
 
 const canvas = document.getElementById("gridContainer");                    //Where the curve should be drawn
-let cP = document.querySelectorAll('.controlPoint:not(.visualInstruction)');//Points controlled by the user to define the curve
+let cP = Array.from(document.querySelectorAll('.controlPoint:not(.visualInstruction)'));//Points controlled by the user to define the curve
 let cP_VI = document.querySelectorAll('.controlPoint.visualInstruction');   //Points for visual instructions
 
 let curve = document.createElementNS("http://www.w3.org/2000/svg", 'svg');  //Create curve for further modification
@@ -20,16 +28,40 @@ let curve_VI = document.createElementNS("http://www.w3.org/2000/svg", 'svg');//C
 
 let graph = document.querySelector('.fullGraph');
 
-/// VARIABLE DEFINITIONS //////////////////////////////////////////////////////////////////////
+let checkButton = document.getElementById("checkButton");                   //Big check button
 
-let canvasW = canvas.getBoundingClientRect().width;                         //Canvas width, for curve scaling
-let canvasH = canvas.getBoundingClientRect().height;                        //Canvas height, for curve scaling
+/// VARIABLE DEFINITIONS //////////////////////////////////////////////////////////////////////
 
 let cPcoords = [];                                                          //Array containing coordinates of all control points
 let cPcoords_VI = [];                                                       //Array containing coordinates of all control points
 
 let bool_vl = true;                                                         //Bool indicating if visual instructions should be displayed
 let lastTrigger = Date.now();                                               //Last time click & drag was triggered (bug fix)
+let startAnimate = 0;                                                       //Time at which animation was started
+
+let userValues = [];                                                       //User answers (for verification)
+
+let caseID = 0;                                                             //User-selected case
+let attempt = 0;                                                            //Attempt number
+
+let ranges = [];                                                            //Contains all verification ranges
+ranges.push([[250,350],[250,350],[1100,1200],[150,250],[100,200],[250,350],[1100,1200],[1100,1200]]); //Case 1
+ranges.push([[250,350],[250,350],[550, 650], [100,200],[50, 150],[50, 100],[20, 80],   [20,80]]);     //Case 2
+ranges.push([[250,350],[250,350],[600, 900], [290,350],[200,300],[250,350],[600,900],  [600,900]]);   //Case 3
+
+let unscored = [true, true, true, true, true, true, true, true];            //Have the control points been scored ?
+let currentScore = 0;                                                       //Current score
+let highScore = 0;                                                          //High-Score
+
+let currentQ = 1;                                                     //ID of the currently displayed question
+let maxQ = 1;                                                         //ID of the max question reached by user
+
+let questions = [];                                                   //Array containing all questions of chosen case
+let answers = [];                                                     //Array containing all possible answers of chosen case
+let correctAnswers = [];                                              //Array containing ID of correct answer from each question
+
+let userAnswers = [];                                                 //Array to be filled with the answers of the user
+
 
 /// EVENT LISTENERS //////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +70,6 @@ cP.forEach(point => {
     point.addEventListener('touchstart', dragFunction(point));                          //Add drag listener (touchscreen)
     point.ondragstart = function() {return false;};                                     //Disable undesirable native drag 
   })
-
 
 /// CURVE HANDLING ////////////////////////////////////////////////////////////////////////////
 
@@ -56,9 +87,10 @@ function getPoints(){                                                       //Ge
 }
 
 const svgPath = (points) => {                                               //Writes the svg path from given point coordinates
-    const d = points.reduce((acc, point, i, a) => i === 0                   
-      ? `M ${point[0]},${point[1]}`                                         //If first element, simply move there
-      : `${acc} ${bezierCommand(point, i, a)}`                              //Otherwise, write the accumulated string & the next bezier control point
+    const d = points.reduce((acc, point, i, a) => 
+      i == 0 ? `M ${point[0]},${point[1]}` :                                //If first element, simply move there
+      i == 1 || i == points.length - 1 ? `${acc} L ${point[0]},${point[1]}` :
+      `${acc} ${bezierCommand(point, i, a)}`                              //Otherwise, write the accumulated string & the next bezier control point
     , '')
     return `<path d="${d}" fill="none" stroke="var(--pseudo-black)" />`     
   }
@@ -93,6 +125,8 @@ const bezierCommand = (point, i, a) => {                                    //Ge
   }
 
 function initializeCurve(){
+    let canvasW = canvas.getBoundingClientRect().width;                     //Canvas width, for curve scaling
+    let canvasH = canvas.getBoundingClientRect().height;                    //Canvas height, for curve scaling
     getPoints();                                                            //Compute initial point coordinates
     curve.id = "curve";                                                     //Style curve
     curve.setAttribute("width", canvasW);                                   //Set to canvas width for correct scaling
@@ -104,39 +138,6 @@ function initializeCurve(){
 function updateCurve(){                                                     //Redraw curve when moving control points
     getPoints();                                                            //Calculate coordinates
     curve.innerHTML = svgPath(cPcoords);                                    //Update curve; interpolate(cPcoords,200)
-}
-
-initializeCurve();
-
-
-/// B-SPLINE INTERPOLATION (USELESS? DOES NOT SEEM TO WORK AS INTENDED) /////////////////////////////////////
-
-const b3 = (x) => {
-  return Math.abs(x) < 1 ? 2/3 - x**2 + Math.abs(x)**3/2 : Math.abs(x) < 2 ? ((2-Math.abs(x))**3)/6 : 0;
-}
-
-const Phi = (x,ref) => {
-  let agg = [];
-  let h = (Math.max(...ref) - Math.min(...ref))/ref.length;
-  for (let i = 0; i < ref.length; i++){
-    agg.push(x.map((x) => b3((x-ref[i])/h)));
-  }
-  return math.transpose(math.matrix(agg));
-}
-
-function interpolate(points, N){
-  const x = points.map(p => p[0]);
-  const y = points.map(p => p[1]);
-  const xi = Array.from({length: N}, (v, i) => Math.min(...x) + i * (Math.max(...x) - Math.min(...x)) / (N - 1));
-  const phi = Phi(x, x);
-  const W = math.multiply(math.multiply(math.inv(math.multiply(math.transpose(phi),phi)),math.transpose(phi)),y);
-  const phi2 = Phi(xi, x);
-  const yi = math.multiply(phi2, W);
-  let points_i = [];
-  for (let i = 0; i < N; i++){
-    points_i.push([xi[i],yi.subset(math.index(i))]);
-  }
-  return points_i;
 }
 
 /// CLICK AND DRAG ////////////////////////////////////////////////////////////////////////////
@@ -195,7 +196,7 @@ function dragFunction(element){
         parent.appendChild(element);                                                  //Add element to initial parent (useful for switching)
         lastTrigger = Date.now();                                                     //Update trigger date (bug fix)
         document.body.classList.remove('no-select');                                  //Restore text selection
-        
+        element.removeChild(element.children[0]);
         element.onmouseup = null;                                                     //bug fix (might be useless)        
     }
     label.remove();                                                                   //Remove label
@@ -208,8 +209,175 @@ function getValue(cp){                                                          
   const ymax = graph.getBoundingClientRect().top + cp.getBoundingClientRect().height/2;
   const ymin = graph.getBoundingClientRect().top + graph.getBoundingClientRect().height - cp.getBoundingClientRect().height/2;
   //Compute corresponding value
-  return Math.round((1-(ymax-y)/(ymax - ymin))*1200);
+  let value = Math.round((1-(ymax-y)/(ymax - ymin))*1200);
+  return Math.round(value/10)*10;                                                       //Round to closest multiple of 5
 }
+
+/// CASE SELECTION ///////////////////////////////////////////////////////////////////////////
+
+function startCase(i){
+  document.getElementById("caseSelectionScreen").style.display = "none";
+  graph.style.display = "flex";
+  document.querySelectorAll(".case"+i).forEach(div =>div.style.display = "flex");
+  initializeCurve();
+  initializeCurve_VI();
+  animate_VI();
+  caseID = i;
+  document.getElementById("questionStart").style.display = "flex";
+  checkButton.addEventListener("click", verifyGrid);
+}
+
+questions.push("What is the first letter of the alphabet ?");
+answers.push(["D","A","Q"]);
+correctAnswers.push(2);
+
+/// VERIFICATION /////////////////////////////////////////////////////////////////////////////
+
+function verifyGrid(){
+  attempt += 1;
+  userValues = Array.from(cP).map(getValue);
+  let allGood = true;
+  for (let i = 0; i < cP.length; i++){
+    if(cP[i].children.length > 0){cP[i].removeChild(cP[i].children[0]);}
+    if (userValues[i] > ranges[caseID-1][i][1]){
+      allGood = false;
+      let img = document.createElement('img');
+      img.src = "../assets/downArrow.png";
+      cP[i].appendChild(img);
+      img.style.top = "-4dvh";
+      img.style.right = "-2dvh";
+      img.style.width = "1.5vw";
+      img.style.height = "1.5vw";
+      img.style.animation = "downArrow 2s ease-in-out 0s infinite";
+    }
+    else if (userValues[i] < ranges[caseID-1][i][0]){
+      allGood = false;
+      let img = document.createElement('img');
+      img.src = "../assets/upArrow.png";
+      cP[i].appendChild(img);
+      img.style.bottom = "-4dvh";
+      img.style.right = "-2dvh";
+      img.style.width = "1.5vw";
+      img.style.height = "1.5vw";
+      img.style.animation = "upArrow 2s ease-in-out 0s infinite";
+    }
+    else{
+      if (unscored[i]){
+        currentScore += attempt == 1 ? 10 : attempt == 2 ? 5 : 1;
+        unscored[i] = false;
+        cP[i].style.backgroundColor = "var(--pseudo-black)";
+        cP[i].style.pointerEvents = "none";
+        cP[i] = removeAllEventListeners(cP[i]);        
+      }
+      let img = document.createElement('img');
+      img.src = "assets/check.png";
+      cP[i].appendChild(img);
+    }
+  }
+  displayScore();
+  if (allGood){
+    transition();
+  }
+}
+
+function displayScore(){
+  //Display score and update highscore if necessary
+  if (currentScore > highScore){
+    highScore = currentScore;                                                           //Update highscore if necessary
+  }
+  document.getElementById('currentScore').textContent = currentScore;                   //Display current score
+  document.getElementById('highScore').textContent = highScore;                         //Display high score
+}
+
+
+async function transition(){
+  document.getElementById("gridContainer").style.height = "64dvh";
+  document.getElementById("arsenalContainer").style.height = "28dvh";
+  let initialP = Array.from(cP).map((x)=>parseFloat(x.style.top));
+  let finalP = Array.from(cP).map((x)=>64/70*parseFloat(x.style.top));
+  for (let i = 0; i <= 100; i++){
+    cP.forEach((point,j) => point.style.top = initialP[j] + i/100*(finalP[j] - initialP[j]) + 'px');
+    initializeCurve();
+    initializeCurve_VI();
+    await delay(5);
+  }
+  document.getElementById("questionStart").style.display = "none";
+  document.getElementById("mcqWrapper").style.display = "flex";
+  checkButton.removeEventListener("click", verifyGrid);
+  setQuestion(currentQ);
+}
+
+/// QUESTIONS /////////////////////////////////////////////////////////
+
+
+function sendAnswer(n){
+  //Function triggered when an answer is chosen. Records the answer, and score
+  if (userAnswers.length < currentQ) {                                              //If the question has not been answered yet
+    if (n == correctAnswers[userAnswers.length]) {currentScore += 10; displayScore()};//Add score if correct answer
+    userAnswers.push(n);                                                            //Record answer
+    maxQ = Math.min(maxQ+1,questions.length);                                       //Raise maximum question reached by one (if there is one more)
+  }
+  setQuestion(currentQ);                                                            //Reset question: the recorded answer will change the display
+}
+
+function setQuestion(i){
+  //Sets the given question: display correct question and corresponding answers; if question was answered already, show which is correct and which was chosen
+  if (i < 1 || i > maxQ ){return 0;}                                                //Impossible to set a question if the number does not exist
+
+  document.querySelectorAll(".singleAnswer > .checkWrapper").forEach(element => element.style.display = "none");          //Hide all checkmarks tied to answers
+  document.querySelectorAll(".checkWrapper > img").forEach(element => element.style.display = "none");                    //Hide all checkmarks tied to answers (bug fix)
+  currentQ = i;                                                                                                           //Keep track of new question
+  //If Question 1: "Previous question" button should be inactive
+  if (i==1){document.getElementById("previousQ").classList.add("inactiveButton");document.getElementById("previousQ").classList.remove("activeButton");}
+  else{document.getElementById("previousQ").classList.add("activeButton");document.getElementById("previousQ").classList.remove("inactiveButton");}
+  //If not the last question reached: "Next question" button should be active
+  if (i<maxQ){document.getElementById("nextQ").classList.add("activeButton");document.getElementById("nextQ").classList.remove("inactiveButton");}
+  else{document.getElementById("nextQ").classList.add("inactiveButton");document.getElementById("nextQ").classList.remove("activeButton");}
+  document.getElementById("qNumber").textContent = "Question "+currentQ;            //Update question number
+  document.getElementById("qTitle").textContent = questions[currentQ-1];            //Update question text
+  document.getElementById("answer1").textContent = answers[currentQ-1][0];          //Update answer text
+  document.getElementById("answer2").textContent = answers[currentQ-1][1];          //Update answer text
+  document.getElementById("answer3").textContent = answers[currentQ-1][2];          //Update answer text
+
+  document.getElementById("answer1").classList.remove("selectedButton");            //Reset style
+  document.getElementById("answer2").classList.remove("selectedButton");            //Reset style
+  document.getElementById("answer3").classList.remove("selectedButton");            //Reset style
+
+  if (i < maxQ || (userAnswers.length == correctAnswers.length)){                  //If the question has been answered (not max reached, or all question answered)
+    document.getElementById("answer1").style.backgroundColor = correctAnswers[i-1] == 1 ? "darkgreen" : "maroon";       //Show the correct answer in green, others in red
+    document.getElementById("answer2").style.backgroundColor = correctAnswers[i-1] == 2 ? "darkgreen" : "maroon";       //Show the correct answer in green, others in red
+    document.getElementById("answer3").style.backgroundColor = correctAnswers[i-1] == 3 ? "darkgreen" : "maroon";       //Show the correct answer in green, others in red
+    
+    document.getElementById("answer1").classList.remove("activeButton");          //Disable buttons
+    document.getElementById("answer2").classList.remove("activeButton");          //Disable buttons
+    document.getElementById("answer3").classList.remove("activeButton");          //Disable buttons
+
+    document.querySelectorAll(".singleAnswer > .checkWrapper").forEach(element => element.style.display = "flex");      //Display check marks
+
+    //Display which answer was selected by the user with a white border and larger scale
+    if (userAnswers[i-1] == 1){document.getElementById("answer1").classList.add("selectedButton")}
+    if (userAnswers[i-1] == 2){document.getElementById("answer2").classList.add("selectedButton")}
+    if (userAnswers[i-1] == 3){document.getElementById("answer3").classList.add("selectedButton")}
+
+    //Display which answer is correct with a check mark
+    if (correctAnswers[i-1] == 1){document.getElementById("a1True").style.display = "block"; document.getElementById("a2False").style.display = "block"; document.getElementById("a3False").style.display = "block"}
+    if (correctAnswers[i-1] == 2){document.getElementById("a1False").style.display = "block"; document.getElementById("a2True").style.display = "block"; document.getElementById("a3False").style.display = "block"}
+    if (correctAnswers[i-1] == 3){document.getElementById("a1False").style.display = "block"; document.getElementById("a2False").style.display = "block"; document.getElementById("a3True").style.display = "block"}
+
+  }
+  else{
+    //If question has not been answered, set backgrounds to black and activate buttons
+    document.getElementById("answer1").style.backgroundColor = "var(--pseudo-black)";     
+    document.getElementById("answer2").style.backgroundColor = "var(--pseudo-black)";
+    document.getElementById("answer3").style.backgroundColor = "var(--pseudo-black)";
+
+    document.getElementById("answer1").classList.add("activeButton");
+    document.getElementById("answer2").classList.add("activeButton");
+    document.getElementById("answer3").classList.add("activeButton");
+  }
+
+};
+
 
 /// VISUAL INSTRUCTION ///////////////////////////////////////////////////////////////////////
 
@@ -219,12 +387,15 @@ function getPoints_VI(){                                                  //Gets
 }
 
 function initializeCurve_VI(){
+  let canvasW = canvas.getBoundingClientRect().width;                     //Canvas width, for curve scaling
+  let canvasH = canvas.getBoundingClientRect().height;                    //Canvas height, for curve scaling
   curve_VI.id = "curve";                                                  //Style curve
   curve_VI.classList.add("visualInstruction");                            //Style curve
   curve_VI.setAttribute("width", canvasW);                                //Set to canvas width for correct scaling
   curve_VI.setAttribute("height", canvasH);                               //Set to canvas height for correct scaling
   canvas.appendChild(curve_VI);                                           //Display on webpage
   updateCurve_VI();                                                       //Calculate position and draw path
+  startAnimate = Date.now();
 }
 
 function updateCurve_VI(){                                                //Redraw curve when moving control points
@@ -232,8 +403,14 @@ function updateCurve_VI(){                                                //Redr
   curve_VI.innerHTML = svgPath(cPcoords_VI);                              //Draw path using bezier curves
 }
 
+function animate_function(time){                                          //Animate curve: a sin wave with delay between each wave
+  const elapsed = time -  startAnimate;
+  const period = 2500;
+  return (elapsed/period) % 3 < 2 ? 0 : Math.sin(2*3.1415*elapsed/period);
+}
+
 async function animate_VI(){                                              //Animate movement of one of the points with a sinusoid
-  cP_VI[1].style.top = cP_VI[0].getBoundingClientRect().top - graph.getBoundingClientRect().top + 20*Math.cos(Date.now()/300)+'px';
+  cP_VI[1].style.top = cP_VI[0].getBoundingClientRect().top - graph.getBoundingClientRect().top + 20*animate_function(Date.now())+'px';
   updateCurve_VI();                                                       //Redraw curve
   await delay(15);
   if (bool_vl){animate_VI();}                                             //Loop until disabled
@@ -241,6 +418,3 @@ async function animate_VI(){                                              //Anim
     document.querySelectorAll(".visualInstruction").forEach(element => element.remove()); //Remove all elements
   }
 }
-
-initializeCurve_VI();
-animate_VI();
