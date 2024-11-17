@@ -155,11 +155,8 @@ function dragFunction(element){
     element.style.zIndex = 1000;                                                      //Bring element to front side
     document.body.classList.add('no-select');                                         //Disable text selection
     moveAt(userX, userY);                                                             //bug fix
-      
-    let label = document.createElement('div');                                        //Create value label
-    label.classList.add('label');                                                     //Style it
-    element.appendChild(label);                                                       //Add it to the control point
-    label.textContent = getValue(element);                                            //Display correct value
+    
+    showLabel(element);
     
 
     function moveAt(pageX, pageY) {                                                   //Move the element to a given position
@@ -176,10 +173,11 @@ function dragFunction(element){
     function onMouseMove(event) {      
       bool_vl = false;                                                                //Disable visual instructions                                               //Drag handling function
       //userX = event.clientX || event.targetTouches[0].pageX;                        //Restrict to vertical movement
-      userY = event.clientY || event.targetTouches[0].pageY;                          //Get current mouse y position
+      if (!element.classList.contains("scoredPoint")){
+        userY = event.clientY || event.targetTouches[0].pageY;                          //Get current mouse y position
+      }
       moveAt(userX, userY);                                                           //Move element
       updateCurve();                                                                  //Update position of curve
-      label.textContent = getValue(element);                                          //Update value of label
     }
 
     document.addEventListener('mousemove', onMouseMove);                              //Drag listener (mouse)
@@ -196,10 +194,11 @@ function dragFunction(element){
         parent.appendChild(element);                                                  //Add element to initial parent (useful for switching)
         lastTrigger = Date.now();                                                     //Update trigger date (bug fix)
         document.body.classList.remove('no-select');                                  //Restore text selection
-        element.removeChild(element.children[0]);
+        if (!element.classList.contains("scoredPoint")){
+          element.children[0].remove();
+        }
         element.onmouseup = null;                                                     //bug fix (might be useless)        
     }
-    label.remove();                                                                   //Remove label
   }
 }}
 
@@ -211,6 +210,18 @@ function getValue(cp){                                                          
   //Compute corresponding value
   let value = Math.round((1-(ymax-y)/(ymax - ymin))*1200);
   return Math.round(value/10)*10;                                                       //Round to closest multiple of 5
+}
+
+function showLabel(cp){
+  const val = getValue(cp);
+  let label = document.createElement('div');                                        //Create value label
+  label.classList.add('label');                                                     //Style it
+  cp.appendChild(label);                                                       //Add it to the control point
+  label.textContent = val;                                            //Display correct value
+  document.addEventListener('mousemove', ()=>label.textContent = getValue(cp));                              //Drag listener (mouse)
+  document.addEventListener('touchmove', ()=>label.textContent = getValue(cp));                              //Drag listener (touchscreen)
+  document.addEventListener('mouseup', ()=>label.remove());                 //Release listener (mouse)
+  document.addEventListener('touchend', ()=>label.remove());                                       //Release listener (touchscreen)
 }
 
 /// CASE SELECTION ///////////////////////////////////////////////////////////////////////////
@@ -239,7 +250,16 @@ function verifyGrid(){
   let allGood = true;
   for (let i = 0; i < cP.length; i++){
     if(cP[i].children.length > 0){cP[i].removeChild(cP[i].children[0]);}
-    if (userValues[i] > ranges[caseID-1][i][1]){
+    const tooHigh = userValues[i] > ranges[caseID-1][i][1];
+    const tooLow  = userValues[i] < ranges[caseID-1][i][0];
+    const tH01 = i == 1 && userValues[i] > userValues[0] + 10;
+    const tL01 = i == 1 && userValues[i] < userValues[0] - 10;
+    const tH67 = i == 7 && userValues[i] > userValues[6] + 10;
+    const tL67 = i == 7 && userValues[i] < userValues[6] - 10;
+    const max2 = i == 2 && ((!unscored[6] && userValues[i] < userValues[6]) || (!unscored[7] && userValues[i] < userValues[7]));
+    const max6 = i == 6 && !unscored[2] && userValues[i] > userValues[2];
+    const max7 = i == 7 && !unscored[2] && userValues[i] > userValues[2];
+    if (tooHigh || tH01 || tH67 || max6 || max7){
       allGood = false;
       let img = document.createElement('img');
       img.src = "../assets/downArrow.png";
@@ -250,7 +270,7 @@ function verifyGrid(){
       img.style.height = "1.5vw";
       img.style.animation = "downArrow 2s ease-in-out 0s infinite";
     }
-    else if (userValues[i] < ranges[caseID-1][i][0]){
+    else if (tooLow || tL01 || tL67 || max2){
       allGood = false;
       let img = document.createElement('img');
       img.src = "../assets/upArrow.png";
@@ -265,9 +285,7 @@ function verifyGrid(){
       if (unscored[i]){
         currentScore += attempt == 1 ? 10 : attempt == 2 ? 5 : 1;
         unscored[i] = false;
-        cP[i].style.backgroundColor = "var(--pseudo-black)";
-        cP[i].style.pointerEvents = "none";
-        cP[i] = removeAllEventListeners(cP[i]);        
+        cP[i].classList.add("scoredPoint");
       }
       let img = document.createElement('img');
       img.src = "assets/check.png";

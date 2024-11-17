@@ -365,6 +365,10 @@ body {
   height: 1vw;
 }
 
+.scoredPoint{
+  background-color: var(--pseudo-black);
+}
+
 @keyframes upArrow {
   10%{
     translate: 0 -0.5vh;
