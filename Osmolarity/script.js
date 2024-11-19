@@ -1,7 +1,9 @@
 /// MAIN FUNCTIONALITIES
 
-// - Click and Drag of Control Points
 // - Drawing smooth curve
+// - Click and Drag of Control Points
+// - Verification and Scoring
+// - Questions module
 
 /// GENERAL ALL PURPOSE & TECHNICAL FUNCTIONS ///////////////////////////////////////////////////
 
@@ -62,6 +64,10 @@ let correctAnswers = [];                                              //Array co
 
 let userAnswers = [];                                                 //Array to be filled with the answers of the user
 
+//Initialize questions (placeholder)
+questions.push("What is the first letter of the alphabet ?");
+answers.push(["D","A","Q"]);
+correctAnswers.push(2);
 
 /// EVENT LISTENERS //////////////////////////////////////////////////////////////////////////
 
@@ -89,7 +95,7 @@ function getPoints(){                                                       //Ge
 const svgPath = (points) => {                                               //Writes the svg path from given point coordinates
     const d = points.reduce((acc, point, i, a) => 
       i == 0 ? `M ${point[0]},${point[1]}` :                                //If first element, simply move there
-      i == 1 || i == points.length - 1 ? `${acc} L ${point[0]},${point[1]}` :
+      i == 1 || i == points.length - 1 ? `${acc} L ${point[0]},${point[1]}` : // If first or last segment: linear 
       `${acc} ${bezierCommand(point, i, a)}`                              //Otherwise, write the accumulated string & the next bezier control point
     , '')
     return `<path d="${d}" fill="none" stroke="var(--pseudo-black)" />`     
@@ -156,7 +162,7 @@ function dragFunction(element){
     document.body.classList.add('no-select');                                         //Disable text selection
     moveAt(userX, userY);                                                             //bug fix
     
-    showLabel(element);
+    showLabel(element);                                                               //Display label with correct value
     
 
     function moveAt(pageX, pageY) {                                                   //Move the element to a given position
@@ -174,7 +180,7 @@ function dragFunction(element){
       bool_vl = false;                                                                //Disable visual instructions                                               //Drag handling function
       //userX = event.clientX || event.targetTouches[0].pageX;                        //Restrict to vertical movement
       if (!element.classList.contains("scoredPoint")){
-        userY = event.clientY || event.targetTouches[0].pageY;                          //Get current mouse y position
+        userY = event.clientY || event.targetTouches[0].pageY;                        //Get current mouse y position
       }
       moveAt(userX, userY);                                                           //Move element
       updateCurve();                                                                  //Update position of curve
@@ -194,8 +200,8 @@ function dragFunction(element){
         parent.appendChild(element);                                                  //Add element to initial parent (useful for switching)
         lastTrigger = Date.now();                                                     //Update trigger date (bug fix)
         document.body.classList.remove('no-select');                                  //Restore text selection
-        if (!element.classList.contains("scoredPoint")){
-          element.children[0].remove();
+        if (!element.classList.contains("scoredPoint")){      
+          element.children[0].remove();                                               //Remove arrow indicator (does not exist if scored)
         }
         element.onmouseup = null;                                                     //bug fix (might be useless)        
     }
@@ -213,88 +219,86 @@ function getValue(cp){                                                          
 }
 
 function showLabel(cp){
-  const val = getValue(cp);
-  let label = document.createElement('div');                                        //Create value label
-  label.classList.add('label');                                                     //Style it
-  cp.appendChild(label);                                                       //Add it to the control point
-  label.textContent = val;                                            //Display correct value
-  document.addEventListener('mousemove', ()=>label.textContent = getValue(cp));                              //Drag listener (mouse)
-  document.addEventListener('touchmove', ()=>label.textContent = getValue(cp));                              //Drag listener (touchscreen)
-  document.addEventListener('mouseup', ()=>label.remove());                 //Release listener (mouse)
-  document.addEventListener('touchend', ()=>label.remove());                                       //Release listener (touchscreen)
+  //Display label with point value, and remove it when unclicked
+  let label = document.createElement('div');                                          //Create value label
+  label.classList.add('label');                                                       //Style it
+  cp.appendChild(label);                                                              //Add it to the control point
+  label.textContent = getValue(cp);                                                   //Display correct value
+  document.addEventListener('mousemove', ()=>label.textContent = getValue(cp));       //Drag listener (mouse)
+  document.addEventListener('touchmove', ()=>label.textContent = getValue(cp));       //Drag listener (touchscreen)
+  document.addEventListener('mouseup', ()=>label.remove());                           //Release listener (mouse)
+  document.addEventListener('touchend', ()=>label.remove());                          //Release listener (touchscreen)
 }
 
 /// CASE SELECTION ///////////////////////////////////////////////////////////////////////////
 
 function startCase(i){
-  document.getElementById("caseSelectionScreen").style.display = "none";
-  graph.style.display = "flex";
-  document.querySelectorAll(".case"+i).forEach(div =>div.style.display = "flex");
-  initializeCurve();
-  initializeCurve_VI();
-  animate_VI();
-  caseID = i;
-  document.getElementById("questionStart").style.display = "flex";
-  checkButton.addEventListener("click", verifyGrid);
+  //Start the case specified by i
+  document.getElementById("caseSelectionScreen").style.display = "none";              //Hide selection screen
+  graph.style.display = "flex";                                                       //Show graph
+  document.querySelectorAll(".case"+i).forEach(div =>div.style.display = "flex");     //Show instructions
+  initializeCurve();                                                                  //Draw curve
+  initializeCurve_VI();                                                               //Draw visual instructions curve
+  animate_VI();                                                                       //Animate VI curve
+  caseID = i;                                                                         //Record case ID
+  document.getElementById("questionStart").style.display = "flex";                    //Show questions module
+  checkButton.addEventListener("click", verifyGrid);                                  //Activate check button
 }
 
-questions.push("What is the first letter of the alphabet ?");
-answers.push(["D","A","Q"]);
-correctAnswers.push(2);
 
 /// VERIFICATION /////////////////////////////////////////////////////////////////////////////
 
 function verifyGrid(){
-  attempt += 1;
-  userValues = Array.from(cP).map(getValue);
-  let allGood = true;
-  for (let i = 0; i < cP.length; i++){
-    if(cP[i].children.length > 0){cP[i].removeChild(cP[i].children[0]);}
-    const tooHigh = userValues[i] > ranges[caseID-1][i][1];
-    const tooLow  = userValues[i] < ranges[caseID-1][i][0];
-    const tH01 = i == 1 && userValues[i] > userValues[0] + 10;
-    const tL01 = i == 1 && userValues[i] < userValues[0] - 10;
-    const tH67 = i == 7 && userValues[i] > userValues[6] + 10;
-    const tL67 = i == 7 && userValues[i] < userValues[6] - 10;
-    const max2 = i == 2 && ((!unscored[6] && userValues[i] < userValues[6]) || (!unscored[7] && userValues[i] < userValues[7]));
-    const max6 = i == 6 && !unscored[2] && userValues[i] > userValues[2];
-    const max7 = i == 7 && !unscored[2] && userValues[i] > userValues[2];
-    if (tooHigh || tH01 || tH67 || max6 || max7){
-      allGood = false;
-      let img = document.createElement('img');
-      img.src = "../assets/downArrow.png";
-      cP[i].appendChild(img);
-      img.style.top = "-4dvh";
-      img.style.right = "-2dvh";
-      img.style.width = "1.5vw";
-      img.style.height = "1.5vw";
-      img.style.animation = "downArrow 2s ease-in-out 0s infinite";
+  attempt += 1;                                                                       //Increase attempt #
+  userValues = Array.from(cP).map(getValue);                                          //Get point values
+  let allGood = true;                                                                 //Boolean to check if nothing is wrong
+  for (let i = 0; i < cP.length; i++){                                                //Iterate ove all points
+    if(cP[i].children.length > 0){cP[i].removeChild(cP[i].children[0]);}              //If there is an indicator remaining: remove it
+    const tooHigh = userValues[i] > ranges[caseID-1][i][1];                           //Bool: value is above range
+    const tooLow  = userValues[i] < ranges[caseID-1][i][0];                           //Bool: value is below range
+    const tH01 = i == 1 && userValues[i] > userValues[0] + 10;                        //Bool: First line is not straight (2 is above 1)
+    const tL01 = i == 1 && userValues[i] < userValues[0] - 10;                        //Bool: First line is not straight (2 is below 1)
+    const tH67 = i == 7 && userValues[i] > userValues[6] + 10;                        //Bool: Last line is not straight (8 is above 7)
+    const tL67 = i == 7 && userValues[i] < userValues[6] - 10;                        //Bool: Last line is not straight (8 is below 7)
+    const max2 = i == 2 && ((!unscored[6] && userValues[i] < userValues[6]) || (!unscored[7] && userValues[i] < userValues[7])); // Bool: Point 3 is not the max (7 or 8 have been scored already)
+    const max6 = i == 6 && !unscored[2] && userValues[i] > userValues[2];             //Bool: Point 7 is above point 3 (Point 3 already scored)
+    const max7 = i == 7 && !unscored[2] && userValues[i] > userValues[2];             //Bool: Point 8 is above point 3 (Point 3 already scored)
+    if (tooHigh || tH01 || tH67 || max6 || max7){                                     //If current point is considered too high
+      allGood = false;                                                                //Record that there was an error
+      let img = document.createElement('img');                                        //Create arrow indicator
+      img.src = "../assets/downArrow.png";                                            //Load down arrow
+      cP[i].appendChild(img);                                                         //Attach it to control point
+      img.style.top = "-4dvh";                                                        //Position it on top
+      img.style.right = "-2dvh";                                                      //Position it to the right
+      img.style.width = "1.5vw";                                                      //Set width
+      img.style.height = "1.5vw";                                                     //Set height
+      img.style.animation = "downArrow 2s ease-in-out 0s infinite";                   //Animate
     }
-    else if (tooLow || tL01 || tL67 || max2){
-      allGood = false;
-      let img = document.createElement('img');
-      img.src = "../assets/upArrow.png";
-      cP[i].appendChild(img);
-      img.style.bottom = "-4dvh";
-      img.style.right = "-2dvh";
-      img.style.width = "1.5vw";
-      img.style.height = "1.5vw";
-      img.style.animation = "upArrow 2s ease-in-out 0s infinite";
+    else if (tooLow || tL01 || tL67 || max2){                                         //If current point is considered too low
+      allGood = false;                                                                //Record that there was an error
+      let img = document.createElement('img');                                        //Create arrow indicator
+      img.src = "../assets/upArrow.png";                                              //Load up arrow
+      cP[i].appendChild(img);                                                         //Attach it to control point
+      img.style.bottom = "-4dvh";                                                     //Position it on bottom
+      img.style.right = "-2dvh";                                                      //Position it to the right
+      img.style.width = "1.5vw";                                                      //Set width
+      img.style.height = "1.5vw";                                                     //Set height
+      img.style.animation = "upArrow 2s ease-in-out 0s infinite";                     //Animate
     }
-    else{
-      if (unscored[i]){
-        currentScore += attempt == 1 ? 10 : attempt == 2 ? 5 : 1;
-        unscored[i] = false;
-        cP[i].classList.add("scoredPoint");
+    else{                                                                             //Otherwise, point is correct
+      if (unscored[i]){                                                               //If it has never been scored
+        currentScore += attempt == 1 ? 10 : attempt == 2 ? 5 : 1;                     //Add score
+        unscored[i] = false;                                                          //Record that it has been scored
+        cP[i].classList.add("scoredPoint");                                           //Show that it has been scored
       }
-      let img = document.createElement('img');
-      img.src = "assets/check.png";
-      cP[i].appendChild(img);
+      let img = document.createElement('img');                                        //Create checkmark indicator
+      img.src = "assets/check.png";                                                   //Load image
+      cP[i].appendChild(img);                                                         //Attach to control point
     }
   }
-  displayScore();
-  if (allGood){
-    transition();
+  displayScore();                                                                     //Display score
+  if (allGood){                                                                       //If everything is correct
+    transition();                                                                     //Transition into questions module
   }
 }
 
@@ -309,20 +313,20 @@ function displayScore(){
 
 
 async function transition(){
-  document.getElementById("gridContainer").style.height = "64dvh";
-  document.getElementById("arsenalContainer").style.height = "28dvh";
-  let initialP = Array.from(cP).map((x)=>parseFloat(x.style.top));
-  let finalP = Array.from(cP).map((x)=>64/70*parseFloat(x.style.top));
+  //Transition from graph control to questions module
+  document.getElementById("gridContainer").style.height = "64dvh";                      //Change container heights
+  document.getElementById("arsenalContainer").style.height = "28dvh";                   //Change container heights
+  let initialP = Array.from(cP).map((x)=>parseFloat(x.style.top));                      //Get initial point position (animation)
+  let finalP = Array.from(cP).map((x)=>64/70*parseFloat(x.style.top));                  //Get final point position (animation)
   for (let i = 0; i <= 100; i++){
-    cP.forEach((point,j) => point.style.top = initialP[j] + i/100*(finalP[j] - initialP[j]) + 'px');
-    initializeCurve();
-    initializeCurve_VI();
-    await delay(5);
+    cP.forEach((point,j) => point.style.top = initialP[j] + i/100*(finalP[j] - initialP[j]) + 'px');  //Update progessively point position (animation)
+    initializeCurve();                                                                  //Redraw curve
+    await delay(5);                                                                     //Wait a bit
   }
-  document.getElementById("questionStart").style.display = "none";
-  document.getElementById("mcqWrapper").style.display = "flex";
-  checkButton.removeEventListener("click", verifyGrid);
-  setQuestion(currentQ);
+  document.getElementById("questionStart").style.display = "none";                      //Hide questions placeholder
+  document.getElementById("mcqWrapper").style.display = "flex";                         //Start questions module
+  checkButton.removeEventListener("click", verifyGrid);                                 //Remove check button functionality
+  setQuestion(currentQ);                                                                //Initialize first question
 }
 
 /// QUESTIONS /////////////////////////////////////////////////////////
