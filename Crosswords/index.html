@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Crosswords - Physiology Games</title>
+        <link rel="icon" type="image/vnd.icon" href="../assets/favicon.ico">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <script language="JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.2.1/math.js"></script>
+        <!-- Left Column -->
+        <div id="leftColumn">
+            <div id="titleBox" onclick="location.href='../index.html'">
+                <h1 id="title">Crosswords</h1>
+                <h2 id="author">Created by Carl Ferlay, under the supervision of Olga Sosnovtseva, Niels-Henrik Holstein-Rahtlou and Charlotte Mehlin Sørensen</h2>
+            </div>
+            <div id="scoreBox">
+                <h3 class="scoreText" style="top: 0px; left: 0px">Current Score:</h3>
+                <h3 class="scoreText" style="top: 0px; right: 0px"id="currentScore">0</h3>
+                <h3 class="scoreText" style="bottom: 0px; left: 0px">High Score:</h3>
+                <h3 class="scoreText" style="bottom: 0px; right: 0px" id="highScore">0</h3>
+            </div>
+            <div id="instructionsBox">
+            </div>
+            <div id="checkButton">Check</div>
+        </div>
+        <!-- Right Column -->
+        <div id="rightColumn">
+            <div id="gridContainer">                
+                <div id="grid">
+                </div>
+                <!-- Right-side buttons column -->
+                <div id = "buttonsColumn">
+                    <div class="buttonWrapper">
+                        <img id="colorButton" src="../assets/colorIcon.png">
+                        <span>Change color theme</span>
+                    </div>
+                </div>
+            </div>
+            <div id="arsenalContainer">
+            </div>
+        </div>
+        <script src="../color_script.js"></script>      <!-- Shared color handler -->
+        <script src="script.js"></script>
+    </body>
+</html>
