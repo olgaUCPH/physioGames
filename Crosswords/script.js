@@ -32,13 +32,97 @@ let grid = [];                                                          //Array 
 let gridPhantom = [];
 let cellDivs = [];
 
-let wordList = ['HELLO', 'ALOHA', 'CHERRY', 'SPLEEN', 'SMARTPHONE', 'KALADIN', 'MISTBORN'];
+let wordList = [];
+let hintList = [];
+
+wordList.push("HELLO");
+hintList.push("Common English Greeting");
+
+wordList.push("ALOHA");
+hintList.push("Common Greeting in Hawai");
+
+wordList.push("CHERRY");
+hintList.push("Summer fruit");
+
+wordList.push("SPLEEN");
+hintList.push("Les Fleurs du Mal");
+
+wordList.push("SMARTPHONE");
+hintList.push("Portable device to communicate");
+
+wordList.push("KALADIN");
+hintList.push("Leader of Bridge Four");
+
+wordList.push("MISTBORN");
+hintList.push("Person being able to burn all allomantic metals");
+
+let VHints = [];
+let HHints = [];
+
 let placementList = [];                                                 //List of placements [Word, x, y, orientation]
+let selPlacement = [];
+let selID = 0;
 
 [grid, placementList] = createBestGrid(wordList, 1000);                 //Create a grid from 1000 samples (working value)
 generateGrid(grid);                                                     //Generate the html element
 
 /// EVENT LISTENERS //////////////////////////////////////////////////////////////////////////
+
+cellDivs.forEach((cell, i) => {
+    if (gridPhantom[i] != ' '){
+        cell.onclick = function(){cellSel(i, true)};
+    }
+    else{
+        cell.onclick = deselect;
+    }
+})
+
+document.getElementById("gridContainer").addEventListener('click', (event) => {
+    if (event.target === event.currentTarget) {
+        deselect();
+    }
+  });
+
+document.addEventListener('keydown', (event) => {
+    if (event.key.length === 1 && event.key.match(/[a-zA-Z]/)) {
+        cellDivs[selID].innerHTML = event.key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);
+        let ids = placementToID(selPlacement);
+        const nextID = ids[Math.min(ids.indexOf(selID) + 1, ids.length - 1)];
+        cellSel(nextID, false);
+    }
+    else if (event.key === 'Backspace') {
+        cellDivs[selID].innerHTML = ' ' + cellDivs[selID].innerHTML.slice(1);
+        let ids = placementToID(selPlacement);
+        const previousID = ids[Math.max(ids.indexOf(selID) - 1, 0)];
+        cellSel(previousID, false);
+    }
+    switch (event.key) {
+        case 'ArrowUp':
+            [x,y] = switchCoords(selID);
+            if(x > 0 && grid[x-1][y] != ' '){
+                cellSel(switchCoords([x-1, y]), true);
+            }
+            break;
+        case 'ArrowDown':
+            [x,y] = switchCoords(selID);
+            if(x < grid.length - 1 && grid[x+1][y] != ' '){
+                cellSel(switchCoords([x+1, y]), true);
+            }
+            break;
+        case 'ArrowLeft':
+            [x,y] = switchCoords(selID);
+            if(y > 0 && grid[x][y - 1] != ' '){
+                cellSel(switchCoords([x, y - 1]), true);
+            }
+            break;
+        case 'ArrowRight':
+            [x,y] = switchCoords(selID);
+            if(y < grid[0].length - 1 && grid[x][y + 1] != ' '){
+                cellSel(switchCoords([x, y + 1]), true);
+            }
+            break;
+      }
+  });
 
 /// CROSSWORD CREATION //////////////////////////////////////////////////////////////////////
 
@@ -238,18 +322,101 @@ function generateGrid(grid){                                            //Create
             if (cell == ' '){                                           //If it shouldn't have a letter
                 cellDiv.classList.add('hidden');                        //Style it
             }
-            cellDiv.textContent = cell;                                 //Write the letter (only for testing)
+            //cellDiv.textContent = cell;                               //Write the letter (only for testing)
+            cellDiv.textContent = ' ';                                  
             cellDivs.push(cellDiv);                                     //Push cell to registering array
             gridPhantom.push(cell);                                     //Push value to grid horizontal phantom
             rowDiv.appendChild(cellDiv);                                //Append cell to row
         })
         gridDiv.appendChild(rowDiv);                                    //Append row to grid
     });
+    generateLabels(placementList);
 }
 
-function switchCoords(coords, grid){                                    //Switch between 1D and 2D coordinates
+function generateLabels(placementList){
+    const hPlacements = placementList.filter(item => item[3] === 'H').sort((a, b) => a[1] - b[1]);  // Sort by the second element
+    const vPlacements = placementList.filter(item => item[3] === 'V').sort((a, b) => a[2] - b[2]);  // Sort by the third element
+
+    hPlacements.forEach((placement,i) => {
+        [word, x, y, o] = placement;
+        HHints.push(hintList[wordList.indexOf(word)]);
+        let label = document.createElement("div");
+        label.classList.add("label");
+        label.textContent = (i+1);
+        cellDivs[switchCoords([x,y])].appendChild(label);
+        let hint = document.createElement("span");
+        hint.textContent = (i+1).toString() + " - " + hintList[wordList.indexOf(word)];
+        document.getElementById("HHints").appendChild(hint);
+    })
+    vPlacements.forEach((placement,i) => {
+        [word, x, y, o] = placement;
+        VHints.push(hintList[wordList.indexOf(word)]);
+        let label = document.createElement("div");
+        label.classList.add("label");
+        label.textContent = (i+1);
+        cellDivs[switchCoords([x,y])].appendChild(label);
+        let hint = document.createElement("span");
+        hint.textContent = (i+1).toString() + " - " + hintList[wordList.indexOf(word)];
+        document.getElementById("VHints").appendChild(hint);
+    })
+}
+
+function switchCoords(coords){                                          //Switch between 1D and 2D coordinates
     let n = grid[0].length;
     return typeof coords == 'number' ? [Math.floor(coords/n), coords%n] : coords[0]*n + coords[1];
 }
 
+function placementToID(placement){
+    [word, x, y, o] = placement;
+    let ids = [];
+    for (var i = 0; i < word.length; i++){
+        ids.push(switchCoords([x + (o == 'V' ? i : 0), y + (o == 'H' ? i : 0)]))
+    }
+    return ids;
+}
+
+function IDtoPlacement(i){
+    pls = [];
+    placementList.forEach(placement => {
+        let ids = placementToID(placement);
+        if (ids.includes(i)){pls.push(placement)};
+    })
+    return pls;
+}
+
 /// CELL SELECTION ///////////////////////////////////////////////////////////////////
+
+function cellSel(i, swap){
+    cellDivs.forEach(cell => {
+        cell.classList.remove('main');
+        cell.classList.remove('secondary');
+    })
+    let placements = IDtoPlacement(i);
+    let ids = [];
+    if (!swap || (i != selID && placements.includes(selPlacement))){
+        ids = placementToID(selPlacement);
+    }
+    else if (i == selID && placements[0] == selPlacement && placements.length > 1){
+        ids = placementToID(placements[1]);
+        selPlacement = placements[1];
+    } 
+    else{
+        ids = placementToID(placements[0]);
+        selPlacement = placements[0];
+    }
+    ids.forEach(j => {
+        cellDivs[j].classList.add('secondary');
+    })
+    cellDivs[i].classList.add('main');
+    cellDivs[i].classList.remove('secondary');
+    selID = i;
+}
+
+function deselect(){
+    selID = -2;
+    selPlacement = [];
+    cellDivs.forEach(cell => {
+        cell.classList.remove('main');
+        cell.classList.remove('secondary');
+    })
+}

@@ -361,6 +361,7 @@ body {
 
 .cell{
     display: table-cell;
+    position: relative;
     width: 2.5vw;
     height: 2.5vw;
     font-size: 1.5vw;
@@ -382,8 +383,14 @@ body {
 }
 
 .cell:hover{
-    background-color: var(--deep-highlight);
-    color: var(--pseudo-white);
+    background-color: var(--light-highlight);
+}
+
+.cell .label{
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 0.5em;
 }
 
 .hidden{
@@ -393,4 +400,25 @@ body {
 
 .hidden:hover{
     background-color: var(--pseudo-white);
+}
+
+.main{
+  background-color: var(--deep-highlight);
+  color: var(--pseudo-white);
+}
+
+.main:hover{
+  background-color: var(--deep-highlight);
+}
+
+.secondary{
+  background-color: var(--light-highlight);
+}
+
+.hintList{
+  width: 45%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
