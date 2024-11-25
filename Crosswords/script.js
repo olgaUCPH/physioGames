@@ -84,43 +84,69 @@ document.getElementById("gridContainer").addEventListener('click', (event) => {
   });
 
 document.addEventListener('keydown', (event) => {
+    if (selID == -2){
+        return 0;
+    }
     if (event.key.length === 1 && event.key.match(/[a-zA-Z]/)) {
         cellDivs[selID].innerHTML = event.key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);
         let ids = placementToID(selPlacement);
         const nextID = ids[Math.min(ids.indexOf(selID) + 1, ids.length - 1)];
         cellSel(nextID, selPlacement[3]);
     }
-    else if (event.key === 'Backspace') {
-        if (cellDivs[selID].innerHTML[0] == ' '){
-            let ids = placementToID(selPlacement);
-            const previousID = ids[Math.max(ids.indexOf(selID) - 1, 0)];
-            cellSel(previousID, selPlacement[3]);
-        }
-        cellDivs[selID].innerHTML = ' ' + cellDivs[selID].innerHTML.slice(1);
-    }
     switch (event.key) {
+        case 'Backspace':
+            if (cellDivs[selID].innerHTML[0] == ' '){
+                let ids = placementToID(selPlacement);
+                const previousID = ids[Math.max(ids.indexOf(selID) - 1, 0)];
+                cellSel(previousID, selPlacement[3]);
+            }
+            cellDivs[selID].innerHTML = ' ' + cellDivs[selID].innerHTML.slice(1);
+            break;
+        case 'Tab':
+            event.preventDefault();
+            cellSel(selID, '');
+            break;
+        case 'Enter':
+            deselect();
+            break;
         case 'ArrowUp':
             [x,y] = switchCoords(selID);
-            if(x > 0 && grid[x-1][y] != ' '){
-                cellSel(switchCoords([x-1, y]), 'V');
+            temp = x-1;
+            while (temp >= 0 && grid[temp][y] == ' '){
+                temp -= 1;
+            }
+            if(temp >= 0 && grid[temp][y] != ' '){
+                cellSel(switchCoords([temp, y]), temp == x-1 ? 'V': '');
             }
             break;
         case 'ArrowDown':
             [x,y] = switchCoords(selID);
-            if(x < grid.length - 1 && grid[x+1][y] != ' '){
-                cellSel(switchCoords([x+1, y]), 'V');
+            temp = x+1;
+            while (temp < grid.length && grid[temp][y] == ' '){
+                temp += 1;
+            }
+            if(temp < grid.length && grid[temp][y] != ' '){
+                cellSel(switchCoords([temp, y]), temp == x+1 ? 'V': '');
             }
             break;
         case 'ArrowLeft':
             [x,y] = switchCoords(selID);
-            if(y > 0 && grid[x][y - 1] != ' '){
-                cellSel(switchCoords([x, y - 1]), 'H');
+            temp = y-1;
+            while (temp >= 0 && grid[x][temp] == ' '){
+                temp -= 1;
+            }
+            if(temp >= 0 && grid[x][temp] != ' '){
+                cellSel(switchCoords([x, temp]), temp == y-1 ? 'H': '');
             }
             break;
         case 'ArrowRight':
             [x,y] = switchCoords(selID);
-            if(y < grid[0].length - 1 && grid[x][y + 1] != ' '){
-                cellSel(switchCoords([x, y + 1]), 'H');
+            temp = y+1;
+            while (temp < grid[0].length && grid[x][temp] == ' '){
+                temp += 1;
+            }
+            if(temp < grid[0].length && grid[x][temp] != ' '){
+                cellSel(switchCoords([x, temp]), temp == y+1 ? 'H': '');
             }
             break;
       }
@@ -332,10 +358,10 @@ function generateGrid(grid){                                            //Create
         })
         gridDiv.appendChild(rowDiv);                                    //Append row to grid
     });
-    generateLabels(placementList);
+    generateLabels();
 }
 
-function generateLabels(placementList){
+function generateLabels(){
     const hPlacements = placementList.filter(item => item[3] === 'H').sort((a, b) => a[1] - b[1]);  // Sort by the second element
     const vPlacements = placementList.filter(item => item[3] === 'V').sort((a, b) => a[2] - b[2]);  // Sort by the third element
     placementList = [...hPlacements, ...vPlacements];
@@ -348,6 +374,7 @@ function generateLabels(placementList){
         cellDivs[switchCoords([x,y])].appendChild(label);
         let hint = document.createElement("span");
         hint.textContent = (i+1).toString() + " - " + hintList[wordList.indexOf(word)];
+        hint.classList.add("hint");
         document.getElementById("HHints").appendChild(hint);
         hint.onclick = (()=>cellSel(switchCoords([x,y]), 'H'));
     })
@@ -360,6 +387,7 @@ function generateLabels(placementList){
         cellDivs[switchCoords([x,y])].appendChild(label);
         let hint = document.createElement("span");
         hint.textContent = (i+1).toString() + " - " + hintList[wordList.indexOf(word)];
+        hint.classList.add("hint");
         document.getElementById("VHints").appendChild(hint);
         hint.onclick = (()=>cellSel(switchCoords([x,y]), 'V'));
     })
@@ -417,6 +445,10 @@ function cellSel(i, o){
     cellDivs[i].classList.add('main');
     cellDivs[i].classList.remove('secondary');
     selID = i;
+    let plID = placementList.indexOf(selPlacement);
+    let hints = document.querySelectorAll('.hint');
+    hints.forEach(h => h.classList.remove("currentHint"));
+    Array.from(hints)[plID].classList.add("currentHint");
 }
 
 function deselect(){

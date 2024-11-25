@@ -422,3 +422,13 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.currentHint{
+  background-color: var(--pseudo-black);
+  color: var(--pseudo-white);
+  border-radius: 3px;
+}
+
+.hint{
+  width: 80%;
+}
