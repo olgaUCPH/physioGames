@@ -246,9 +246,13 @@ function case_1(){
   highScore = highScore_1;                                              //Get highscore value
   document.getElementById('highScore').textContent = highScore;         //Display it
   
-  const weight = randRange(48,66,3);                                    //Generate realistic weight
+  //const weight = randRange(48,66,3);                                    //Generate realistic weight
   const water_ratio = 0.46;                                             //Senior woman water ratio (?)
-  const lost_water = randRange(1.5, 3.9, 0.3);                          //Generate random amount of lost water
+  //const lost_water = randRange(1.5, 3.9, 0.3);                          //Generate random amount of lost water
+
+  //FIX VALUES
+  const weight = 55;
+  const lost_water = 3;
 
   //Generate case description
   //Title
