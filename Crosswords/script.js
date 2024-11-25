@@ -70,7 +70,7 @@ generateGrid(grid);                                                     //Genera
 
 cellDivs.forEach((cell, i) => {
     if (gridPhantom[i] != ' '){
-        cell.onclick = function(){cellSel(i, true)};
+        cell.onclick = function(){cellSel(i, '')};
     }
     else{
         cell.onclick = deselect;
@@ -88,37 +88,37 @@ document.addEventListener('keydown', (event) => {
         cellDivs[selID].innerHTML = event.key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);
         let ids = placementToID(selPlacement);
         const nextID = ids[Math.min(ids.indexOf(selID) + 1, ids.length - 1)];
-        cellSel(nextID, false);
+        cellSel(nextID, selPlacement[3]);
     }
     else if (event.key === 'Backspace') {
         cellDivs[selID].innerHTML = ' ' + cellDivs[selID].innerHTML.slice(1);
         let ids = placementToID(selPlacement);
         const previousID = ids[Math.max(ids.indexOf(selID) - 1, 0)];
-        cellSel(previousID, false);
+        cellSel(previousID, selPlacement[3]);
     }
     switch (event.key) {
         case 'ArrowUp':
             [x,y] = switchCoords(selID);
             if(x > 0 && grid[x-1][y] != ' '){
-                cellSel(switchCoords([x-1, y]), true);
+                cellSel(switchCoords([x-1, y]), 'V');
             }
             break;
         case 'ArrowDown':
             [x,y] = switchCoords(selID);
             if(x < grid.length - 1 && grid[x+1][y] != ' '){
-                cellSel(switchCoords([x+1, y]), true);
+                cellSel(switchCoords([x+1, y]), 'V');
             }
             break;
         case 'ArrowLeft':
             [x,y] = switchCoords(selID);
             if(y > 0 && grid[x][y - 1] != ' '){
-                cellSel(switchCoords([x, y - 1]), true);
+                cellSel(switchCoords([x, y - 1]), 'H');
             }
             break;
         case 'ArrowRight':
             [x,y] = switchCoords(selID);
             if(y < grid[0].length - 1 && grid[x][y + 1] != ' '){
-                cellSel(switchCoords([x, y + 1]), true);
+                cellSel(switchCoords([x, y + 1]), 'H');
             }
             break;
       }
@@ -336,9 +336,9 @@ function generateGrid(grid){                                            //Create
 function generateLabels(placementList){
     const hPlacements = placementList.filter(item => item[3] === 'H').sort((a, b) => a[1] - b[1]);  // Sort by the second element
     const vPlacements = placementList.filter(item => item[3] === 'V').sort((a, b) => a[2] - b[2]);  // Sort by the third element
-
+    placementList = [...hPlacements, ...vPlacements];
     hPlacements.forEach((placement,i) => {
-        [word, x, y, o] = placement;
+        let [word, x, y, o] = placement;
         HHints.push(hintList[wordList.indexOf(word)]);
         let label = document.createElement("div");
         label.classList.add("label");
@@ -347,9 +347,10 @@ function generateLabels(placementList){
         let hint = document.createElement("span");
         hint.textContent = (i+1).toString() + " - " + hintList[wordList.indexOf(word)];
         document.getElementById("HHints").appendChild(hint);
+        hint.onclick = (()=>cellSel(switchCoords([x,y]), 'H'));
     })
     vPlacements.forEach((placement,i) => {
-        [word, x, y, o] = placement;
+        let [word, x, y, o] = placement;
         VHints.push(hintList[wordList.indexOf(word)]);
         let label = document.createElement("div");
         label.classList.add("label");
@@ -358,6 +359,7 @@ function generateLabels(placementList){
         let hint = document.createElement("span");
         hint.textContent = (i+1).toString() + " - " + hintList[wordList.indexOf(word)];
         document.getElementById("VHints").appendChild(hint);
+        hint.onclick = (()=>cellSel(switchCoords([x,y]), 'V'));
     })
 }
 
@@ -386,14 +388,17 @@ function IDtoPlacement(i){
 
 /// CELL SELECTION ///////////////////////////////////////////////////////////////////
 
-function cellSel(i, swap){
+function cellSel(i, o){
     cellDivs.forEach(cell => {
         cell.classList.remove('main');
         cell.classList.remove('secondary');
     })
     let placements = IDtoPlacement(i);
+    if (o != ''){
+        placements = placements.filter((x) => x[3] == o);
+    }
     let ids = [];
-    if (!swap || (i != selID && placements.includes(selPlacement))){
+    if ((i != selID && placements.includes(selPlacement) && o == '')){
         ids = placementToID(selPlacement);
     }
     else if (i == selID && placements[0] == selPlacement && placements.length > 1){
