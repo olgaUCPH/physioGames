@@ -91,10 +91,12 @@ document.addEventListener('keydown', (event) => {
         cellSel(nextID, selPlacement[3]);
     }
     else if (event.key === 'Backspace') {
+        if (cellDivs[selID].innerHTML[0] == ' '){
+            let ids = placementToID(selPlacement);
+            const previousID = ids[Math.max(ids.indexOf(selID) - 1, 0)];
+            cellSel(previousID, selPlacement[3]);
+        }
         cellDivs[selID].innerHTML = ' ' + cellDivs[selID].innerHTML.slice(1);
-        let ids = placementToID(selPlacement);
-        const previousID = ids[Math.max(ids.indexOf(selID) - 1, 0)];
-        cellSel(previousID, selPlacement[3]);
     }
     switch (event.key) {
         case 'ArrowUp':
