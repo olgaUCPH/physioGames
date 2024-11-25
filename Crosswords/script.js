@@ -56,6 +56,15 @@ hintList.push("Leader of Bridge Four");
 wordList.push("MISTBORN");
 hintList.push("Person being able to burn all allomantic metals");
 
+wordList.push("TOMOGRAPHY");
+hintList.push("The T in CT scan");
+
+wordList.push("REBLOCHON");
+hintList.push("Cheese used in Croziflette");
+
+wordList.push("MIREPOIX");
+hintList.push("Onions, carrots and celery in French Cuisine");
+
 let VHints = [];
 let HHints = [];
 
@@ -63,8 +72,21 @@ let placementList = [];                                                 //List o
 let selPlacement = [];
 let selID = 0;
 
-[grid, placementList] = createBestGrid(wordList, 1000);                 //Create a grid from 1000 samples (working value)
-generateGrid(grid);                                                     //Generate the html element
+let gridContainer = document.getElementById('gridContainer').getBoundingClientRect();
+let desired_ratio = gridContainer.width/gridContainer.height;
+
+do{
+    grid = [[]];
+    placementList = [];
+    gridPhantom = [];
+    cellDivs = [];
+    if (gridDiv.children.length > 0) {
+        Array.from(gridDiv.children).forEach(child => child.remove());
+        document.querySelectorAll(".hint").forEach(hint => hint.remove());
+    }
+    [grid, placementList] = createBestGrid(wordList, 1000);                 //Create a grid from 1000 samples (working value)
+    generateGrid(grid);                                                     //Generate the html element
+}while(gridDiv.getBoundingClientRect().height > gridContainer.height);
 
 /// EVENT LISTENERS //////////////////////////////////////////////////////////////////////////
 
@@ -303,7 +325,7 @@ function placeWord(grid, placementList, word, position, orientation){
 
 function gridEntropy(grid, pL, wL){                                     //Compute "entropy" of a given grid. Higher entropies are undesirable
     missingWords = wL.length - pL.length;                               //Number of words that haven't been placed (highly undesirable)
-    sizeRatio = 1 + Math.abs(Math.max(grid.length/grid[0].length, grid[0].length/grid.length) - 1.3);       //Ratio of longest dimension over the other, compared to a 1.3 ratio (working value)
+    sizeRatio = Math.abs(Math.max(grid.length/grid[0].length, grid[0].length/grid.length) - desired_ratio);       //Ratio of longest dimension over the other, compared to a 1.3 ratio (working value)
     filledRatio = (grid.length*grid[0].length)/pL.reduce((r, a) => r+a[0].length, 0);       //Ratio of empty cells over filled cells. Lower ratio indicates more intersections, which is desirable
     deadEnds = 0;                                                       //Number of dead ends (word starting or ending right next to another one, leading to a confusing length)
     pL.forEach(placement => {                                           //Loop over all words to check for dead ends
@@ -333,7 +355,7 @@ function gridEntropy(grid, pL, wL){                                     //Comput
     })
     //The weighting of the different values is arbitrary and may be changed
     //Missing words and dead ends are highly undesirable so have high weights, other issues are lower
-    return missingWords * 1000 + sizeRatio * 50 + filledRatio * 50 + deadEnds * 250 + fakeWords * 100;
+    return missingWords * 1000 + sizeRatio * 100 + filledRatio * 50 + deadEnds * 250 + fakeWords * 250;
 }
 
 function flipGrid(grid, pL){                                            //Flip a grid in case of higher height than width (for better display)
@@ -458,4 +480,6 @@ function deselect(){
         cell.classList.remove('main');
         cell.classList.remove('secondary');
     })
+    let hints = document.querySelectorAll('.hint');
+    hints.forEach(h => h.classList.remove("currentHint"));
 }
