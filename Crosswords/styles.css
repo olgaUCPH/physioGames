@@ -431,4 +431,5 @@ body {
 
 .hint{
   width: 80%;
+  cursor: pointer;
 }
