@@ -124,7 +124,7 @@ let HHints = [];
 
 let placementList = [];                                                 //List of placements [Word, x, y, orientation]
 let selPlacement = [];
-let selID = 0;
+let selID = -1;
 
 let gridContainer = document.getElementById('gridContainer').getBoundingClientRect();
 let desired_ratio = gridContainer.width/gridContainer.height;
@@ -445,7 +445,7 @@ function flipGrid(grid, pL){                                            //Flip a
     return [grid[0].map((_, colIndex) => grid.map(row => row[colIndex])), pL.map((p) => [p[0], p[2], p[1], p[3] == 'H' ? 'V': 'H'])];
 }
 
-async function generateGrid(grid, final){                                            //Create the html element from the given grid
+async function generateGrid(grid, final){                               //Create the html element from the given grid
     grid.forEach(row => {
         let rowDiv = document.createElement('div');                     //Create each row
         rowDiv.classList.add('row');                                    //Style it
@@ -453,8 +453,8 @@ async function generateGrid(grid, final){                                       
             let cellDiv = document.createElement('div');                //Create each cell in each row
             cellDiv.classList.add('cell');                              //Style it
             cellDiv.classList.add('hidden');                            //Hide it
-            //cellDiv.textContent = cell;                               //Write the letter (only for testing)
             cellDiv.textContent = ' ';                                  
+            //cellDiv.textContent = cell;                               //Write the letter (only for testing)
             cellDivs.push(cellDiv);                                     //Push cell to registering array
             gridPhantom.push(cell);                                     //Push value to grid horizontal phantom
             rowDiv.appendChild(cellDiv);                                //Append cell to row
@@ -464,6 +464,7 @@ async function generateGrid(grid, final){                                       
     if (final){
         reveal([placementList[0][1], placementList[0][2]]);
         generateLabels();        
+        
     }
 }
 
