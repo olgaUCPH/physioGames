@@ -22,6 +22,9 @@ function argMin(array) {
     return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] < r[0] ? a : r))[1];
   }
 
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 /// RELEVANT HTML ELEMENTS ////////////////////////////////////////////////////////////////////
 
 let gridDiv = document.getElementById("grid");
@@ -35,35 +38,84 @@ let cellDivs = [];
 let wordList = [];
 let hintList = [];
 
-wordList.push("HELLO");
-hintList.push("Common English Greeting");
+wordList.push("Creatinine");
+hintList.push("A substance used to estimate GFR.");
 
-wordList.push("ALOHA");
-hintList.push("Common Greeting in Hawai");
+wordList.push("Glucose");
+hintList.push("A substance whose renal clearance normally is zero.");
 
-wordList.push("CHERRY");
-hintList.push("Summer fruit");
+wordList.push("Proximal");
+hintList.push("Which nephron segment has the highest water reabsorption");
 
-wordList.push("SPLEEN");
-hintList.push("Les Fleurs du Mal");
+wordList.push("Urea");
+hintList.push("A substance secreted in thin ALH");
 
-wordList.push("SMARTPHONE");
-hintList.push("Portable device to communicate");
+wordList.push("Lithium");
+hintList.push("A substance that can be used to estimate the flow at the end of proximal tubule");
 
-wordList.push("KALADIN");
-hintList.push("Leader of Bridge Four");
+wordList.push("Renin");
+hintList.push("An enzyme secreted by the kidney");
 
-wordList.push("MISTBORN");
-hintList.push("Person being able to burn all allomantic metals");
+wordList.push("Aldosterone");
+hintList.push("A hormone released with increased plasma AngII and plasma K+");
 
-wordList.push("TOMOGRAPHY");
-hintList.push("The T in CT scan");
+wordList.push("Vasopressin");
+hintList.push("A hormone that regulates water reabsorption in collecting duct");
 
-wordList.push("REBLOCHON");
-hintList.push("Cheese used in Croziflette");
+wordList.push("Furosemide");
+hintList.push("A loop diuretic");
 
-wordList.push("MIREPOIX");
-hintList.push("Onions, carrots and celery in French Cuisine");
+wordList.push("Parathyroid");
+hintList.push("A hormone that stimulates Ca++ reabsorption in the kidney");
+
+wordList.push("Paraaminohippurate");
+hintList.push("A substance with one of the highest plasma clearances");
+
+wordList.push("Ammonium");
+hintList.push("A component of net acid excretion");
+
+wordList.push("Bicarbonate");
+hintList.push("A compound produced by carbanhydrase");
+
+wordList.push("Albumine");
+hintList.push("A substance that is not passing the filtration barrier");
+
+wordList.push("Acidosis");
+hintList.push("A condition in which there is too much acid in the body");
+
+wordList.push("Clearance");
+hintList.push("A concept used to estimate renal function");
+
+wordList.push("Phosphate");
+hintList.push("A buffer in the tubular fluid");
+
+wordList.push("Podocyte");
+hintList.push("A cell that is part of the filtration barrier");
+
+wordList.push("Hypocalcemia");
+hintList.push("A condition with increased PTH secretion");
+
+wordList.push("Nephron");
+hintList.push("Functional unit of the kidney");
+
+wordList.push("Respiratory");
+hintList.push("A form of alkalosis");
+
+wordList.push("Descending");
+hintList.push("The limp of the loop of Henle with high water permeability");
+
+wordList.push("Erythropoietin");
+hintList.push("A hormone that regulates the amount of red blood cells");
+
+wordList.push("Medulla");
+hintList.push("The region with the highest osmolarity in the kidney");
+
+wordList.push("Aquaporins");
+hintList.push("Membrane proteins that increases water permeability");
+
+for (let i = 0; i < wordList.length; i++){
+    wordList[i] = wordList[i].toUpperCase();
+}
 
 let VHints = [];
 let HHints = [];
@@ -75,29 +127,38 @@ let selID = 0;
 let gridContainer = document.getElementById('gridContainer').getBoundingClientRect();
 let desired_ratio = gridContainer.width/gridContainer.height;
 
-do{
-    grid = [[]];
-    placementList = [];
-    gridPhantom = [];
-    cellDivs = [];
-    if (gridDiv.children.length > 0) {
-        Array.from(gridDiv.children).forEach(child => child.remove());
-        document.querySelectorAll(".hint").forEach(hint => hint.remove());
-    }
-    [grid, placementList] = createBestGrid(wordList, 1000);                 //Create a grid from 1000 samples (working value)
-    generateGrid(grid);                                                     //Generate the html element
-}while(gridDiv.getBoundingClientRect().height > gridContainer.height);
+
+async function start(){
+    document.getElementById("generate").style.display = "none";
+    document.getElementById("loadingScreen").style.display = "flex";
+    await delay(10);
+    do{
+        grid = [[]];
+        placementList = [];
+        gridPhantom = [];
+        cellDivs = [];
+        if (gridDiv.children.length > 0) {
+            Array.from(gridDiv.children).forEach(child => child.remove());
+            document.querySelectorAll(".hint").forEach(hint => hint.remove());
+        }
+        [grid, placementList] = createBestGrid(wordList, 1000);                 //Create a grid from 1000 samples (working value)
+        generateGrid(grid);                                                     //Generate the html element
+    }while(gridDiv.getBoundingClientRect().height > gridContainer.height);
+    document.getElementById("loadingScreen").style.display = "none";
+    cellDivs.forEach((cell, i) => {
+        if (gridPhantom[i] != ' '){
+            cell.onclick = function(){cellSel(i, '')};
+        }
+        else{
+            cell.onclick = deselect;
+        }
+    })
+}
+
 
 /// EVENT LISTENERS //////////////////////////////////////////////////////////////////////////
 
-cellDivs.forEach((cell, i) => {
-    if (gridPhantom[i] != ' '){
-        cell.onclick = function(){cellSel(i, '')};
-    }
-    else{
-        cell.onclick = deselect;
-    }
-})
+
 
 document.getElementById("gridContainer").addEventListener('click', (event) => {
     if (event.target === event.currentTarget) {
@@ -194,7 +255,7 @@ function createBestGrid(wL, n){                                         //Create
 function createGrid(wL){                                                //Creates a potential grid from a given word list
     let grid = [[]];                                                    //Initialize empty grid
     let placementList = [];                                             //Initialize empty placement grid
-    let remainingWords = shuffleArray([...wL]);                         //Shuffle words
+    let remainingWords = shuffleArray([...wL]).slice(0,10);             //Shuffle words
     //Place first word
     placeWord(grid, placementList, remainingWords[0], [0,0], Math.random() < 0.5 ? 'H':'V');
     remainingWords = remainingWords.splice(1);                          //Pop off first word
@@ -323,8 +384,8 @@ function placeWord(grid, placementList, word, position, orientation){
     placementList.push([word, x, y, orientation]);                      //Register new word placement
 }
 
-function gridEntropy(grid, pL, wL){                                     //Compute "entropy" of a given grid. Higher entropies are undesirable
-    missingWords = wL.length - pL.length;                               //Number of words that haven't been placed (highly undesirable)
+function gridEntropy(grid, pL, wL)      {                                   //Compute "entropy" of a given grid. Higher entropies are undesirable
+    //missingWords = wL.length - pL.length;                               //Number of words that haven't been placed (highly undesirable)
     sizeRatio = Math.abs(Math.max(grid.length/grid[0].length, grid[0].length/grid.length) - desired_ratio);       //Ratio of longest dimension over the other, compared to a 1.3 ratio (working value)
     filledRatio = (grid.length*grid[0].length)/pL.reduce((r, a) => r+a[0].length, 0);       //Ratio of empty cells over filled cells. Lower ratio indicates more intersections, which is desirable
     deadEnds = 0;                                                       //Number of dead ends (word starting or ending right next to another one, leading to a confusing length)
@@ -355,7 +416,11 @@ function gridEntropy(grid, pL, wL){                                     //Comput
     })
     //The weighting of the different values is arbitrary and may be changed
     //Missing words and dead ends are highly undesirable so have high weights, other issues are lower
-    return missingWords * 1000 + sizeRatio * 100 + filledRatio * 50 + deadEnds * 250 + fakeWords * 250;
+    if (deadEnds ||fakeWords){
+        return 1000000;
+    }
+    //return missingWords * 1000 + sizeRatio * 100 + filledRatio * 50 + deadEnds * 250 + fakeWords * 250;
+    return sizeRatio * 100 + filledRatio * 50;
 }
 
 function flipGrid(grid, pL){                                            //Flip a grid in case of higher height than width (for better display)

@@ -342,6 +342,88 @@ body {
   50%{rotate: 0deg;}
 }
 
+#loading{
+  width: 10vw;
+  height: 10vw;
+  animation: turn 1s linear 0s infinite forwards;
+}
+
+#loadingScreen{
+  display: none;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+#generating{
+  display: flex;
+  flex-direction: row;
+}
+
+#d1{
+  animation: dot1 3s linear 0s infinite forwards;
+}
+
+#d2{
+  animation: dot2 3s linear 0s infinite forwards;
+}
+
+#d3{
+  animation: dot3 3s linear 0s infinite forwards;
+}
+
+@keyframes dot1{
+  0% {opacity: 0;}
+  20% {opacity: 0;}
+  25% {opacity: 1;}
+  100%{opacity: 1;}
+}
+
+@keyframes dot2{
+  0% {opacity: 0;}
+  45% {opacity: 0;}
+  50% {opacity: 1;}
+  100%{opacity: 1;}
+}
+
+@keyframes dot3{
+  0% {opacity: 0;}
+  70% {opacity: 0;}
+  75% {opacity: 1;}
+  100%{opacity: 1;}
+}
+
+#gridContainer button{
+  margin: 20px;
+  background-color: var(--pseudo-black);
+  border-radius: .75rem;
+  box-sizing: border-box;
+  color: var(--pseudo-white);
+  padding: .75rem 1.2rem;
+  text-align: center;
+  transition-duration: .5s;
+  transition-property: background-color,border-color,color,fill,stroke,scale;
+  font-family: Avenir;
+  font-weight: 300;
+  font-size: 2em;
+  cursor: pointer;
+}
+
+#gridContainer button:hover {
+  filter: brightness(1.5);
+  transform: scale(1.05);
+}
+
+#gridContainer button:active {
+  filter: brightness(2);
+}
+
+@keyframes turn{
+  100% {rotate: 360deg;}
+}
+
 
 /* GRID */
 
@@ -362,9 +444,9 @@ body {
 .cell{
     display: table-cell;
     position: relative;
-    width: 2.5vw;
-    height: 2.5vw;
-    font-size: 1.5vw;
+    width: 2.25vw;
+    height: 2.25vw;
+    font-size: 1.25vw;
     font-family: 'Avenir Regular';
     border-style: solid;
     border-color: var(--pseudo-black);
@@ -421,6 +503,10 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
+}
+
+.hintList h2{
+  margin-bottom: 5px;
 }
 
 .currentHint{
