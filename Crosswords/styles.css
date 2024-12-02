@@ -444,9 +444,9 @@ body {
 .cell{
     display: table-cell;
     position: relative;
-    width: 2.25vw;
-    height: 2.25vw;
-    font-size: 1.25vw;
+    width: 2.5vw;
+    height: 2.5vw;
+    font-size: 1.5vw;
     font-family: 'Avenir Regular';
     border-style: solid;
     border-color: var(--pseudo-black);
@@ -498,7 +498,7 @@ body {
 }
 
 .hintList{
-  width: 45%;
+  width: 48%;
   height: 100%;
   position: relative;
   display: flex;
@@ -516,6 +516,6 @@ body {
 }
 
 .hint{
-  width: 80%;
+  width: 90%;
   cursor: pointer;
 }

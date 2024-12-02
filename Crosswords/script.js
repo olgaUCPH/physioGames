@@ -139,12 +139,15 @@ async function start(){
         cellDivs = [];
         if (gridDiv.children.length > 0) {
             Array.from(gridDiv.children).forEach(child => child.remove());
-            document.querySelectorAll(".hint").forEach(hint => hint.remove());
         }
-        [grid, placementList] = createBestGrid(wordList, 1000);                 //Create a grid from 1000 samples (working value)
-        generateGrid(grid);                                                     //Generate the html element
-    }while(gridDiv.getBoundingClientRect().height > gridContainer.height);
+        [grid, placementList] = createBestGrid(wordList, 1000);                  //Create a grid from 1000 samples (working value)
+        generateGrid(grid, false);                                                     //Generate the html element
+    }while(gridDiv.getBoundingClientRect().height > gridContainer.height || gridDiv.getBoundingClientRect().width > gridContainer.width);
     document.getElementById("loadingScreen").style.display = "none";
+    Array.from(gridDiv.children).forEach(child => child.remove());
+    gridPhantom = [];
+    cellDivs = [];
+    generateGrid(grid, true);
     cellDivs.forEach((cell, i) => {
         if (gridPhantom[i] != ' '){
             cell.onclick = function(){cellSel(i, '')};
@@ -238,6 +241,7 @@ document.addEventListener('keydown', (event) => {
 /// CROSSWORD CREATION //////////////////////////////////////////////////////////////////////
 
 function createBestGrid(wL, n){                                         //Creates n grids, scores them, then chooses the best one
+    wL = shuffleArray([...wL]).slice(0,10);                             //Shuffle words
     let grids = [];                                                     //Store grids, placements, entropies
     for (let i = 0; i < n; i++){                                        
         let [grid, pL] = createGrid(wL);                                //Create a grid randomly
@@ -262,6 +266,8 @@ function createGrid(wL){                                                //Create
     let calls = 0;                                                      //Count number of calls to the while loop (avoid infinite loops)
     while (remainingWords.length > 0){                                  //While some words have not been placed
         calls += 1;                                                     //Increase count
+        let previousGrid = JSON.parse(JSON.stringify(grid));
+        let previouspL = JSON.parse(JSON.stringify(placementList));
         if (calls > 3*wL.length){                                       //If number of calls is too high
             return [grid, placementList];                               //Stop and return partial result
         }
@@ -277,6 +283,11 @@ function createGrid(wL){                                                //Create
         else{
             let [x, y, o] = candidates[Math.floor(Math.random() * candidates.length)];      //Choose a random position from all possibilities
             placeWord(grid, placementList, word, [x, y], o);            //Place the word
+        }
+        if (gridEntropy(grid, placementList, wL) >= 1000000){
+            grid = previousGrid;
+            placementList = previouspL;
+            remainingWords.push(word);
         }
     }      
     return [grid, placementList];
@@ -427,16 +438,14 @@ function flipGrid(grid, pL){                                            //Flip a
     return [grid[0].map((_, colIndex) => grid.map(row => row[colIndex])), pL.map((p) => [p[0], p[2], p[1], p[3] == 'H' ? 'V': 'H'])];
 }
 
-function generateGrid(grid){                                            //Create the html element from the given grid
+async function generateGrid(grid, final){                                            //Create the html element from the given grid
     grid.forEach(row => {
         let rowDiv = document.createElement('div');                     //Create each row
         rowDiv.classList.add('row');                                    //Style it
         row.forEach(cell => {
             let cellDiv = document.createElement('div');                //Create each cell in each row
             cellDiv.classList.add('cell');                              //Style it
-            if (cell == ' '){                                           //If it shouldn't have a letter
-                cellDiv.classList.add('hidden');                        //Style it
-            }
+            cellDiv.classList.add('hidden');                            //Ide it
             //cellDiv.textContent = cell;                               //Write the letter (only for testing)
             cellDiv.textContent = ' ';                                  
             cellDivs.push(cellDiv);                                     //Push cell to registering array
@@ -445,7 +454,55 @@ function generateGrid(grid){                                            //Create
         })
         gridDiv.appendChild(rowDiv);                                    //Append row to grid
     });
-    generateLabels();
+    if (final){
+        const hPlacements = placementList.filter(item => item[3] === 'H').sort((a, b) => a[1] - b[1]);  // Sort by the second element
+        const vPlacements = placementList.filter(item => item[3] === 'V').sort((a, b) => a[2] - b[2]);  // Sort by the third element
+        for (const placement of placementList){
+            let [word, x, y, o] = placement;
+            for (const id of placementToID(placement)){
+                console.log(id);
+                cellDivs[id].classList.remove("hidden");
+                await delay(10);
+            }
+            let label = document.createElement("div");
+            label.classList.add("label");
+            if (o =='H'){
+                label.textContent = (hPlacements.indexOf(placement)+1);
+                cellDivs[switchCoords([x,y])].appendChild(label);
+                let text = (hPlacements.indexOf(placement)+1).toString() + " - " + hintList[wordList.indexOf(word)];
+                hint = insertLabel(document.getElementById("HHints"), text);
+                hint.onclick = (()=>cellSel(switchCoords([x,y]), 'H'));
+            }
+            else {
+                label.textContent = (vPlacements.indexOf(placement)+1);
+                cellDivs[switchCoords([x,y])].appendChild(label);
+                let text = (vPlacements.indexOf(placement)+1).toString() + " - " + hintList[wordList.indexOf(word)];
+                hint = insertLabel(document.getElementById("VHints"), text);
+                hint.onclick = (()=>cellSel(switchCoords([x,y]), 'V'));
+            }
+            
+        }
+        placementList = [...hPlacements, ...vPlacements];
+        //generateLabels();        
+    }
+}
+
+function insertLabel(hL, text){
+    let hint = document.createElement("span");
+    hint.textContent = text;
+    hint.classList.add("hint");
+    let inserted = false;
+    for (let i = 1; i < hL.children.length; i++) {
+        if (text.localeCompare(hL.children[i].textContent) < 0) {
+        hL.insertBefore(hint, hL.children[i]);
+        inserted = true;
+        break;
+        }
+    }
+    if (!inserted) {
+        hL.appendChild(hint);
+    }
+    return hint;
 }
 
 function generateLabels(){
