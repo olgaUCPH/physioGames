@@ -38,6 +38,8 @@ let cellDivs = [];
 let wordList = [];
 let hintList = [];
 
+let wordsPerGrid = 10;
+
 wordList.push("Creatinine");
 hintList.push("A substance used to estimate GFR.");
 
@@ -129,8 +131,6 @@ let desired_ratio = gridContainer.width/gridContainer.height;
 
 
 async function start(){
-    document.getElementById("generate").style.display = "none";
-    document.getElementById("loadingScreen").style.display = "flex";
     await delay(10);
     do{
         grid = [[]];
@@ -140,9 +140,9 @@ async function start(){
         if (gridDiv.children.length > 0) {
             Array.from(gridDiv.children).forEach(child => child.remove());
         }
-        [grid, placementList] = createBestGrid(wordList, 1000);                  //Create a grid from 1000 samples (working value)
+        [grid, placementList] = createBestGrid(wordList, 100);                  //Create a grid from 1000 samples (working value)
         generateGrid(grid, false);                                                     //Generate the html element
-    }while(gridDiv.getBoundingClientRect().height > gridContainer.height || gridDiv.getBoundingClientRect().width > gridContainer.width);
+    }while(gridDiv.getBoundingClientRect().height > 0.95*gridContainer.height || gridDiv.getBoundingClientRect().width > 0.95*gridContainer.width);
     document.getElementById("loadingScreen").style.display = "none";
     Array.from(gridDiv.children).forEach(child => child.remove());
     gridPhantom = [];
@@ -158,6 +158,10 @@ async function start(){
     })
 }
 
+document.addEventListener("DOMContentLoaded", async function() {
+    await delay(500);
+    start();
+  });
 
 /// EVENT LISTENERS //////////////////////////////////////////////////////////////////////////
 
@@ -241,11 +245,14 @@ document.addEventListener('keydown', (event) => {
 /// CROSSWORD CREATION //////////////////////////////////////////////////////////////////////
 
 function createBestGrid(wL, n){                                         //Creates n grids, scores them, then chooses the best one
-    wL = shuffleArray([...wL]).slice(0,10);                             //Shuffle words
+    wL = shuffleArray([...wL]).slice(0,wordsPerGrid);                   //Shuffle words
     let grids = [];                                                     //Store grids, placements, entropies
     for (let i = 0; i < n; i++){                                        
         let [grid, pL] = createGrid(wL);                                //Create a grid randomly
         let entropy = gridEntropy(grid, pL, wL);                        //Score it 
+        if (pL.length < wordsPerGrid){
+            entropy = 1000000;
+        }
         grids.push([grid, pL, entropy]);                                //Register
     }
     grids.sort((a, b) => a[2] - b[2]);                                  //Sort grids in increasing order of entropy
@@ -259,7 +266,7 @@ function createBestGrid(wL, n){                                         //Create
 function createGrid(wL){                                                //Creates a potential grid from a given word list
     let grid = [[]];                                                    //Initialize empty grid
     let placementList = [];                                             //Initialize empty placement grid
-    let remainingWords = shuffleArray([...wL]).slice(0,10);             //Shuffle words
+    let remainingWords = shuffleArray([...wL]).slice(0,wordsPerGrid);   //Shuffle words
     //Place first word
     placeWord(grid, placementList, remainingWords[0], [0,0], Math.random() < 0.5 ? 'H':'V');
     remainingWords = remainingWords.splice(1);                          //Pop off first word
@@ -396,7 +403,6 @@ function placeWord(grid, placementList, word, position, orientation){
 }
 
 function gridEntropy(grid, pL, wL)      {                                   //Compute "entropy" of a given grid. Higher entropies are undesirable
-    //missingWords = wL.length - pL.length;                               //Number of words that haven't been placed (highly undesirable)
     sizeRatio = Math.abs(Math.max(grid.length/grid[0].length, grid[0].length/grid.length) - desired_ratio);       //Ratio of longest dimension over the other, compared to a 1.3 ratio (working value)
     filledRatio = (grid.length*grid[0].length)/pL.reduce((r, a) => r+a[0].length, 0);       //Ratio of empty cells over filled cells. Lower ratio indicates more intersections, which is desirable
     deadEnds = 0;                                                       //Number of dead ends (word starting or ending right next to another one, leading to a confusing length)
@@ -445,7 +451,7 @@ async function generateGrid(grid, final){                                       
         row.forEach(cell => {
             let cellDiv = document.createElement('div');                //Create each cell in each row
             cellDiv.classList.add('cell');                              //Style it
-            cellDiv.classList.add('hidden');                            //Ide it
+            cellDiv.classList.add('hidden');                            //Hide it
             //cellDiv.textContent = cell;                               //Write the letter (only for testing)
             cellDiv.textContent = ' ';                                  
             cellDivs.push(cellDiv);                                     //Push cell to registering array
@@ -455,35 +461,24 @@ async function generateGrid(grid, final){                                       
         gridDiv.appendChild(rowDiv);                                    //Append row to grid
     });
     if (final){
-        const hPlacements = placementList.filter(item => item[3] === 'H').sort((a, b) => a[1] - b[1]);  // Sort by the second element
-        const vPlacements = placementList.filter(item => item[3] === 'V').sort((a, b) => a[2] - b[2]);  // Sort by the third element
-        for (const placement of placementList){
-            let [word, x, y, o] = placement;
-            for (const id of placementToID(placement)){
-                console.log(id);
-                cellDivs[id].classList.remove("hidden");
-                await delay(10);
-            }
-            let label = document.createElement("div");
-            label.classList.add("label");
-            if (o =='H'){
-                label.textContent = (hPlacements.indexOf(placement)+1);
-                cellDivs[switchCoords([x,y])].appendChild(label);
-                let text = (hPlacements.indexOf(placement)+1).toString() + " - " + hintList[wordList.indexOf(word)];
-                hint = insertLabel(document.getElementById("HHints"), text);
-                hint.onclick = (()=>cellSel(switchCoords([x,y]), 'H'));
-            }
-            else {
-                label.textContent = (vPlacements.indexOf(placement)+1);
-                cellDivs[switchCoords([x,y])].appendChild(label);
-                let text = (vPlacements.indexOf(placement)+1).toString() + " - " + hintList[wordList.indexOf(word)];
-                hint = insertLabel(document.getElementById("VHints"), text);
-                hint.onclick = (()=>cellSel(switchCoords([x,y]), 'V'));
-            }
-            
-        }
-        placementList = [...hPlacements, ...vPlacements];
-        //generateLabels();        
+        reveal([placementList[0][1], placementList[0][2]]);
+        generateLabels();        
+    }
+}
+
+async function reveal(pos){
+    let [x,y] = pos;
+    let i = switchCoords(pos);
+    if (x < 0 || y < 0 || x >= grid.length || y >= grid[0].length || !cellDivs[i].classList.contains('hidden')){
+        return 0;
+    }
+    if (gridPhantom[i] != ' '){
+        cellDivs[i].classList.remove('hidden');
+        await delay(30);
+        reveal([x-1,y]);
+        reveal([x+1,y]);
+        reveal([x,y-1]);
+        reveal([x,y+1]);
     }
 }
 
