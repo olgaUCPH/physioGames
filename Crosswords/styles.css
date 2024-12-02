@@ -462,7 +462,9 @@ body {
     -ms-transition: all 0.1s ease-in-out;
     transition: all 0.1s ease-in-out;
     cursor: pointer;
+    animation: cellAppear 0.75s ease-in-out 0s 1 none;
 }
+
 
 .cell:hover{
     background-color: var(--light-highlight);
@@ -478,6 +480,7 @@ body {
 .hidden{
     border-style: none;
     cursor: default;
+    animation: none;
 }
 
 .hidden .label{
@@ -486,6 +489,13 @@ body {
 
 .hidden:hover{
     background-color: var(--pseudo-white);
+}
+
+@keyframes cellAppear {
+  0%{background-color: var(--deep-highlight);}
+  40%{background-color: var(--light-highlight);}
+  100%{background-color: none;}
+  
 }
 
 .main{

@@ -147,6 +147,7 @@ async function start(){
     Array.from(gridDiv.children).forEach(child => child.remove());
     gridPhantom = [];
     cellDivs = [];
+    delay(10);
     generateGrid(grid, true);
     cellDivs.forEach((cell, i) => {
         if (gridPhantom[i] != ' '){
