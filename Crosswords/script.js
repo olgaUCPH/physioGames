@@ -47,73 +47,73 @@ wordList.push("Glucose");
 hintList.push("A substance whose renal clearance normally is zero.");
 
 wordList.push("Proximal");
-hintList.push("Which nephron segment has the highest water reabsorption");
+hintList.push("Which nephron segment has the highest water reabsorption.");
 
 wordList.push("Urea");
-hintList.push("A substance secreted in thin ALH");
+hintList.push("A substance secreted in thin ALH.");
 
 wordList.push("Lithium");
-hintList.push("A substance that can be used to estimate the flow at the end of proximal tubule");
+hintList.push("A substance that can be used to estimate the flow at the end of proximal tubule.");
 
 wordList.push("Renin");
-hintList.push("An enzyme secreted by the kidney");
+hintList.push("An enzyme secreted by the kidney.");
 
 wordList.push("Aldosterone");
-hintList.push("A hormone released with increased plasma AngII and plasma K+");
+hintList.push("A hormone released with increased plasma AngII and plasma K+.");
 
 wordList.push("Vasopressin");
-hintList.push("A hormone that regulates water reabsorption in collecting duct");
+hintList.push("A hormone that regulates water reabsorption in collecting duct.");
 
 wordList.push("Furosemide");
-hintList.push("A loop diuretic");
+hintList.push("A loop diuretic.");
 
 wordList.push("Parathyroid");
-hintList.push("A hormone that stimulates Ca++ reabsorption in the kidney");
+hintList.push("A hormone that stimulates Ca++ reabsorption in the kidney.");
 
 wordList.push("Paraaminohippurate");
-hintList.push("A substance with one of the highest plasma clearances");
+hintList.push("A substance with one of the highest plasma clearances.");
 
 wordList.push("Ammonium");
-hintList.push("A component of net acid excretion");
+hintList.push("A component of net acid excretion.");
 
 wordList.push("Bicarbonate");
-hintList.push("A compound produced by carbanhydrase");
+hintList.push("A compound produced by carbanhydrase.");
 
 wordList.push("Albumine");
-hintList.push("A substance that is not passing the filtration barrier");
+hintList.push("A substance that is not passing the filtration barrier.");
 
 wordList.push("Acidosis");
-hintList.push("A condition in which there is too much acid in the body");
+hintList.push("A condition in which there is too much acid in the body.");
 
 wordList.push("Clearance");
-hintList.push("A concept used to estimate renal function");
+hintList.push("A concept used to estimate renal function.");
 
 wordList.push("Phosphate");
-hintList.push("A buffer in the tubular fluid");
+hintList.push("A buffer in the tubular fluid.");
 
 wordList.push("Podocyte");
-hintList.push("A cell that is part of the filtration barrier");
+hintList.push("A cell that is part of the filtration barrier.");
 
 wordList.push("Hypocalcemia");
-hintList.push("A condition with increased PTH secretion");
+hintList.push("A condition with increased PTH secretion.");
 
 wordList.push("Nephron");
-hintList.push("Functional unit of the kidney");
+hintList.push("Functional unit of the kidney.");
 
 wordList.push("Respiratory");
-hintList.push("A form of alkalosis");
+hintList.push("A form of alkalosis.");
 
 wordList.push("Descending");
-hintList.push("The limp of the loop of Henle with high water permeability");
+hintList.push("The limp of the loop of Henle with high water permeability.");
 
 wordList.push("Erythropoietin");
-hintList.push("A hormone that regulates the amount of red blood cells");
+hintList.push("A hormone that regulates the amount of red blood cells.");
 
 wordList.push("Medulla");
-hintList.push("The region with the highest osmolarity in the kidney");
+hintList.push("The region with the highest osmolarity in the kidney.");
 
 wordList.push("Aquaporins");
-hintList.push("Membrane proteins that increases water permeability");
+hintList.push("Membrane proteins that increases water permeability.");
 
 for (let i = 0; i < wordList.length; i++){
     wordList[i] = wordList[i].toUpperCase();
