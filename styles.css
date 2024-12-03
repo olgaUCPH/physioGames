@@ -52,6 +52,20 @@
     font-style: normal;
   }
 
+  @font-face {
+    font-family: 'Avenir Regular';
+    src: url("fonts/AvenirNextLTPro-Regular.otf");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Avenir Regular';
+    src: url("fonts/AvenirNextLTPro-Demi.otf");
+    font-weight: 700;
+    font-style: normal;
+  }
+
 body {
     margin: 0;
     padding: 0;
@@ -80,7 +94,7 @@ body {
     margin: 10px;
     background-color: var(--deep-highlight);
     color: var(--pseudo-white);
-    height: 150px;
+    height: 125px;
     width: 98.5%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -99,7 +113,7 @@ body {
     font-size: 5em;
     font-weight: 700;
     margin: 5px;
-    padding-top: 20px;
+    padding-top: 10px;
     margin-bottom: 5px;
     text-shadow: 1px 1px 2px black;
 }
@@ -145,6 +159,16 @@ body {
     margin: 5px;
     -webkit-filter: drop-shadow(3px 3px 2px black);
     filter: drop-shadow(3px 3px 2px black);
+}
+
+.image{
+  width: 30%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
 }
 
 .gameText{
@@ -351,3 +375,76 @@ body {
       scale: 0;
     }
   }
+
+
+/* OSMOLARITY */
+
+.fullGraph{
+  width: 95%;
+  height: 100%;
+}
+
+#curve{
+position: absolute;
+z-index: 0;
+stroke-width: 4px;
+pointer-events: none;
+}
+
+.controlPoint{
+  height: 1vw;
+  width: 1vw;
+  position: absolute;
+  border-radius: 1vw;
+  background-color: var(--light-highlight);
+  border-style: solid;
+  border-color: var(--pseudo-black);
+  z-index: 1;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  pointer-events: none;
+}
+
+
+
+/* CROSSWORDS */
+
+.cwTable{
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: table;
+  grid-template-columns: repeat(5, 3vw);
+  grid-template-rows: repeat(3, 3vw);
+  border-collapse: collapse;
+}
+
+.cwRow{
+  display: table-row;
+}
+
+.cwCell{
+  display: table-cell;
+  position: relative;
+  width: 1vw;
+  height: 1vw;
+  font-size: 0.75vw;
+  font-weight: 700;
+  font-family: 'Avenir Regular';
+  border-style: solid;
+  border-color: var(--pseudo-black);
+  border-width: 2px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.hidden{
+  border-style: none;
+  cursor: default;
+}

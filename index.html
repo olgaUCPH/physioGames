@@ -91,11 +91,15 @@
             </div>
         </div>
 
-        <div class="gameWrapper" onclick="location.href='Osmolarity/index.html'">
-            <img src="assets/fluidBalance_icon.png" style="transform: scale(0.8);">
+        <div class="gameWrapper" id="oWrapper" onclick="location.href='Osmolarity/index.html'">
+            <div id="fullGraph" class="image">
+                <div class="controlPoint" style="left:5%"></div>
+                <div class="controlPoint"></div>
+                <div class="controlPoint"style="right:5%"></div>
+            </div>
             <div class="gameText">
                 <h1 class="gameTitle">Osmolarity</h1>
-                <p class="gameDescription"></p>
+                <p class="gameDescription">Adjust the osmolarity curve based on the case study.</p>
             </div>
             <div class="gameScore">
                 <span class="BP">Best Performance</span>
@@ -103,11 +107,56 @@
             </div>
         </div>
 
-        <div class="gameWrapper" onclick="location.href='Crosswords/index.html'">
-            <img src="assets/fluidBalance_icon.png" style="transform: scale(0.8);">
+        <div class="gameWrapper" id="cwWrapper" onclick="location.href='Crosswords/index.html'">
+            <div class="image">
+                <div class="cwTable">
+                    <div class="cwRow">
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell"></div>
+                    </div>
+                    <div class="cwRow">
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell"></div>
+                    </div>
+                    <div class="cwRow">
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell"></div>
+                    </div>
+                    <div class="cwRow">
+                        <div class="cwCell"></div>
+                        <div class="cwCell"></div>
+                        <div class="cwCell"></div>
+                        <div class="cwCell"></div>
+                        <div class="cwCell"></div>
+                    </div>
+                    <div class="cwRow">
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell"></div>
+                    </div>
+                    <div class="cwRow">
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell hidden"></div>
+                        <div class="cwCell"></div>
+                    </div>
+                </div>
+            </div>
             <div class="gameText">
                 <h1 class="gameTitle">Crosswords</h1>
-                <p class="gameDescription"></p>
+                <p class="gameDescription">Generate a random crossword from physiological words, and try to fill it !</p>
             </div>
             <div class="gameScore">
                 <span class="BP">Best Performance</span>
@@ -126,28 +175,5 @@
         </div>
 
         <script src="color_script.js"></script>
-        <script>
-            document.getElementById("moreGames").classList.add(document.querySelectorAll(".gameWrapper").length % 2 == 0 ? "moreGamesBig" : "moreGamesSmall");
-            document.getElementById("colorButton").removeEventListener("click", colorChange);
-            document.addEventListener("DOMContentLoaded", function() {
-                let transP = parseInt(localStorage.getItem('trans_highScore1'))+parseInt(localStorage.getItem('trans_highScore2')) || 0;
-                document.getElementById("transportersPercent").textContent = Math.round(transP/250*100)+"%";
-                let RAAS1P = parseInt(localStorage.getItem('RAAS_highScore'))|| 0;
-                document.getElementById("raasPercent").textContent = Math.round(RAAS1P/180*100)+"%";
-                let RAAS2P = parseInt(localStorage.getItem('RAAS2_highScore'))|| 0;
-                document.getElementById("raas2Percent").textContent = Math.round(RAAS2P/280*100)+"%";
-                let Game3P = parseInt(localStorage.getItem('Game3_highScore'))|| 0;
-                document.getElementById("game3Percent").textContent = Math.round(Game3P/180*100)+"%";
-            });
-
-            function resetScores(){
-                localStorage.setItem("trans_highScore1", 0);
-                localStorage.setItem("trans_highScore2", 0);
-                localStorage.setItem("RAAS_highScore", 0);
-                localStorage.setItem("RAAS2_highScore", 0);
-                localStorage.setItem("Game3_highScore", 0);
-                location.reload();
-            }
-        </script>
-
+        <script src="script.js"></script>
     </body>
