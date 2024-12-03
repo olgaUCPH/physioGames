@@ -156,7 +156,7 @@ async function start(){
         if (gridDiv.children.length > 0) {
             Array.from(gridDiv.children).forEach(child => child.remove());
         }
-        [grid, placementList] = createBestGrid(wordList, 100);                         //Create a grid from 10 samples (working value)
+        [grid, placementList] = createBestGrid(wordList, 500);                         //Create a grid from 10 samples (working value)
         generateGrid(grid, false);                                                     //Generate the html element
     }while(gridDiv.getBoundingClientRect().height > 0.95*gridContainer.height || gridDiv.getBoundingClientRect().width > 0.85*gridContainer.width);
     document.getElementById("loadingScreen").style.display = "none";
@@ -455,8 +455,8 @@ function gridEntropy(grid, pL, wL)      {                                   //Co
     })
     //The weighting of the different values is arbitrary and may be changed
     //Missing words and dead ends are highly undesirable so have high weights, other issues are lower
-    let maxHCells = document.getElementById("gridContainer").getBoundingClientRect().width/vw / cellSize;
-    let maxVCells = document.getElementById("gridContainer").getBoundingClientRect().height/vw / cellSize;
+    let maxHCells = 0.85*document.getElementById("gridContainer").getBoundingClientRect().width/vw / cellSize;
+    let maxVCells = 0.95*document.getElementById("gridContainer").getBoundingClientRect().height/vw / cellSize;
 
     if (deadEnds || fakeWords || grid.length > maxVCells || grid[0].length > maxHCells){
         return 1000000;
