@@ -334,6 +334,19 @@ body {
   animation-iteration-count: infinite;
 }
 
+#resetButton:hover{
+  animation: rotate;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes rotate {
+  0%  {rotate: 0deg;}
+  15% {rotate: 380deg;}
+  30% {rotate: 360deg;}
+  100%{rotate: 360deg;}
+}
+
 @keyframes shake{
   10% {rotate: 20deg;}
   20%{rotate:-20deg;}
@@ -348,8 +361,48 @@ body {
   animation: turn 1s linear 0s infinite forwards;
 }
 
-#loadingScreen{
+#startScreen{
   display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 2px;  
+  height: 10px;
+  width: 20vw;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%; 
+  background: var(--deep-highlight);
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--deep-highlight);
+  cursor: pointer;
+}
+
+#loadingScreen{
+  display: none;
   flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
@@ -511,15 +564,40 @@ body {
   background-color: var(--light-highlight);
 }
 
-.hintList{
-  width: 48%;
-  height: 100%;
+.hlWrapper{
+  width: 45%;
+  height: 95%;
   position: relative;
   display: flex;
   flex-direction: column;
+  margin-right: 2%;
+  margin-left: 2%;
+  padding-bottom: 5%;
 }
 
-.hintList h2{
+.hintList{
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--deep-highlight); 
+  border-radius: 10px;
+}
+
+
+.hlWrapper h2{
   margin-bottom: 5px;
 }
 

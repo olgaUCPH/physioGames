@@ -39,6 +39,11 @@ let wordList = [];
 let hintList = [];
 
 let wordsPerGrid = 10;
+let cellSize = 2.5;
+const vw = window.innerWidth / 100;
+
+let callCount = 0;
+
 
 wordList.push("Creatinine");
 hintList.push("A substance used to estimate GFR.");
@@ -129,8 +134,19 @@ let selID = -1;
 let gridContainer = document.getElementById('gridContainer').getBoundingClientRect();
 let desired_ratio = gridContainer.width/gridContainer.height;
 
+document.getElementById("wordsPerGrid").addEventListener('input', updateWPG, false);                             
+document.getElementById("wordsPerGrid").addEventListener('change', updateWPG, false);
+
+function updateWPG(){
+    wordsPerGrid = document.getElementById("wordsPerGrid").value;
+    document.getElementById("wpgValue").textContent = wordsPerGrid;
+    cellSize = 1.5 + (25 - wordsPerGrid)/15;
+}
 
 async function start(){
+    let startTime = Date.now();
+    document.getElementById("startScreen").style.display = "none";
+    document.getElementById("loadingScreen").style.display = "flex";
     await delay(10);
     do{
         grid = [[]];
@@ -140,13 +156,17 @@ async function start(){
         if (gridDiv.children.length > 0) {
             Array.from(gridDiv.children).forEach(child => child.remove());
         }
-        [grid, placementList] = createBestGrid(wordList, 100);                  //Create a grid from 1000 samples (working value)
+        [grid, placementList] = createBestGrid(wordList, 100);                         //Create a grid from 10 samples (working value)
         generateGrid(grid, false);                                                     //Generate the html element
-    }while(gridDiv.getBoundingClientRect().height > 0.95*gridContainer.height || gridDiv.getBoundingClientRect().width > 0.95*gridContainer.width);
+    }while(gridDiv.getBoundingClientRect().height > 0.95*gridContainer.height || gridDiv.getBoundingClientRect().width > 0.85*gridContainer.width);
     document.getElementById("loadingScreen").style.display = "none";
+    console.log(`Generation Time: ${Math.round(Date.now() - startTime)/1000} s`);
+    console.log(`${callCount} grids generated.`);
+    console.log(`Final grid entropy: ${Math.round(gridEntropy(grid, placementList, wordList))}`);
     Array.from(gridDiv.children).forEach(child => child.remove());
     gridPhantom = [];
     cellDivs = [];
+    cellSize = Math.min(0.95*gridContainer.height/grid.length,0.85*gridContainer.width/grid[0].length)/vw;
     delay(10);
     generateGrid(grid, true);
     cellDivs.forEach((cell, i) => {
@@ -159,10 +179,10 @@ async function start(){
     })
 }
 
-document.addEventListener("DOMContentLoaded", async function() {
-    await delay(500);
-    start();
-  });
+//document.addEventListener("DOMContentLoaded", async function() {
+//    await delay(500);
+//    start();
+//  });
 
 /// EVENT LISTENERS //////////////////////////////////////////////////////////////////////////
 
@@ -265,6 +285,7 @@ function createBestGrid(wL, n){                                         //Create
 }
 
 function createGrid(wL){                                                //Creates a potential grid from a given word list
+    callCount += 1;
     let grid = [[]];                                                    //Initialize empty grid
     let placementList = [];                                             //Initialize empty placement grid
     let remainingWords = shuffleArray([...wL]).slice(0,wordsPerGrid);   //Shuffle words
@@ -434,7 +455,10 @@ function gridEntropy(grid, pL, wL)      {                                   //Co
     })
     //The weighting of the different values is arbitrary and may be changed
     //Missing words and dead ends are highly undesirable so have high weights, other issues are lower
-    if (deadEnds ||fakeWords){
+    let maxHCells = document.getElementById("gridContainer").getBoundingClientRect().width/vw / cellSize;
+    let maxVCells = document.getElementById("gridContainer").getBoundingClientRect().height/vw / cellSize;
+
+    if (deadEnds || fakeWords || grid.length > maxVCells || grid[0].length > maxHCells){
         return 1000000;
     }
     //return missingWords * 1000 + sizeRatio * 100 + filledRatio * 50 + deadEnds * 250 + fakeWords * 250;
@@ -454,6 +478,9 @@ async function generateGrid(grid, final){                               //Create
             cellDiv.classList.add('cell');                              //Style it
             cellDiv.classList.add('hidden');                            //Hide it
             cellDiv.textContent = ' ';                                  
+            cellDiv.style.width = cellSize+"vw";
+            cellDiv.style.height = cellSize+"vw";
+            cellDiv.style.fontSize = 0.6*cellSize+"vw";
             //cellDiv.textContent = cell;                               //Write the letter (only for testing)
             cellDivs.push(cellDiv);                                     //Push cell to registering array
             gridPhantom.push(cell);                                     //Push value to grid horizontal phantom
@@ -590,6 +617,11 @@ function cellSel(i, o){
     let hints = document.querySelectorAll('.hint');
     hints.forEach(h => h.classList.remove("currentHint"));
     Array.from(hints)[plID].classList.add("currentHint");
+    Array.from(hints)[plID].scrollIntoView({
+        behavior: 'smooth',  // Smooth scrolling animation
+        block: 'nearest',    // Aligns the element to the nearest edge of the container
+        inline: 'nearest'
+      });
 }
 
 function deselect(){
@@ -602,3 +634,4 @@ function deselect(){
     let hints = document.querySelectorAll('.hint');
     hints.forEach(h => h.classList.remove("currentHint"));
 }
+

@@ -27,7 +27,13 @@
         </div>
         <!-- Right Column -->
         <div id="rightColumn">
-            <div id="gridContainer">             
+            <div id="gridContainer">
+                <div id="startScreen">
+                    <button id="generate" onclick="start()">Generate Crossword</button>
+                    <h1>Words per Grid:</h1>
+                    <h2 id="wpgValue">10</h2>
+                    <input id="wordsPerGrid" class="slider" type="range" min="10" max="25" value="10" step="1">
+                </div>
                 <div id="loadingScreen">
                     <div id="generating"><h1>Generating</h1><h1 id="d1">.</h1><h1 id="d2">.</h1><h1 id="d3">.</h1></div>
                     <h2>This might take a few seconds</h2>
@@ -42,14 +48,20 @@
                         <img id="colorButton" src="../assets/colorIcon.png">
                         <span>Change color theme</span>
                     </div>
+                    <div class="buttonWrapper">
+                        <img id="resetButton" src="../assets/resetIcon.png" onclick="location.reload()">
+                        <span>Go back to main menu</span>
+                    </div>
                 </div>
             </div>
             <div id="arsenalContainer">
-                <div id="HHints" class="hintList">
+                <div class="hlWrapper">
                     <h2>Horizontal</h2>
+                    <div id="HHints" class="hintList"></div>
                 </div>
-                <div id="VHints" class="hintList">
+                <div class="hlWrapper">
                     <h2>Vertical</h2>
+                    <div id="VHints" class="hintList"></div>
                 </div>
             </div>
         </div>
