@@ -149,26 +149,14 @@ async function start(){
     document.getElementById("loadingScreen").style.display = "flex";
     await delay(10);
     do{
-        grid = [[]];
-        placementList = [];
-        gridPhantom = [];
-        cellDivs = [];
-        if (gridDiv.children.length > 0) {
-            Array.from(gridDiv.children).forEach(child => child.remove());
-        }
-        [grid, placementList] = createBestGrid(wordList, 500);                         //Create a grid from 10 samples (working value)
-        generateGrid(grid, false);                                                     //Generate the html element
-    }while(gridDiv.getBoundingClientRect().height > 0.95*gridContainer.height || gridDiv.getBoundingClientRect().width > 0.85*gridContainer.width);
+        [grid, placementList] = createBestGrid(wordList, wordsPerGrid*10);                 //Create a grid from 10 samples (working value)
+    }while(placementList.length < wordsPerGrid);    
     document.getElementById("loadingScreen").style.display = "none";
     console.log(`Generation Time: ${Math.round(Date.now() - startTime)/1000} s`);
     console.log(`${callCount} grids generated.`);
     console.log(`Final grid entropy: ${Math.round(gridEntropy(grid, placementList, wordList))}`);
-    Array.from(gridDiv.children).forEach(child => child.remove());
-    gridPhantom = [];
-    cellDivs = [];
     cellSize = Math.min(0.95*gridContainer.height/grid.length,0.85*gridContainer.width/grid[0].length)/vw;
-    delay(10);
-    generateGrid(grid, true);
+    generateGrid(grid);
     cellDivs.forEach((cell, i) => {
         if (gridPhantom[i] != ' '){
             cell.onclick = function(){cellSel(i, '')};
@@ -458,12 +446,26 @@ function gridEntropy(grid, pL, wL)      {                                   //Co
     let maxHCells = 0.85*document.getElementById("gridContainer").getBoundingClientRect().width/vw / cellSize;
     let maxVCells = 0.95*document.getElementById("gridContainer").getBoundingClientRect().height/vw / cellSize;
 
-    if (deadEnds || fakeWords || grid.length > maxVCells || grid[0].length > maxHCells){
+    if (deadEnds || fakeWords || grid.length > maxVCells || grid[0].length > maxHCells || sharedHeads(placementList)){
         return 1000000;
     }
     //return missingWords * 1000 + sizeRatio * 100 + filledRatio * 50 + deadEnds * 250 + fakeWords * 250;
     return sizeRatio * 100 + filledRatio * 50;
 }
+
+function sharedHeads(pL) {
+    const heads = new Set();
+    for (let p of pL) {
+      // Extract the second and third elements
+      const head = `${p[1]},${p[2]}`; // Create a unique key (string)
+  
+      if (heads.has(head)) {
+        return true;
+      }
+      heads.add(head);
+    }
+    return false;
+  }
 
 function flipGrid(grid, pL){                                            //Flip a grid in case of higher height than width (for better display)
     return [grid[0].map((_, colIndex) => grid.map(row => row[colIndex])), pL.map((p) => [p[0], p[2], p[1], p[3] == 'H' ? 'V': 'H'])];
@@ -488,11 +490,8 @@ async function generateGrid(grid, final){                               //Create
         })
         gridDiv.appendChild(rowDiv);                                    //Append row to grid
     });
-    if (final){
-        reveal([placementList[0][1], placementList[0][2]]);
-        generateLabels();        
-        
-    }
+    reveal([placementList[0][1], placementList[0][2]]);
+    generateLabels();        
 }
 
 async function reveal(pos){
