@@ -130,6 +130,8 @@ for (let i = 0; i < wordList.length; i++){
     wordList[i] = wordList[i].toUpperCase();
 }
 
+document.getElementById("wordsPerGrid").setAttribute("max",wordList.length);
+
 let VHints = [];
 let HHints = [];
 
@@ -197,8 +199,8 @@ document.addEventListener('keydown', (event) => {
     }
     if (event.key.length === 1 && event.key.match(/[a-zA-Z]/)) {
         if (!cellDivs[selID].classList.contains('correct')){
-            cellDivs[selID].innerHTML = event.key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);
             cellDivs[selID].classList.remove('incorrect');
+            cellDivs[selID].innerHTML = event.key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);
         }
         let ids = placementToID(selPlacement);
         const nextID = ids[Math.min(ids.indexOf(selID) + 1, ids.length - 1)];
@@ -212,8 +214,8 @@ document.addEventListener('keydown', (event) => {
                 cellSel(previousID, selPlacement[3]);
             }
             if (!cellDivs[selID].classList.contains('correct')){
-                cellDivs[selID].innerHTML = ' ' + cellDivs[selID].innerHTML.slice(1);
                 cellDivs[selID].classList.remove('incorrect');
+                cellDivs[selID].innerHTML = ' ' + cellDivs[selID].innerHTML.slice(1);
             }
             break;
         case 'Tab':
@@ -668,6 +670,7 @@ function verifyGrid(){
     document.getElementById("currentScore").textContent = currentScore;
     if (selID > 0){
         revealCorrect(switchCoords(selID));
+        deselect();
     }
     else{
         revealCorrect([placementList[0][1],placementList[0][2]]);
