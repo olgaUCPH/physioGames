@@ -34,6 +34,8 @@ let gridDiv = document.getElementById("grid");
 let grid = [];                                                          //Array containing information about the whole grid
 let gridPhantom = [];
 let cellDivs = [];
+let verifPL = [];
+let verifPhantom = [];
 
 let wordList = [];
 let hintList = [];
@@ -43,6 +45,10 @@ let cellSize = 2.5;
 const vw = window.innerWidth / 100;
 
 let callCount = 0;
+
+let currentScore = 0;
+let highScore = 0;
+let attempt = 0;
 
 
 wordList.push("Creatinine");
@@ -160,11 +166,14 @@ async function start(){
     cellDivs.forEach((cell, i) => {
         if (gridPhantom[i] != ' '){
             cell.onclick = function(){cellSel(i, '')};
+            verifPhantom.push(false);
         }
         else{
             cell.onclick = deselect;
+            verifPhantom.push(true);
         }
     })
+    placementList.forEach(pl => verifPL.push(false));
 }
 
 //document.addEventListener("DOMContentLoaded", async function() {
@@ -187,25 +196,34 @@ document.addEventListener('keydown', (event) => {
         return 0;
     }
     if (event.key.length === 1 && event.key.match(/[a-zA-Z]/)) {
-        cellDivs[selID].innerHTML = event.key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);
+        if (!cellDivs[selID].classList.contains('correct')){
+            cellDivs[selID].innerHTML = event.key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);
+            cellDivs[selID].classList.remove('incorrect');
+        }
         let ids = placementToID(selPlacement);
         const nextID = ids[Math.min(ids.indexOf(selID) + 1, ids.length - 1)];
         cellSel(nextID, selPlacement[3]);
     }
     switch (event.key) {
         case 'Backspace':
-            if (cellDivs[selID].innerHTML[0] == ' '){
+            if (cellDivs[selID].innerHTML[0] == ' ' || cellDivs[selID].classList.contains('correct')){
                 let ids = placementToID(selPlacement);
                 const previousID = ids[Math.max(ids.indexOf(selID) - 1, 0)];
                 cellSel(previousID, selPlacement[3]);
             }
-            cellDivs[selID].innerHTML = ' ' + cellDivs[selID].innerHTML.slice(1);
+            if (!cellDivs[selID].classList.contains('correct')){
+                cellDivs[selID].innerHTML = ' ' + cellDivs[selID].innerHTML.slice(1);
+                cellDivs[selID].classList.remove('incorrect');
+            }
             break;
         case 'Tab':
             event.preventDefault();
             cellSel(selID, '');
             break;
         case 'Enter':
+            deselect();
+            break;
+        case 'Escape':
             deselect();
             break;
         case 'ArrowUp':
@@ -634,3 +652,45 @@ function deselect(){
     hints.forEach(h => h.classList.remove("currentHint"));
 }
 
+function verifyGrid(){
+    attempt += 1;
+    cellDivs.forEach(cell => cell.classList.remove('revealed'));
+    placementList.forEach((pl,i) => {
+        if (!verifPL[i]){
+            let correct = true;
+            placementToID(pl).forEach(id => correct = (correct && cellDivs[id].textContent[0] == gridPhantom[id]));
+            verifPL[i] = correct;
+            currentScore += correct * (attempt == 1 ? 10 : attempt == 2 ? 5 : 1);
+            placementToID(pl).forEach(id => verifPhantom[id] = verifPhantom[id] || correct);
+        }
+    }
+    )
+    document.getElementById("currentScore").textContent = currentScore;
+    if (selID > 0){
+        revealCorrect(switchCoords(selID));
+    }
+    else{
+        revealCorrect([placementList[0][1],placementList[0][2]]);
+    }
+
+}
+
+async function revealCorrect(pos){
+    let [x,y] = pos;
+    let i = switchCoords(pos);
+    if (x < 0 || y < 0 || x >= grid.length || y >= grid[0].length || cellDivs[i].classList.contains('revealed')){
+        return 0;
+    }
+    if (gridPhantom[i] != ' '){
+        if(verifPhantom[i]){cellDivs[i].classList.add('correct');}
+        else{cellDivs[i].classList.add('incorrect');}
+        cellDivs[i].classList.add('revealed');
+        await delay(30);
+        revealCorrect([x-1,y]);
+        revealCorrect([x+1,y]);
+        revealCorrect([x,y-1]);
+        revealCorrect([x,y+1]);
+    }
+}
+
+document.getElementById("checkButton").addEventListener("click", verifyGrid);

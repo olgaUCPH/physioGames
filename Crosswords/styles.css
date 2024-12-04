@@ -61,6 +61,13 @@
     font-style: normal;
   }
 
+  @font-face {
+    font-family: 'Avenir Regular';
+    src: url("../fonts/AvenirNextLTPro-Demi.otf");
+    font-weight: 700;
+    font-style: normal;
+  }
+
 body {
     margin: 0;
     padding: 0;
@@ -530,6 +537,17 @@ body {
   font-size: 0.5em;
 }
 
+.correct{
+  font-weight: 700;
+  background-color: var(--deep-highlight);
+  color: var(--pseudo-white);
+}
+
+.incorrect{
+  font-style: italic;
+  background-color: lightpink;
+}
+
 .hidden{
     border-style: none;
     cursor: default;
@@ -562,6 +580,7 @@ body {
 
 .secondary{
   background-color: var(--light-highlight);
+  color: black;
 }
 
 .hlWrapper{
