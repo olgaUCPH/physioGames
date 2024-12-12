@@ -623,6 +623,7 @@ function phantomInput(){
     document.body.appendChild(inputP);
     inputP.focus();
     inputP.addEventListener('input', (event) => {
+        document.getElementById(currentScore).textContent = inputP.value;
         console.log(inputP.value);
         pressKey(inputP.value);
         inputP.value = '';
