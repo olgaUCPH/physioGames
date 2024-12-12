@@ -605,6 +605,15 @@ function IDtoPlacement(i){
 
 /// CELL SELECTION ///////////////////////////////////////////////////////////////////
 
+
+
+function phantomInput(){
+    let inputP = document.createElement('input');
+    inputP.classList.add("inputPhantom");
+    document.body.appendChild(inputP);
+    inputP.focus();
+}
+
 function cellSel(i, o){
     cellDivs.forEach(cell => {
         cell.classList.remove('main');
@@ -641,6 +650,7 @@ function cellSel(i, o){
         block: 'nearest',    // Aligns the element to the nearest edge of the container
         inline: 'nearest'
       });
+      if(!document.querySelector('.inputPhantom')){phantomInput();}
 }
 
 function deselect(){
@@ -652,6 +662,7 @@ function deselect(){
     })
     let hints = document.querySelectorAll('.hint');
     hints.forEach(h => h.classList.remove("currentHint"));
+    document.querySelector('.inputPhantom').remove();
 }
 
 function verifyGrid(){

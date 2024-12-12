@@ -630,3 +630,11 @@ body {
   width: 90%;
   cursor: pointer;
 }
+
+.inputPhantom{
+  opacity: 0.5;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+
+}

@@ -64,11 +64,6 @@ let correctAnswers = [];                                              //Array co
 
 let userAnswers = [];                                                 //Array to be filled with the answers of the user
 
-//Initialize questions (placeholder)
-questions.push("What is the first letter of the alphabet ?");
-answers.push(["D","A","Q"]);
-correctAnswers.push(2);
-
 /// EVENT LISTENERS //////////////////////////////////////////////////////////////////////////
 
 cP.forEach(point => {
@@ -243,6 +238,7 @@ function startCase(i){
   caseID = i;                                                                         //Record case ID
   document.getElementById("questionStart").style.display = "flex";                    //Show questions module
   checkButton.addEventListener("click", verifyGrid);                                  //Activate check button
+  loadQuestions(i);                                                                   //Load questions from case i
 }
 
 
@@ -400,6 +396,39 @@ function setQuestion(i){
 
 };
 
+
+function loadQuestions(i){
+  switch (i){
+    case 1:
+      questions.push("Where in the nephron is the tubular fluid hypotonic during antidiuresis ?");
+      answers.push(["The proximal tubule","The late part of TAL and early part of the distal convoluted tubule","The collecting duct"]);
+      correctAnswers.push(2);
+      
+      questions.push("The hyperosmolarity in the medulla is due to:");
+      answers.push(["Only NaCl","Only urea","Nacl and urea"]);
+      correctAnswers.push(3);
+      break;
+    case 2:
+      questions.push("Why is medullary osmolarity low during water diuresis ?");
+      answers.push(["Reduced activity of the Na/K/2Cl-cotransporter","Reduced amount of urea in the inner medulla","Reduced amount of NaCl in the outer medulla"]);
+      correctAnswers.push(2);
+      
+      questions.push("The tubular water permeability is decreased during water diuresis");
+      answers.push(["In the collecting duct","In the proximal tubule","In the descending limb of the loop of Henle"]);
+      correctAnswers.push(1);
+      break;
+      
+    case 3:
+      questions.push("Why is urinary osmolarity reduced after administration of Furosemide?");
+      answers.push(["Reduced water permeability in the collecting duct","Reduced urea permeability in the inner medullary collecting duct","Reduced medullary osmolarity due to inhibition of the Na/K/2Cl-cotransporter"]);
+      correctAnswers.push(3);
+      
+      questions.push("Where in the nephron is the tubular fluid hypotonic during Furosemide?");
+      answers.push(["Nowhere","The late part of TAL and early part of the distal convoluted tubule","The collecting duct"]);
+      correctAnswers.push(1);
+      break;
+  }
+}
 
 /// VISUAL INSTRUCTION ///////////////////////////////////////////////////////////////////////
 
