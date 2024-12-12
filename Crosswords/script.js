@@ -7,6 +7,11 @@
 
 /// GENERAL ALL PURPOSE & TECHNICAL FUNCTIONS ///////////////////////////////////////////////////
 
+function isMobile() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    return /android|ipad|iphone|ipod/i.test(userAgent);
+  } //Useless for now
+
 function shuffleArray(array) {
     //Randomly shuffles a given array
     for (let i = array.length - 1; i > 0; i--) {
@@ -206,7 +211,7 @@ function pressKey(key){
     if (key.length === 1 && key.match(/[a-zA-Z]/)) {
         if (!cellDivs[selID].classList.contains('correct')){
             cellDivs[selID].classList.remove('incorrect');
-            cellDivs[selID].innerHTML = event.key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);
+            cellDivs[selID].innerHTML = key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);
         }
         let ids = placementToID(selPlacement);
         const nextID = ids[Math.min(ids.indexOf(selID) + 1, ids.length - 1)];
@@ -618,7 +623,8 @@ function phantomInput(){
     document.body.appendChild(inputP);
     inputP.focus();
     inputP.addEventListener('input', (event) => {
-        pressKey(event.target.value);
+        console.log(inputP.value);
+        pressKey(inputP.value);
         inputP.value = '';
     });
 }
@@ -659,9 +665,11 @@ function cellSel(i, o){
         block: 'nearest',    // Aligns the element to the nearest edge of the container
         inline: 'nearest'
       });
-      if(!document.querySelector('.inputPhantom')){phantomInput();}
+      if (isMobile()){
+        if(!document.querySelector('.inputPhantom')){phantomInput();}
       else{
         document.querySelector('.inputPhantom').focus();
+      }
       }
 }
 
