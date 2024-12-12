@@ -194,10 +194,16 @@ document.getElementById("gridContainer").addEventListener('click', (event) => {
   });
 
 document.addEventListener('keydown', (event) => {
+    if (event.key == "Tab"){
+        event.preventDefault();
+    }
+    pressKey(event.key);})
+
+function pressKey(key){
     if (selID == -2){
         return 0;
     }
-    if (event.key.length === 1 && event.key.match(/[a-zA-Z]/)) {
+    if (key.length === 1 && key.match(/[a-zA-Z]/)) {
         if (!cellDivs[selID].classList.contains('correct')){
             cellDivs[selID].classList.remove('incorrect');
             cellDivs[selID].innerHTML = event.key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);
@@ -206,7 +212,7 @@ document.addEventListener('keydown', (event) => {
         const nextID = ids[Math.min(ids.indexOf(selID) + 1, ids.length - 1)];
         cellSel(nextID, selPlacement[3]);
     }
-    switch (event.key) {
+    switch (key) {
         case 'Backspace':
             if (cellDivs[selID].innerHTML[0] == ' ' || cellDivs[selID].classList.contains('correct')){
                 let ids = placementToID(selPlacement);
@@ -219,7 +225,6 @@ document.addEventListener('keydown', (event) => {
             }
             break;
         case 'Tab':
-            event.preventDefault();
             cellSel(selID, '');
             break;
         case 'Enter':
@@ -269,7 +274,7 @@ document.addEventListener('keydown', (event) => {
             }
             break;
       }
-  });
+  };
 
 /// CROSSWORD CREATION //////////////////////////////////////////////////////////////////////
 
@@ -612,6 +617,10 @@ function phantomInput(){
     inputP.classList.add("inputPhantom");
     document.body.appendChild(inputP);
     inputP.focus();
+    inputP.addEventListener('input', (event) => {
+        pressKey(event.target.value);
+        inputP.value = '';
+    });
 }
 
 function cellSel(i, o){
@@ -651,6 +660,9 @@ function cellSel(i, o){
         inline: 'nearest'
       });
       if(!document.querySelector('.inputPhantom')){phantomInput();}
+      else{
+        document.querySelector('.inputPhantom').focus();
+      }
 }
 
 function deselect(){
