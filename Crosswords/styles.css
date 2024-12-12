@@ -81,7 +81,7 @@ body {
     -ms-transition: background-color 0.5s ease-in-out;
     transition: background-color 0.5s ease-in-out;
     overflow-y: hidden;
-    overflow-x: auto;
+    overflow-x: hidden;
   }
 
 .no-select {
@@ -632,8 +632,8 @@ body {
 }
 
 .inputPhantom{
-  opacity: 0.5;
-  z-index: 100;
+  opacity: 0;
+  z-index: -100;
   position: absolute;
   left: 50%;
   top: 50%;

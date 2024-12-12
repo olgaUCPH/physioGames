@@ -672,7 +672,7 @@ function cellSel(i, o){
         block: 'nearest',    // Aligns the element to the nearest edge of the container
         inline: 'nearest'
       });
-      if (isMobile() || true){
+      if (isMobile()){
         if(!document.querySelector('.inputPhantom')){phantomInput();}
       else{
         document.querySelector('.inputPhantom').focus();
