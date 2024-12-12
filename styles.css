@@ -144,7 +144,6 @@ body {
 }
 
 .gameWrapper:hover{
-    transform: scale(1.01);
     background-color: var(--deep-highlight);
     color: var(--pseudo-white);
 }
@@ -447,4 +446,79 @@ pointer-events: none;
 .hidden{
   border-style: none;
   cursor: default;
+}
+
+
+
+.diagram{
+  position: absolute;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  height: 70%;
+}
+
+.diagram div{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.boxContainer div{
+  transition: background-color 0.5s ease-in-out;
+}
+
+
+.ECVX{
+  width: 40%;
+  height: 100%;
+  box-sizing: border-box;
+  position: absolute;
+  right: 60%;
+  top: 0;
+}
+
+.ICVX{
+  width: 60%;
+  height: 100%;
+  box-sizing: border-box;
+  position: absolute;
+  left: 40%;
+  top: 0;
+}
+
+#ECV1{
+  width: 40%;
+  height: 100%;
+  position: absolute;
+  right: 60%;
+  top: 0;
+  background-color: var(--deep-highlight);
+  transform-origin: bottom right;
+  transition: transform 1s ease-in-out;
+  color: var(--pseudo-white);
+}
+
+#ICV1{
+  width: 60%;
+  height: 100%;
+  position: absolute;
+  left: 40%;
+  top: 0;
+  background-color: var(--light-highlight);
+  transform-origin: bottom left;
+  transition: transform 1s ease-in-out;
+}
+
+.boxContainer{
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#fbWrapper:hover #ECV1{
+  background-color: var(--pseudo-black);
 }

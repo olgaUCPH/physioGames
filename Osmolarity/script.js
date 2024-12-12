@@ -19,6 +19,12 @@ function removeAllEventListeners(element) {
 } //Remove all event listener from given element by cloning it
 
 
+document.addEventListener("DOMContentLoaded", function() {
+  highScore_1 = parseInt(localStorage.getItem('O_highScore_1')) || 0;      //Case 1 high-score
+  highScore_2 = parseInt(localStorage.getItem('O_highScore_2')) || 0;      //Case 2 high-score
+  highScore_3 = parseInt(localStorage.getItem('O_highScore_3')) || 0;      //Case 3 high-score
+}); //Get stored values
+
 /// RELEVANT HTML ELEMENTS ////////////////////////////////////////////////////////////////////
 
 const canvas = document.getElementById("gridContainer");                    //Where the curve should be drawn
@@ -239,6 +245,10 @@ function startCase(i){
   document.getElementById("questionStart").style.display = "flex";                    //Show questions module
   checkButton.addEventListener("click", verifyGrid);                                  //Activate check button
   loadQuestions(i);                                                                   //Load questions from case i
+  console.log([highScore_1, highScore_2, highScore_3]);
+  highScore = [highScore_1, highScore_2, highScore_3][i-1];
+  console.log(highScore);
+  displayScore();
 }
 
 
@@ -305,6 +315,8 @@ function displayScore(){
   }
   document.getElementById('currentScore').textContent = currentScore;                   //Display current score
   document.getElementById('highScore').textContent = highScore;                         //Display high score
+  localStorage.setItem(`O_highScore_${caseID}`, highScore);
+  
 }
 
 

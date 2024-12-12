@@ -762,6 +762,7 @@ function offsetLeft(element){                                         //Compute 
 function offsetTop(element){                                          //Compute the exact y position (from the top)
   return element.offsetTop;
 }
+
 async function calculatePositions(){
 
   //Dynamically calculate where tables should be positioned, for smooth transition between step 1 & 2

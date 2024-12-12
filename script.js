@@ -6,7 +6,7 @@ function delay(ms) {
 document.getElementById("moreGames").classList.add(document.querySelectorAll(".gameWrapper").length % 2 == 0 ? "moreGamesBig" : "moreGamesSmall");
 document.getElementById("colorButton").removeEventListener("click", colorChange);
 document.addEventListener("DOMContentLoaded", function() {
-    let transP = parseInt(localStorage.getItem('trans_highScore1'))+parseInt(localStorage.getItem('trans_highScore2')) || 0;
+    let transP = (parseInt(localStorage.getItem('trans_highScore1')) || 0)+(parseInt(localStorage.getItem('trans_highScore2')) || 0);
     document.getElementById("transportersPercent").textContent = Math.round(transP/250*100)+"%";
     let RAAS1P = parseInt(localStorage.getItem('RAAS_highScore'))|| 0;
     document.getElementById("raasPercent").textContent = Math.round(RAAS1P/180*100)+"%";
@@ -14,6 +14,12 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("raas2Percent").textContent = Math.round(RAAS2P/280*100)+"%";
     let Game3P = parseInt(localStorage.getItem('Game3_highScore'))|| 0;
     document.getElementById("game3Percent").textContent = Math.round(Game3P/180*100)+"%";
+    let FBP = (parseInt(localStorage.getItem('FB_highScore_0')) || 0)+(parseInt(localStorage.getItem('FB_highScore_1')) || 0)+(parseInt(localStorage.getItem('FB_highScore_2')) || 0)+(parseInt(localStorage.getItem('FB_highScore_3')) || 0);
+    document.getElementById("fbPercent").textContent = Math.round(FBP/440*100)+"%";
+    let oP = (parseInt(localStorage.getItem('O_highScore_1')) || 0)+(parseInt(localStorage.getItem('O_highScore_2')) || 0);
+    document.getElementById("oPercent").textContent = Math.round(oP/300*100)+"%";
+    let cwP = parseInt(localStorage.getItem('cw_highScore')) || 0;
+    document.getElementById("cwPercent").textContent = Math.round(cwP/250*100)+"%";
 });
 
 function resetScores(){
@@ -22,9 +28,89 @@ function resetScores(){
     localStorage.setItem("RAAS_highScore", 0);
     localStorage.setItem("RAAS2_highScore", 0);
     localStorage.setItem("Game3_highScore", 0);
+    localStorage.setItem("FB_highScore_0", 0);
+    localStorage.setItem("FB_highScore_1", 0);
+    localStorage.setItem("FB_highScore_2", 0);
+    localStorage.setItem("FB_highScore_3", 0);
+    localStorage.setItem("O_highScore_1", 0);
+    localStorage.setItem("O_highScore_2", 0);
+    localStorage.setItem("cw_highScore", 0);
     location.reload();
 }
 
+/// FLUID BALANCE ANIMATION ///////////////////////////////////////////////////////////////////////////
+
+function offsetLeft(element){                                         //Compute the exact x position (from the left)
+    return element.offsetLeft;
+  }
+  
+  function offsetTop(element){                                          //Compute the exact y position (from the top)
+    return element.offsetTop;
+  }
+
+let ECV_scaleX = 1.2;
+let ECV_scaleY = 0.9;
+
+let ICV_scaleX = 1.1;
+let ICV_scaleY = 0.9;
+
+  async function ECV_animation(){
+    //Controls the stretch animation of ECV rectangle
+    const ECV = document.getElementById("ECV1");                              //Get ECV rectangle
+    ECV.style.transform = `scaleX(${ECV_scaleX}) scaleY(${ECV_scaleY})`;      //Transform using stretch factors
+    await delay (3000);                                                       //Wait for a long time in deformed state
+    ECV.style.transform = `scaleX(1) scaleY(1)`;                              //Return to healthy state
+    await delay (1000);                                                       //Wait a bit
+    if (fbAnimate) {ECV_animation();}                                         //Loop
+  }
+  
+  async function ICV_animation(){
+    //Controls the stretch animation of ICV rectangle
+    const ICV = document.getElementById("ICV1");                              //Get ICV rectangle
+    ICV.style.transform = `scaleX(${ICV_scaleX}) scaleY(${ICV_scaleY})`;      //Transform using stretch factors
+    await delay (3000);                                                       //Wait a long time in deformed state
+    ICV.style.transform = `scaleX(1) scaleY(1)`;                              //Return to healthy state
+    await delay (1000);                                                       //Wait a bit
+    if (fbAnimate){ICV_animation();}                                          //Loop
+  }
+  
+  async function diagram_update() {
+  
+    //Updates shadows. Purpose of the shadows is to follow the shape of the stretched rectangles but without stretching,
+    //allowing for nicer looking arrows
+  
+    //Update size and position of ECV shadow
+    ECV_Shadow.style.width = document.getElementById('ECV1').getBoundingClientRect().width+"px";
+    ECV_Shadow.style.height = document.getElementById('ECV1').getBoundingClientRect().height + "px";
+    ECV_Shadow.style.left = document.getElementById('ECV1').getBoundingClientRect().left + "px";
+    ECV_Shadow.style.top = document.getElementById('ECV1').getBoundingClientRect().top + "px";
+    //Update size and position of ICV shadow
+    ICV_Shadow.style.width = document.getElementById('ICV1').getBoundingClientRect().width+"px";
+    ICV_Shadow.style.height = document.getElementById('ICV1').getBoundingClientRect().height + "px";
+    ICV_Shadow.style.left = document.getElementById('ICV1').getBoundingClientRect().left + "px";
+    ICV_Shadow.style.top = document.getElementById('ICV1').getBoundingClientRect().top + "px";
+    await delay(10);            //Wait before looping
+    diagram_update();           //Loop
+  }
+
+  document.getElementById("fbWrapper").addEventListener("mouseenter", ()=>{
+    fbAnimate = true;
+    ECV_animation();
+    ICV_animation();
+  })
+
+  document.getElementById("fbWrapper").addEventListener("mouseleave", async function (){
+    fbAnimate = false;
+    document.getElementById("ECV1").style.transitionDuration="0.01s";
+    document.getElementById("ICV1").style.transitionDuration="0.01s";
+    document.getElementById("ECV1").style.transform = `scaleX(1) scaleY(1)`;
+    document.getElementById("ICV1").style.transform = `scaleX(1) scaleY(1)`;
+    await delay(10);
+    document.getElementById("ECV1").style.transitionDuration="1s";
+    document.getElementById("ICV1").style.transitionDuration="1s";
+  })
+  
+  diagram_update();             //Start loop
 /// OSMOLARITY ANIMATION ///////////////////////////////////////////////////////////////////////////////
 
 const canvas = document.getElementById("fullGraph");                        //Where the curve should be drawn

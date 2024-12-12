@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        <div class="gameWrapper" onclick="location.href='RAAS_bis/index.html'">
+        <div class="gameWrapper"  onclick="location.href='RAAS_bis/index.html'">
             <img src="assets/RAAS2_icon.png">
             <div class="gameText">
                 <h1 class="gameTitle">Renin-Angiotensin-Aldosterone System (V2)</h1>
@@ -79,8 +79,26 @@
             </div>
         </div>
 
-        <div class="gameWrapper" onclick="location.href='fluidBalance/index.html'">
-            <img src="assets/fluidBalance_icon.png" style="transform: scale(0.8);">
+        <div class="gameWrapper" id="fbWrapper" onclick="location.href='fluidBalance/index.html'">
+            <div class="image">
+                <div class="diagram">
+                            <div class="boxContainer">
+                                <div id="ECV1">
+                                </div>
+                                <div id="ICV1">
+                                </div>
+                                <div id="ECV_Shadow" style="position: fixed; color: var(--pseudo-white)">
+                                    ECV
+                                </div>
+                                <div id="ICV_Shadow" style="position: fixed; color: var(--pseudo-black)">
+                                    ICV
+                                </div>
+                                <div class="ECVX" style="border-style: dotted; border-width: 2px;"></div>
+                                <div class="ICVX" style="border-style: dotted; border-width: 2px;"></div>    
+                            </div>
+                        </div>
+            </div>
+            
             <div class="gameText">
                 <h1 class="gameTitle">Fluid Balance</h1>
                 <p class="gameDescription">Fill the table, watch the graphical representation, and answer some questions.</p>
@@ -160,7 +178,7 @@
             </div>
             <div class="gameScore">
                 <span class="BP">Best Performance</span>
-                <span class="gamePercentage" id="crPercent">0%</span>
+                <span class="gamePercentage" id="cwPercent">0%</span>
             </div>
         </div>
         

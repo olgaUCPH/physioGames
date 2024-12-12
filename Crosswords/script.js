@@ -706,7 +706,7 @@ function verifyGrid(){
         }
     }
     )
-    document.getElementById("currentScore").textContent = currentScore;
+    displayScore();
     if (selID > 0){
         revealCorrect(switchCoords(selID));
         deselect();
@@ -716,6 +716,17 @@ function verifyGrid(){
     }
 
 }
+
+function displayScore(){
+    //Display score and update highscore if necessary
+    if (currentScore > highScore){
+      highScore = currentScore;                                                           //Update highscore if necessary
+    }
+    document.getElementById('currentScore').textContent = currentScore;                   //Display current score
+    document.getElementById('highScore').textContent = highScore;                         //Display high score
+    localStorage.setItem(`cw_highScore`, highScore);
+    
+  }
 
 async function revealCorrect(pos){
     let [x,y] = pos;
