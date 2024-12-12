@@ -615,7 +615,7 @@ function IDtoPlacement(i){
 
 /// CELL SELECTION ///////////////////////////////////////////////////////////////////
 
-
+let previousValue = '';
 
 function phantomInput(){
     let inputP = document.createElement('input');
@@ -623,10 +623,16 @@ function phantomInput(){
     document.body.appendChild(inputP);
     inputP.focus();
     inputP.addEventListener('input', (event) => {
-        document.getElementById("currentScore").textContent = inputP.value;
-        console.log(inputP.value);
-        pressKey(inputP.value);
-        inputP.value = '';
+        if (inputP.value.length < previousValue.length){
+            pressKey("BackSpace");
+        }
+        else{
+            value = inputP.value[inputP.value.length - 1];
+            document.getElementById("currentScore").textContent = value;
+            console.log(value);
+            pressKey(value);
+        }
+        previousValue = inputP.value;
     });
 }
 
@@ -684,6 +690,7 @@ function deselect(){
     let hints = document.querySelectorAll('.hint');
     hints.forEach(h => h.classList.remove("currentHint"));
     document.querySelector('.inputPhantom').remove();
+    previousValue = '';
 }
 
 function verifyGrid(){
