@@ -624,7 +624,7 @@ function phantomInput(){
     inputP.focus();
     inputP.addEventListener('input', (event) => {
         if (inputP.value.length < previousValue.length){
-            pressKey("BackSpace");
+            pressKey("Backspace");
         }
         else{
             value = inputP.value[inputP.value.length - 1];
