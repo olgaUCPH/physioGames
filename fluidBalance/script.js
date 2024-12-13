@@ -138,7 +138,7 @@ function startCase(i){
 
 function case_0(){
 
-  document.getElementById("topDescription").innerHTML = `<b style='font-weight: 700'>Case 0</b>:  Training! Drag & Drop the correct values to make the table internally consistent! (Values do not have any physiological significance)`;
+  document.getElementById("topDescription").innerHTML = `<b style='font-weight: 700'>Case 0</b>:  Training! Drag & Drop the correct values to make the table internally consistent! (Values may not be physiologically correct)`;
   document.getElementById('topDescription').style.display = "flex";                                 //Display short-hand description
   document.getElementById('topDescription').style.top = "4dvh";                                 //Ajust style
   //Generates random values and creates case 0
