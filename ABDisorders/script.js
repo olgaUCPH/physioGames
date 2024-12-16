@@ -409,6 +409,8 @@ updatepH();                                       //Initialize slider values
 updateBE();                                       //Initialize slider values
 updatePC();                                       //Initialize slider values
 
+document.querySelectorAll(".clickBox").forEach((box,i) => box.addEventListener("click", changeSign(box, box, i+4)));
+
 clickableCaptions();                              //Create clickable captions
 
 /// VISUAL INSTRUCTIONS ////////////////////////////////////////////////////////////////////////////

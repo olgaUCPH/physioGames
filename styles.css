@@ -80,7 +80,7 @@ body {
     transition: background-color 0.5s ease-in-out;
     overflow-x: auto;
     flex-wrap: wrap;
-    font-size: max(1.35vh,0.8vw);
+    font-size: max(1.35dvh,0.8dvw);
   }
 
 .no-select {
@@ -94,7 +94,9 @@ body {
     margin: 10px;
     background-color: var(--deep-highlight);
     color: var(--pseudo-white);
-    height: 125px;
+    height: auto;
+    padding-top: 0.5dvh;
+    padding-bottom: 0.5dvh;
     width: 98.5%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -127,7 +129,7 @@ body {
 .gameWrapper{
     background-color: var(--pseudo-white);
     color: var(--pseudo-black);
-    height: 120px;
+    height: 17dvh;
     width: 49%;
     margin: 0.25vw;
     -webkit-transition: all 0.2s ease-in-out;
@@ -217,7 +219,7 @@ body {
     width: 99%;
     background-color: var(--pseudo-white);
     color: var(--pseudo-black);
-    height: 75px;
+    height: 15dvh;
     margin: 0.25vw;
     box-shadow: black 3px 3px 5px;
     position: relative;
@@ -233,7 +235,7 @@ body {
     width: 49%;
     background-color: var(--pseudo-white);
     color: var(--pseudo-black);
-    height: 120px;
+    height: 17dvh;
     margin: 0.25vw;
     box-shadow: black 3px 3px 5px;
     position: relative;
@@ -247,7 +249,9 @@ body {
 
 #colorBar{
     width: 98.5%;
-    height: 37.5px;
+    height: auto;
+    padding-top: 1dvh;
+    padding-bottom: 1dvh;
     font-size: 1.5em;
     margin-bottom: 5px;
     background-color: var(--light-highlight);
@@ -335,7 +339,7 @@ body {
   transition-duration: .2s;
   transition-property: background-color,border-color,color,fill,stroke;
   transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
-  width: 200px;
+  width: 20vw;
   font-family: Avenir;
   font-weight: 300;
   font-size: 1em;
