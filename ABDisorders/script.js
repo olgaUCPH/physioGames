@@ -22,6 +22,9 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById('highScore').textContent = highScore;
 });//Get stored highscore value
 
+window.onresize = clickableCaptions;
+window.onfullscreenchange = clickableCaptions;
+
 function removeAllEventListeners(element) {
   const newElement = element.cloneNode(true);
   element.parentNode.replaceChild(newElement, element);
