@@ -31,18 +31,20 @@
         <!-- Right Column -->
         <div id="rightColumn">
             <div id="gridContainer">
+                <!-- Start screen (difficulty selection) -->
                 <div id="startScreen">
                     <button id="generate" onclick="start()">Generate Crossword</button>
                     <h1>Words per Grid:</h1>
                     <h2 id="wpgValue">10</h2>
                     <input id="wordsPerGrid" class="slider" type="range" min="10" max="25" value="10" step="1">
                 </div>
+                <!-- Loading Screen -->
                 <div id="loadingScreen">
                     <div id="generating"><h1>Generating</h1><h1 id="d1">.</h1><h1 id="d2">.</h1><h1 id="d3">.</h1></div>
                     <h2>This might take a few seconds</h2>
                     <img id="loading" src="assets/loading.png">
                 </div>
-                
+                <!-- Grid Container -->
                 <div id="grid" class="no-select">
                 </div>
                 <!-- Right-side buttons column -->
@@ -57,6 +59,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Arsenal (contains all hints) -->
             <div id="arsenalContainer">
                 <div class="hlWrapper">
                     <h2>Horizontal</h2>
@@ -67,7 +70,6 @@
                     <div id="VHints" class="hintList"></div>
                 </div>
             </div>
-            <div id="keyboard"></div>
         </div>
         <script src="../color_script.js"></script>      <!-- Shared color handler -->
         <script src="script.js"></script>

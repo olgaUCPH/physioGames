@@ -37,24 +37,30 @@ let gridDiv = document.getElementById("grid");
 /// VARIABLE DEFINITIONS //////////////////////////////////////////////////////////////////////
 
 let grid = [];                                                          //Array containing information about the whole grid
-let gridPhantom = [];
-let cellDivs = [];
-let verifPL = [];
-let verifPhantom = [];
+let gridPhantom = [];                                                   //Grid, but in list form (for coordinates switching)
+let cellDivs = [];                                                      //Array containing all cell elements
+let verifPL = [];                                                       //Verified words
+let verifPhantom = [];                                                  //Verified letters
 
-let wordList = [];
-let hintList = [];
+let wordList = [];                                                      //List of all words in crossword
+let hintList = [];                                                      //List of all hints (in same order)
 
-let wordsPerGrid = 10;
-let cellSize = 2.5;
-const vw = window.innerWidth / 100;
+let wordsPerGrid = 10;                                                  //Number of words in generated grid
+let cellSize = 2.5;                                                     //Default cell size
+const vw = window.innerWidth / 100;                                     //Convert vw to px
 
-let callCount = 0;
+let callCount = 0;                                                      //Counts how many times has the function been called
 
-let currentScore = 0;
-let highScore = 0;
-let attempt = 0;
+let currentScore = 0;                                                   //Current score
+let highScore = 0;                                                      //High score
+let attempt = 0;                                                        //Attempt number
 
+
+////////////////////////////////////////////////
+
+/// INSERT NEW WORDS & HINTS HERE ! ////////////
+
+////////////////////////////////////////////////
 
 wordList.push("Creatinine");
 hintList.push("A substance used to estimate GFR.");
@@ -131,113 +137,80 @@ hintList.push("The region with the highest osmolarity in the kidney.");
 wordList.push("Aquaporins");
 hintList.push("Membrane proteins that increases water permeability.");
 
+
 for (let i = 0; i < wordList.length; i++){
-    wordList[i] = wordList[i].toUpperCase();
+    wordList[i] = wordList[i].toUpperCase();            //Convert all words to uppercase
 }
 
-document.getElementById("wordsPerGrid").setAttribute("max",wordList.length);
-
-let VHints = [];
-let HHints = [];
+let VHints = [];                                                        //List containing all vertical hints
+let HHints = [];                                                        //List containing all horizontal hints
 
 let placementList = [];                                                 //List of placements [Word, x, y, orientation]
-let selPlacement = [];
-let selID = -1;
+let selPlacement = [];                                                  //Selected word
+let selID = -1;                                                         //Selected cell (<0 if outside grid)
 
-let gridContainer = document.getElementById('gridContainer').getBoundingClientRect();
-let desired_ratio = gridContainer.width/gridContainer.height;
+let gridContainer = document.getElementById('gridContainer').getBoundingClientRect();       //Grid container (for sizing)
+let desired_ratio = gridContainer.width/gridContainer.height;                               //Ratio of container size (for crossword sizing)
 
-document.getElementById("wordsPerGrid").addEventListener('input', updateWPG, false);                             
-document.getElementById("wordsPerGrid").addEventListener('change', updateWPG, false);
 
-function updateWPG(){
-    wordsPerGrid = document.getElementById("wordsPerGrid").value;
-    document.getElementById("wpgValue").textContent = wordsPerGrid;
-    cellSize = 1.5 + (25 - wordsPerGrid)/15;
-}
-
-async function start(){
-    let startTime = Date.now();
-    document.getElementById("startScreen").style.display = "none";
-    document.getElementById("loadingScreen").style.display = "flex";
-    await delay(10);
-    do{
-        [grid, placementList] = createBestGrid(wordList, wordsPerGrid*10);                 //Create a grid from 10 samples (working value)
-    }while(placementList.length < wordsPerGrid);    
-    document.getElementById("loadingScreen").style.display = "none";
-    console.log(`Generation Time: ${Math.round(Date.now() - startTime)/1000} s`);
-    console.log(`${callCount} grids generated.`);
-    console.log(`Final grid entropy: ${Math.round(gridEntropy(grid, placementList, wordList))}`);
-    cellSize = Math.min(0.95*gridContainer.height/grid.length,0.85*gridContainer.width/grid[0].length)/vw;
-    generateGrid(grid);
-    cellDivs.forEach((cell, i) => {
-        if (gridPhantom[i] != ' '){
-            cell.onclick = function(){cellSel(i, '')};
-            verifPhantom.push(false);
-        }
-        else{
-            cell.onclick = deselect;
-            verifPhantom.push(true);
-        }
-    })
-    placementList.forEach(pl => verifPL.push(false));
-}
-
-//document.addEventListener("DOMContentLoaded", async function() {
-//    await delay(500);
-//    start();
-//  });
 
 /// EVENT LISTENERS //////////////////////////////////////////////////////////////////////////
 
+document.getElementById("wordsPerGrid").setAttribute("max",wordList.length);    //Set maximum of slider to number of words
 
+document.getElementById("wordsPerGrid").addEventListener('input', updateWPG, false);        //Record when slider is changed
+document.getElementById("wordsPerGrid").addEventListener('change', updateWPG, false);       //Record when slider is changed
 
-document.getElementById("gridContainer").addEventListener('click', (event) => {
-    if (event.target === event.currentTarget) {
+document.getElementById("checkButton").addEventListener("click", verifyGrid);   //Big check button verification trigger
+
+document.getElementById("gridContainer").addEventListener('click', (event) => {             //Deselect when clicking outside grid
+    if (event.target === event.currentTarget) {                                             //bug fix (forgot why)
         deselect();
     }
   });
 
-document.addEventListener('keydown', (event) => {
+document.addEventListener('keydown', (event) => {                                           //Detect when a key is pressed
     if (event.key == "Tab"){
-        event.preventDefault();
+        event.preventDefault();                                                             //Bug fix
     }
-    pressKey(event.key);})
+    pressKey(event.key);})                                                                  //Trigger key handling
 
 function pressKey(key){
-    if (selID == -2){
+    if (selID == -2){                                                                       //If no cell is selected, nothing to do
         return 0;
     }
-    if (key.length === 1 && key.match(/[a-zA-Z]/)) {
-        if (!cellDivs[selID].classList.contains('correct')){
-            cellDivs[selID].classList.remove('incorrect');
-            cellDivs[selID].innerHTML = key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);
+    if (key.length === 1 && key.match(/[a-zA-Z]/)) {                                        //If it's a single letter
+        if (!cellDivs[selID].classList.contains('correct')){                                //And the cell has not been validated yet
+            cellDivs[selID].classList.remove('incorrect');                                  //Reset style
+            cellDivs[selID].innerHTML = key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);     //Write letter
         }
-        let ids = placementToID(selPlacement);
+        let ids = placementToID(selPlacement);                                              //Find next cell in current word
         const nextID = ids[Math.min(ids.indexOf(selID) + 1, ids.length - 1)];
-        cellSel(nextID, selPlacement[3]);
+        cellSel(nextID, selPlacement[3]);                                                   //Select said cell
     }
     switch (key) {
-        case 'Backspace':
-            if (cellDivs[selID].innerHTML[0] == ' ' || cellDivs[selID].classList.contains('correct')){
-                let ids = placementToID(selPlacement);
-                const previousID = ids[Math.max(ids.indexOf(selID) - 1, 0)];
-                cellSel(previousID, selPlacement[3]);
+        case 'Backspace':                                                                   //If backspace is pressed
+            if (cellDivs[selID].innerHTML[0] == ' ' || cellDivs[selID].classList.contains('correct')){      //If cell is empty or already validated
+                let ids = placementToID(selPlacement);  
+                const previousID = ids[Math.max(ids.indexOf(selID) - 1, 0)];                //Find previous cell in current word
+                cellSel(previousID, selPlacement[3]);                                       //Select said cell
             }
-            if (!cellDivs[selID].classList.contains('correct')){
-                cellDivs[selID].classList.remove('incorrect');
-                cellDivs[selID].innerHTML = ' ' + cellDivs[selID].innerHTML.slice(1);
+            if (!cellDivs[selID].classList.contains('correct')){                            //Otherwise, if cell is not empty
+                cellDivs[selID].classList.remove('incorrect');                              //Reset style
+                cellDivs[selID].innerHTML = ' ' + cellDivs[selID].innerHTML.slice(1);       //Remove letter
             }
             break;
         case 'Tab':
-            cellSel(selID, '');
+            cellSel(selID, '');                                                             //Switch between horizontal and vertical at intersections
             break;
         case 'Enter':
-            deselect();
+            deselect();                                                                     //Deselect
             break;
         case 'Escape':
-            deselect();
+            deselect();                                                                     //Deselect
             break;
+
+        //Arrow handling: find the next cell in the grid that belongs to the crossword
         case 'ArrowUp':
             [x,y] = switchCoords(selID);
             temp = x-1;
@@ -281,6 +254,42 @@ function pressKey(key){
       }
   };
 
+/// GENERAL FUNCTIONALITY ///////////////////////////////////////////////////////////////////
+
+function updateWPG(){
+    wordsPerGrid = document.getElementById("wordsPerGrid").value;       //Get value of slider
+    document.getElementById("wpgValue").textContent = wordsPerGrid;     //Change displayed value
+    cellSize = 1.5 + (25 - wordsPerGrid)/15;                            //Change cell size (more words = smaller cells)
+}
+
+async function start(){                                                 //Starts generating and loading the crossword
+    let startTime = Date.now();                                         //To record loading time
+    document.getElementById("startScreen").style.display = "none";      //Hide start screen
+    document.getElementById("loadingScreen").style.display = "flex";    //Show loading screen
+    await delay(10);
+    do{
+        [grid, placementList] = createBestGrid(wordList, wordsPerGrid*10);                  //Create a grid from 10*N_words samples (working value)
+    }while(placementList.length < wordsPerGrid);                                            //Repeat if not all words were placed
+    document.getElementById("loadingScreen").style.display = "none";                        //Hide loading screen
+    console.log(`Generation Time: ${Math.round(Date.now() - startTime)/1000} s`);           //For debug
+    console.log(`${callCount} grids generated.`);                                           //For debut
+    console.log(`Final grid entropy: ${Math.round(gridEntropy(grid, placementList, wordList))}`);   //For debug
+    cellSize = Math.min(0.95*gridContainer.height/grid.length,0.85*gridContainer.width/grid[0].length)/vw;  //Set cellsize relative to grid size
+    generateGrid(grid);                                                                     //Create grid elements
+    cellDivs.forEach((cell, i) => {
+        if (gridPhantom[i] != ' '){
+            cell.onclick = function(){cellSel(i, '')};                                      //Add click listener to cells for selection
+            verifPhantom.push(false);                                                       //Generate verification phantom
+        }
+        else{
+            cell.onclick = deselect;                                                        //If it's a hidden cell, click listener to deselect
+            verifPhantom.push(true);                                                        //Generate verification phantom (no need to check these)
+        }
+    })
+    placementList.forEach(pl => verifPL.push(false));                                       //Generate verification placement list
+}
+
+
 /// CROSSWORD CREATION //////////////////////////////////////////////////////////////////////
 
 function createBestGrid(wL, n){                                         //Creates n grids, scores them, then chooses the best one
@@ -289,7 +298,7 @@ function createBestGrid(wL, n){                                         //Create
     for (let i = 0; i < n; i++){                                        
         let [grid, pL] = createGrid(wL);                                //Create a grid randomly
         let entropy = gridEntropy(grid, pL, wL);                        //Score it 
-        if (pL.length < wordsPerGrid){
+        if (pL.length < wordsPerGrid){                                  //If there are not enough words, score it badly
             entropy = 1000000;
         }
         grids.push([grid, pL, entropy]);                                //Register
@@ -313,8 +322,8 @@ function createGrid(wL){                                                //Create
     let calls = 0;                                                      //Count number of calls to the while loop (avoid infinite loops)
     while (remainingWords.length > 0){                                  //While some words have not been placed
         calls += 1;                                                     //Increase count
-        let previousGrid = JSON.parse(JSON.stringify(grid));
-        let previouspL = JSON.parse(JSON.stringify(placementList));
+        let previousGrid = JSON.parse(JSON.stringify(grid));            //Record current state
+        let previouspL = JSON.parse(JSON.stringify(placementList));     //Record current state
         if (calls > 3*wL.length){                                       //If number of calls is too high
             return [grid, placementList];                               //Stop and return partial result
         }
@@ -331,7 +340,7 @@ function createGrid(wL){                                                //Create
             let [x, y, o] = candidates[Math.floor(Math.random() * candidates.length)];      //Choose a random position from all possibilities
             placeWord(grid, placementList, word, [x, y], o);            //Place the word
         }
-        if (gridEntropy(grid, placementList, wL) >= 1000000){
+        if (gridEntropy(grid, placementList, wL) >= 1000000){           //If there is a major issue with the placement, go back!
             grid = previousGrid;
             placementList = previouspL;
             remainingWords.push(word);
@@ -524,58 +533,40 @@ async function generateGrid(grid, final){                               //Create
     generateLabels();        
 }
 
-async function reveal(pos){
+async function reveal(pos){                                             //Recursive function to have a nice animation
     let [x,y] = pos;
     let i = switchCoords(pos);
     if (x < 0 || y < 0 || x >= grid.length || y >= grid[0].length || !cellDivs[i].classList.contains('hidden')){
-        return 0;
+        return 0;                                                       //If cell should not be revealed (already revealed or outside grid)
     }
-    if (gridPhantom[i] != ' '){
-        cellDivs[i].classList.remove('hidden');
+    if (gridPhantom[i] != ' '){                                         //If it's a crossword cell
+        cellDivs[i].classList.remove('hidden');                         //Reveal it
         await delay(30);
-        reveal([x-1,y]);
+        reveal([x-1,y]);                                                //Reveal its neighbours
         reveal([x+1,y]);
         reveal([x,y-1]);
         reveal([x,y+1]);
     }
 }
 
-function insertLabel(hL, text){
-    let hint = document.createElement("span");
-    hint.textContent = text;
-    hint.classList.add("hint");
-    let inserted = false;
-    for (let i = 1; i < hL.children.length; i++) {
-        if (text.localeCompare(hL.children[i].textContent) < 0) {
-        hL.insertBefore(hint, hL.children[i]);
-        inserted = true;
-        break;
-        }
-    }
-    if (!inserted) {
-        hL.appendChild(hint);
-    }
-    return hint;
-}
-
 function generateLabels(){
-    const hPlacements = placementList.filter(item => item[3] === 'H').sort((a, b) => a[1] - b[1]);  // Sort by the second element
-    const vPlacements = placementList.filter(item => item[3] === 'V').sort((a, b) => a[2] - b[2]);  // Sort by the third element
+    const hPlacements = placementList.filter(item => item[3] === 'H').sort((a, b) => a[1] - b[1]);  // Sort by the second element (x position)
+    const vPlacements = placementList.filter(item => item[3] === 'V').sort((a, b) => a[2] - b[2]);  // Sort by the third element  (y position)
     placementList = [...hPlacements, ...vPlacements];
-    hPlacements.forEach((placement,i) => {
+    hPlacements.forEach((placement,i) => {                                                          //Handle horizontal words
         let [word, x, y, o] = placement;
-        HHints.push(hintList[wordList.indexOf(word)]);
-        let label = document.createElement("div");
-        label.classList.add("label");
-        label.textContent = (i+1);
-        cellDivs[switchCoords([x,y])].appendChild(label);
-        let hint = document.createElement("span");
-        hint.textContent = (i+1).toString() + " - " + hintList[wordList.indexOf(word)];
-        hint.classList.add("hint");
-        document.getElementById("HHints").appendChild(hint);
-        hint.onclick = (()=>cellSel(switchCoords([x,y]), 'H'));
+        HHints.push(hintList[wordList.indexOf(word)]);                                              //Add to list of horizontal hints
+        let label = document.createElement("div");                                                  //Create label number for first cell
+        label.classList.add("label");                                                               //Style it
+        label.textContent = (i+1);                                                                  //Set the text
+        cellDivs[switchCoords([x,y])].appendChild(label);                                           //Add it to first cell
+        let hint = document.createElement("span");                                                  //Create hint element
+        hint.textContent = (i+1).toString() + " - " + hintList[wordList.indexOf(word)];             //Set text
+        hint.classList.add("hint");                                                                 //Style it
+        document.getElementById("HHints").appendChild(hint);                                        //Add it to the list
+        hint.onclick = (()=>cellSel(switchCoords([x,y]), 'H'));                                     //Add event listener to select word
     })
-    vPlacements.forEach((placement,i) => {
+    vPlacements.forEach((placement,i) => {                                                          //Same thing here, but for vertical words
         let [word, x, y, o] = placement;
         VHints.push(hintList[wordList.indexOf(word)]);
         let label = document.createElement("div");
@@ -595,7 +586,7 @@ function switchCoords(coords){                                          //Switch
     return typeof coords == 'number' ? [Math.floor(coords/n), coords%n] : coords[0]*n + coords[1];
 }
 
-function placementToID(placement){
+function placementToID(placement){                                      //Gets the list of cell IDs corresponding to a given word
     [word, x, y, o] = placement;
     let ids = [];
     for (var i = 0; i < word.length; i++){
@@ -604,7 +595,7 @@ function placementToID(placement){
     return ids;
 }
 
-function IDtoPlacement(i){
+function IDtoPlacement(i){                                              //Get the list of words (max 2) that the given cell is in
     pls = [];
     placementList.forEach(placement => {
         let ids = placementToID(placement);
@@ -617,7 +608,7 @@ function IDtoPlacement(i){
 
 let previousValue = '';
 
-function phantomInput(){
+function phantomInput(){                                                //For tablet compatibilty: abandoned for now
     let inputP = document.createElement('input');
     inputP.classList.add("inputPhantom");
     document.body.appendChild(inputP);
@@ -638,41 +629,41 @@ function phantomInput(){
 
 function cellSel(i, o){
     cellDivs.forEach(cell => {
-        cell.classList.remove('main');
+        cell.classList.remove('main');                                  //Remove style from currently selected word
         cell.classList.remove('secondary');
     })
-    let placements = IDtoPlacement(i);
+    let placements = IDtoPlacement(i);                                  //Get the words corresponding to current cell
     if (o != ''){
-        placements = placements.filter((x) => x[3] == o);
+        placements = placements.filter((x) => x[3] == o);               //If an orientation is specified, select the corresponding word
     }
-    let ids = [];
-    if ((i != selID && placements.includes(selPlacement) && o == '')){
-        ids = placementToID(selPlacement);
+    let ids = [];                                                       
+    if ((i != selID && placements.includes(selPlacement) && o == '')){  //If new cell is selected, but is on the same word, stay on that wprd
+        ids = placementToID(selPlacement);                              //Get all cells in the selected word
     }
-    else if (i == selID && placements[0] == selPlacement && placements.length > 1){
+    else if (i == selID && placements[0] == selPlacement && placements.length > 1){     //Otherwise, switch to the other word
         ids = placementToID(placements[1]);
         selPlacement = placements[1];
     } 
-    else{
+    else{                                                               //Otherwise, get the first corresponding word
         ids = placementToID(placements[0]);
         selPlacement = placements[0];
     }
     ids.forEach(j => {
-        cellDivs[j].classList.add('secondary');
+        cellDivs[j].classList.add('secondary');                         //Highlight selected word
     })
-    cellDivs[i].classList.add('main');
+    cellDivs[i].classList.add('main');                                  //Highlight selected cell
     cellDivs[i].classList.remove('secondary');
     selID = i;
-    let plID = placementList.indexOf(selPlacement);
+    let plID = placementList.indexOf(selPlacement);                     
     let hints = document.querySelectorAll('.hint');
-    hints.forEach(h => h.classList.remove("currentHint"));
-    Array.from(hints)[plID].classList.add("currentHint");
-    Array.from(hints)[plID].scrollIntoView({
+    hints.forEach(h => h.classList.remove("currentHint"));              //Deselect previous hint
+    Array.from(hints)[plID].classList.add("currentHint");               //Select new hint
+    Array.from(hints)[plID].scrollIntoView({                            //Bring to view selected hint
         behavior: 'smooth',  // Smooth scrolling animation
         block: 'nearest',    // Aligns the element to the nearest edge of the container
         inline: 'nearest'
       });
-      if (isMobile()){
+      if (isMobile()){                                                  //For tablet functionality (abandoned for now)
         if(!document.querySelector('.inputPhantom')){phantomInput();}
       else{
         document.querySelector('.inputPhantom').focus();
@@ -680,39 +671,42 @@ function cellSel(i, o){
       }
 }
 
-function deselect(){
-    selID = -2;
-    selPlacement = [];
+function deselect(){                                                //Handle cell deselection
+    selID = -2;                                                     //Deselect cell
+    selPlacement = [];                                              //Deselect word
     cellDivs.forEach(cell => {
-        cell.classList.remove('main');
+        cell.classList.remove('main');                              //Visualize deselection
         cell.classList.remove('secondary');
     })
     let hints = document.querySelectorAll('.hint');
-    hints.forEach(h => h.classList.remove("currentHint"));
+    hints.forEach(h => h.classList.remove("currentHint"));          //Visualize deselection
     document.querySelector('.inputPhantom').remove();
     previousValue = '';
 }
 
-function verifyGrid(){
+
+// VERICATION AND SCORING ////////////////////////////////////////////
+
+function verifyGrid(){                                              //Handles verification
     attempt += 1;
-    cellDivs.forEach(cell => cell.classList.remove('revealed'));
+    cellDivs.forEach(cell => cell.classList.remove('revealed'));    //Reset verification animation
     placementList.forEach((pl,i) => {
-        if (!verifPL[i]){
+        if (!verifPL[i]){                                           //If word has not been validated yet
             let correct = true;
-            placementToID(pl).forEach(id => correct = (correct && cellDivs[id].textContent[0] == gridPhantom[id]));
-            verifPL[i] = correct;
-            currentScore += correct * (attempt == 1 ? 10 : attempt == 2 ? 5 : 1);
-            placementToID(pl).forEach(id => verifPhantom[id] = verifPhantom[id] || correct);
+            placementToID(pl).forEach(id => correct = (correct && cellDivs[id].textContent[0] == gridPhantom[id]));     //Check each letter of the word
+            verifPL[i] = correct;                                   //Record result for the word
+            currentScore += correct * (attempt == 1 ? 10 : attempt == 2 ? 5 : 1);       //Score depending on result
+            placementToID(pl).forEach(id => verifPhantom[id] = verifPhantom[id] || correct);        //Record results on cells
         }
     }
     )
-    displayScore();
+    displayScore();                                                 //Display score
     if (selID > 0){
-        revealCorrect(switchCoords(selID));
-        deselect();
+        revealCorrect(switchCoords(selID));                         //Start revelation animation in current position if possible
+        deselect();                                                 //Deselect current cells 
     }
     else{
-        revealCorrect([placementList[0][1],placementList[0][2]]);
+        revealCorrect([placementList[0][1],placementList[0][2]]);   //Reveal starting from first cell
     }
 
 }
@@ -728,7 +722,7 @@ function displayScore(){
     
   }
 
-async function revealCorrect(pos){
+async function revealCorrect(pos){                                  //Recursive animation for verification revelation
     let [x,y] = pos;
     let i = switchCoords(pos);
     if (x < 0 || y < 0 || x >= grid.length || y >= grid[0].length || cellDivs[i].classList.contains('revealed')){
@@ -746,4 +740,3 @@ async function revealCorrect(pos){
     }
 }
 
-document.getElementById("checkButton").addEventListener("click", verifyGrid);
