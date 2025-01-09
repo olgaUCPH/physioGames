@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Crosswords - Physiology Games</title>
+        <link rel="icon" type="image/vnd.icon" href="../assets/favicon.ico">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <script language="JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.2.1/math.js"></script>
+        <!-- Left Column -->
+        <div id="leftColumn">
+            <div id="titleBox" onclick="location.href='../index.html'">
+                <h1 id="title">Crosswords</h1>
+                <h2 id="author">Created by Carl Ferlay, under the supervision of Olga Sosnovtseva, Niels-Henrik Holstein-Rathlou and Charlotte Mehlin Sørensen</h2>
+            </div>
+            <div id="scoreBox">
+                <h3 class="scoreText" style="top: 0px; left: 0px">Current Score:</h3>
+                <h3 class="scoreText" style="top: 0px; right: 0px"id="currentScore">0</h3>
+                <h3 class="scoreText" style="bottom: 0px; left: 0px">High Score:</h3>
+                <h3 class="scoreText" style="bottom: 0px; right: 0px" id="highScore">0</h3>
+            </div>
+            <div id="instructionsBox">
+                <p>In this game you can test your knowledge of renal physiology.</p>
+                <p>Select number of questions (words) you want to have in your crossword, and start answering the questions.</p>
+                <p>Enjoy!</p>
+            </div>
+            <div id="checkButton">Check</div>
+        </div>
+        <!-- Right Column -->
+        <div id="rightColumn">
+            <div id="gridContainer">
+                <!-- Start screen (difficulty selection) -->
+                <div id="startScreen">
+                    <button id="generate" onclick="start()">Generate Crossword</button>
+                    <h1>Words per Grid:</h1>
+                    <h2 id="wpgValue">10</h2>
+                    <input id="wordsPerGrid" class="slider" type="range" min="10" max="25" value="10" step="1">
+                </div>
+                <!-- Loading Screen -->
+                <div id="loadingScreen">
+                    <div id="generating"><h1>Generating</h1><h1 id="d1">.</h1><h1 id="d2">.</h1><h1 id="d3">.</h1></div>
+                    <h2>This might take a few seconds</h2>
+                    <img id="loading" src="assets/loading.png">
+                </div>
+                <!-- Grid Container -->
+                <div id="grid" class="no-select">
+                </div>
+                <!-- Right-side buttons column -->
+                <div id = "buttonsColumn">
+                    <div class="buttonWrapper">
+                        <img id="colorButton" src="../assets/colorIcon.png">
+                        <span>Change color theme</span>
+                    </div>
+                    <div class="buttonWrapper">
+                        <img id="resetButton" src="../assets/resetIcon.png" onclick="location.reload()">
+                        <span>Go back to main menu</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Arsenal (contains all hints) -->
+            <div id="arsenalContainer">
+                <div class="hlWrapper">
+                    <h2>Horizontal</h2>
+                    <div id="HHints" class="hintList"></div>
+                </div>
+                <div class="hlWrapper">
+                    <h2>Vertical</h2>
+                    <div id="VHints" class="hintList"></div>
+                </div>
+            </div>
+        </div>
+        <script src="../color_script.js"></script>      <!-- Shared color handler -->
+        <script src="script.js"></script>
+    </body>
+</html>
