@@ -236,11 +236,6 @@ body {
 
 /* Right Column ********************** */
 
-#version:hover {
-  cursor: pointer;
-  transform: scale(1.10);
-}
-
 #rightColumn{
     margin: calc(min(1vh,1vw));
     width: calc(max(100vw - 17vw,100vh - 50vh));
@@ -293,6 +288,12 @@ body {
 
 
 /* Right side button column */
+
+
+#version:hover {
+  cursor: pointer;
+  transform: scale(1.10);
+}
 
 #buttonsColumn{
   position: absolute;
