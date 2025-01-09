@@ -289,6 +289,11 @@ body {
 
 /* Right side button column */
 
+#version:hover {
+  cursor: pointer;
+  transform: scale(1.10);
+}
+
 #buttonsColumn{
   position: absolute;
   right: 0.5vw;
@@ -381,7 +386,7 @@ body {
   -webkit-appearance: none;
   appearance: none;
   border-radius: 2px;  
-  height: 10px;
+  height: 14px;
   width: 20vw;
   background: #d3d3d3;
   outline: none;
