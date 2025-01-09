@@ -62,81 +62,95 @@ let attempt = 0;                                                        //Attemp
 
 ////////////////////////////////////////////////
 
-wordList.push("Creatinine");
-hintList.push("A substance used to estimate GFR.");
+wordList.push("Kreatinin");
+hintList.push("Et stof der kan benyttes til bestemmelse af GFR");
 
 wordList.push("Glucose");
-hintList.push("A substance whose renal clearance normally is zero.");
+hintList.push("Et stof hvis renale clearance normalt er 0");
 
-wordList.push("Proximal");
-hintList.push("Which nephron segment has the highest water reabsorption.");
+wordList.push("Proximale");
+hintList.push("Nefron segmentet med den største vandreabsorption");
 
 wordList.push("Urea");
-hintList.push("A substance secreted in thin ALH.");
+hintList.push("Et stof der secerneres i det ascenderende ben af Henles slynge");
 
-wordList.push("Lithium");
-hintList.push("A substance that can be used to estimate the flow at the end of proximal tubule.");
+wordList.push("Litium");
+hintList.push("Et stof hvis clearance er lig flowhastigheden ud af den proximale tubulus");
 
 wordList.push("Renin");
-hintList.push("An enzyme secreted by the kidney.");
+hintList.push("Et enzym der secerneres fra nyren");
 
-wordList.push("Aldosterone");
-hintList.push("A hormone released with increased plasma AngII and plasma K+.");
+wordList.push("Aldosteron");
+hintList.push("Et hormon hvis sekretion stimuleres af øget plasma AngII og plasma K+");
 
 wordList.push("Vasopressin");
-hintList.push("A hormone that regulates water reabsorption in collecting duct.");
+hintList.push("Et hormon der regulerer vandreabsorptionen i samlerørerne");
 
-wordList.push("Furosemide");
-hintList.push("A loop diuretic.");
+wordList.push("Furosemid");
+hintList.push("Et slynge (loop) diuretikum");
 
-wordList.push("Parathyroid");
-hintList.push("A hormone that stimulates Ca++ reabsorption in the kidney.");
+wordList.push("Parathyroideahormon");
+hintList.push("Et hormon der stimulerer Ca++ reabsorptionen i nyren");
 
-wordList.push("Paraaminohippurate");
-hintList.push("A substance with one of the highest plasma clearances.");
+wordList.push("Paraaminohippurat");
+hintList.push("Et stof med en af de højeste værdier for renal clearance");
 
 wordList.push("Ammonium");
-hintList.push("A component of net acid excretion.");
+hintList.push("En komponent i netto syreudskillelsen");
 
-wordList.push("Bicarbonate");
-hintList.push("A compound produced by carbanhydrase.");
+wordList.push("Bikarbonat");
+hintList.push("Et stof hvis dannelse katalyseres af kulsyreanhydrase");
 
-wordList.push("Albumine");
-hintList.push("A substance that is not passing the filtration barrier.");
+wordList.push("Albumin");
+hintList.push("Et stof der ikke normalt passerer filtrationsbarrieren");
 
-wordList.push("Acidosis");
-hintList.push("A condition in which there is too much acid in the body.");
+wordList.push("Acidose");
+hintList.push("En tilstand med overskud af syre i kroppen");
 
 wordList.push("Clearance");
-hintList.push("A concept used to estimate renal function.");
+hintList.push("Et mål for nyrens funktion");
 
-wordList.push("Phosphate");
-hintList.push("A buffer in the tubular fluid.");
+wordList.push("Fosfat");
+hintList.push("En buffer i tubulusvæsken");
 
-wordList.push("Podocyte");
-hintList.push("A cell that is part of the filtration barrier.");
+wordList.push("Podocyt");
+hintList.push("En celle der er en del af filtrationsbarrieren");
 
-wordList.push("Hypocalcemia");
-hintList.push("A condition with increased PTH secretion.");
+wordList.push("Hypocalcæmi");
+hintList.push("En tilstand med forøget plasma PTH");
 
-wordList.push("Nephron");
-hintList.push("Functional unit of the kidney.");
+wordList.push("Nefronet");
+hintList.push("Nyrens funktionelle enhed");
 
-wordList.push("Respiratory");
-hintList.push("A form of alkalosis.");
+wordList.push("Respiratorisk");
+hintList.push("En type af alkalose");
 
-wordList.push("Descending");
-hintList.push("The limp of the loop of Henle with high water permeability.");
+wordList.push("Descenderende");
+hintList.push("Segment af Henles slynge med den højeste vandpermeabilitet");
 
-wordList.push("Erythropoietin");
-hintList.push("A hormone that regulates the amount of red blood cells.");
+wordList.push("Erytropoietin");
+hintList.push("Et hormon der regulerer dannelsen af røde blodlegemer");
 
 wordList.push("Medulla");
-hintList.push("The region with the highest osmolarity in the kidney.");
+hintList.push("Region i nyren med den højeste osmolaritet");
 
-wordList.push("Aquaporins");
-hintList.push("Membrane proteins that increases water permeability.");
+wordList.push("Aquaporiner");
+hintList.push("Membranproteiner der øger tubulus vandpermeabilitet");
 
+wordList.push("Somatiske");
+hintList.push("Type af nervefibre der innerverer urethras eksterne (rhabdo) sphincter");
+
+wordList.push("Parasympatiske");
+hintList.push("Del af det autonome nervesystem der kontraherer detrusor vesicae");
+
+wordList.push("Pons");
+hintList.push("Beliggenheden af det primære miktionscenter");
+
+wordList.push("Ekskretionsfraktionen");
+hintList.push("Den udskilte mængde af et stof i forhold til den udfiltrerede mængde");
+
+wordList.push("Filtrationsfraktionen");
+hintList.push("Fraktion af det renale plasmaflow der filtreres i glomerulus");
 
 for (let i = 0; i < wordList.length; i++){
     wordList[i] = wordList[i].toUpperCase();            //Convert all words to uppercase
@@ -179,7 +193,8 @@ function pressKey(key){
     if (selID == -2){                                                                       //If no cell is selected, nothing to do
         return 0;
     }
-    if (key.length === 1 && key.match(/[a-zA-Z]/)) {                                        //If it's a single letter
+    //if (key.length === 1 && key.match(/[a-zA-Z]/)) {                                        //If it's a single letter
+    if (key.length === 1 && key.match(/[\p{Letter}\p{Mark}]+/gu)) {                          //If it's a single letter. Changed to include Danish letters!
         if (!cellDivs[selID].classList.contains('correct')){                                //And the cell has not been validated yet
             cellDivs[selID].classList.remove('incorrect');                                  //Reset style
             cellDivs[selID].innerHTML = key.toUpperCase() + cellDivs[selID].innerHTML.slice(1);     //Write letter
