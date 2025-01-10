@@ -146,23 +146,29 @@ hintList.push("Del af det autonome nervesystem der kontraherer detrusor vesicae"
 wordList.push("Pons");
 hintList.push("Beliggenheden af det primære miktionscenter");
 
-wordList.push("Ekskretionsfraktionen");
+wordList.push("Ekskretionsfraktion");
 hintList.push("Den udskilte mængde af et stof i forhold til den udfiltrerede mængde");
 
-wordList.push("Filtrationsfraktionen");
+wordList.push("Filtrationsfraktion");
 hintList.push("Fraktion af det renale plasmaflow der filtreres i glomerulus");
 
 wordList.push("Hovedcelle");
 hintList.push("Den dominerende celletype i samlerørerne");
 
 wordList.push("Hypokaliæmi");
-hintList.push("Ved hyperaldosteronisme ses denn tilstand som oftest");
+hintList.push("Ved hyperaldosteronisme ses denne tilstand som oftest");
 
 wordList.push("Calcium");
 hintList.push("Slynge (loop) diuretika øger udskillelsen af dette stof");
 
 wordList.push("Positiv");
 hintList.push("Under vanddiurese er fritvands-clearance ...?");
+
+wordList.push("Hypothalamus");
+hintList.push("Område i CNS hvor tørstcentret er beliggende");
+
+wordList.push("Blærehals");
+hintList.push("Denne struktur udgør blærens øvre kontinenszone");
 
 
 for (let i = 0; i < wordList.length; i++){
