@@ -152,6 +152,19 @@ hintList.push("Den udskilte mængde af et stof i forhold til den udfiltrerede m�
 wordList.push("Filtrationsfraktionen");
 hintList.push("Fraktion af det renale plasmaflow der filtreres i glomerulus");
 
+wordList.push("Hovedcelle");
+hintList.push("Den dominerende celletype i samlerørerne");
+
+wordList.push("Hypokaliæmi");
+hintList.push("Ved hyperaldosteronisme ses denn tilstand som oftest");
+
+wordList.push("Calcium");
+hintList.push("Slynge (loop) diuretika øger udskillelsen af dette stof");
+
+wordList.push("Positiv");
+hintList.push("Under vanddiurese er fritvands-clearance ...?");
+
+
 for (let i = 0; i < wordList.length; i++){
     wordList[i] = wordList[i].toUpperCase();            //Convert all words to uppercase
 }
