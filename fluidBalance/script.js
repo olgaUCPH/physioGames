@@ -628,7 +628,7 @@ function consistencyCheck(){
   let bool = true;                                            //Boolean to check if one of the lines is wrong (avoid duplicate error messages)
   const kTtext = document.getElementById("kTtext");           //Get end window text element
   kTtext.innerHTML = "Your results are inconsistent.</br>";   //Initialize text
-  if (round_1(parseFloat(gridRectangles[0].textContent) + parseFloat(gridRectangles[3].textContent)) != parseFloat(gridRectangles[6].textContent)){
+  if (round_1(parseFloat(gridRectangles[0].textContent) + parseFloat(gridRectangles[3].textContent)) - parseFloat(gridRectangles[6].textContent) >= 0.1){
     //If first column is inconsistent (volume does not sum)
     consistent = false;
     document.getElementById("volumeTrue").style.display = "none";         //Hide "correct" checkmark from first column
@@ -650,7 +650,7 @@ function consistencyCheck(){
     document.getElementById("concentrationFalse").style.display = "none"; //Hide "wrong" checkmark from second column
     document.getElementById("concentrationTrue").style.display = "block"; //Show "correct" checkmark from second column
   }
-  if (round_1(parseFloat(gridRectangles[2].textContent) + parseFloat(gridRectangles[5].textContent)) != parseFloat(gridRectangles[8].textContent)){
+  if (round_1(parseFloat(gridRectangles[2].textContent) + parseFloat(gridRectangles[5].textContent)) - parseFloat(gridRectangles[8].textContent >= 0.1)){
     //If third column is inconsistent (mosmol does not sum)
     consistent = false;
     document.getElementById("totalTrue").style.display = "none";          //Hide "correct" checkmark from third column
@@ -660,7 +660,7 @@ function consistencyCheck(){
     document.getElementById("totalFalse").style.display = "none";         //Hide "wrong" checkmark from third column
     document.getElementById("totalTrue").style.display = "block";         //Show "correct" checkmark from third column
   }
-  if (Math.abs(parseFloat(gridRectangles[0].textContent) * parseFloat(gridRectangles[1].textContent) - parseFloat(gridRectangles[2].textContent.replace(' ',''))) > 20){
+  if (Math.abs(parseFloat(gridRectangles[0].textContent) * parseFloat(gridRectangles[1].textContent) - parseFloat(gridRectangles[2].textContent.replace(' ',''))) > 30){
     //If first row is inconsistent (V*C != mosmol)
     consistent = false;
     document.getElementById("ecvTrue").style.display = "none";          //Hide "correct" checkmark from first row
@@ -672,7 +672,7 @@ function consistencyCheck(){
     document.getElementById("ecvFalse").style.display = "none";         //Hide "wrong" checkmark from first row
     document.getElementById("ecvTrue").style.display = "block";         //Show "correct" checkmark from first row
   }
-  if (Math.abs(parseFloat(gridRectangles[3].textContent) * parseFloat(gridRectangles[4].textContent) - parseFloat(gridRectangles[5].textContent.replace(' ',''))) > 20){
+  if (Math.abs(parseFloat(gridRectangles[3].textContent) * parseFloat(gridRectangles[4].textContent) - parseFloat(gridRectangles[5].textContent.replace(' ',''))) > 30){
     //If second row is inconsistent (V*C != mosmol)
     consistent = false;
     document.getElementById("icvTrue").style.display = "none";          //Hide "correct" checkmark from first row
@@ -684,7 +684,7 @@ function consistencyCheck(){
     document.getElementById("icvFalse").style.display = "none";         //Hide "wrong" checkmark from first row
     document.getElementById("icvTrue").style.display = "block";         //Show "correct" checkmark from first row
   }
-  if (Math.abs(parseFloat(gridRectangles[6].textContent) * parseFloat(gridRectangles[7].textContent) - parseFloat(gridRectangles[8].textContent.replace(' ',''))) > 20){
+  if (Math.abs(parseFloat(gridRectangles[6].textContent) * parseFloat(gridRectangles[7].textContent) - parseFloat(gridRectangles[8].textContent.replace(' ',''))) > 30){
     //If third row is inconsistent (V*C != mosmol)
     consistent = false;
     document.getElementById("tbwTrue").style.display = "none";          //Hide "correct" checkmark from first row
