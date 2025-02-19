@@ -43,6 +43,14 @@ function randRange(min, max, step) {
   return round_1(min + randomStep * step);                  //Generate number
 }
 
+const replaceDuplicates = (list) => {
+  //Replace duplicates in a given number list
+  const uniqueNumbers = new Set();
+  const min = Math.min(...list), max = Math.max(...list);
+  return list.map(value => uniqueNumbers.has(value) 
+      ? (uniqueNumbers.add(value = randRange(Math.round(min * 0.9), Math.round(max * 1.1), 1)), value) 
+      : (uniqueNumbers.add(value), value));
+};  
 
 /// RELEVANT HTML ELEMENTS ////////////////////////////////////////////////////////////////////
 
@@ -313,6 +321,8 @@ function case_1(){
   M_labels.push(Math.round(TBW_0*concentration_1),Math.round(ECV_0*concentration_1),Math.round(ICV_0*concentration_1));
   M_labels.push(Math.round(ECM_0 - lost_water*concentration_0), Math.round(ICM_0 - lost_water*concentration_0), Math.round(ECM_0 - lost_water*concentration_0/2));
 
+  C_labels = replaceDuplicates(C_labels);
+
   //Shuffle and concatenate labels
   let labels = [...shuffleArray(V_labels), ...shuffleArray(C_labels), ...shuffleArray(M_labels)];
 
@@ -416,14 +426,6 @@ function case_2(){
   C_labels.push(Math.round(ECM_1/ECV_0), Math.round(ECM_0/ECV_1));
 
   //Case 2 has a chance to generate duplicate values for concentration. In this case, replace duplicates with random values
-  const replaceDuplicates = (list) => {
-    const uniqueNumbers = new Set();
-    const min = Math.min(...list), max = Math.max(...list);
-    return list.map(value => uniqueNumbers.has(value) 
-        ? (uniqueNumbers.add(value = randRange(Math.round(min * 0.9), Math.round(max * 1.1), 1)), value) 
-        : (uniqueNumbers.add(value), value));
-  };  
-
   C_labels = replaceDuplicates(C_labels);
 
   let M_labels = [TBM_0, ECM_0, ICM_0, TBM_1, ECM_1];
@@ -530,12 +532,14 @@ function case_3(){
   C_labels.push(Math.round(TBM_1/TBW_0), Math.round(TBM_0/TBW_1));
   C_labels.push(Math.round((TBM_0 + crisps/mol_weight*2000)/TBW_1), Math.round((TBM_0 + crisps/mol_weight*2000)/TBW_0));
   C_labels.push(Math.round(1.1*concentration_0), Math.round(0.9*concentration_0));
-
+  
   let M_labels = [TBM_0, ECM_0, ICM_0, TBM_1, ECM_1];
   M_labels.push(Math.round(TBM_0 + salt_mosmol/2), Math.round(ECM_0 + salt_mosmol/2));
   M_labels.push(Math.round(ICM_0 + salt_mosmol), Math.round(ICM_0 + salt_mosmol/2));
   M_labels.push(Math.round(concentration_0 * TBW_1), Math.round(TBM_0 + crisps/mol_weight*2000), Math.round(ECM_0 + crisps/mol_weight*2000));
   
+  C_labels = replaceDuplicates(C_labels);
+
   //Shuffle and concatenate labels
   let labels = [...shuffleArray(V_labels), ...shuffleArray(C_labels), ...shuffleArray(M_labels)];
 
