@@ -248,7 +248,8 @@ body {
 
 #gridContainer{
     width: 99%;
-    height: 64dvh;
+    /*height: 64dvh;*/
+    height: 70%;
     margin: calc(min(1vh,1vw));
     background-color: var(--pseudo-white);
     border-top-left-radius: 10px;
@@ -268,7 +269,8 @@ body {
 
 #arsenalContainer{
     width:99%;
-    height: 28dvh;
+    /*height: 28dvh;*/
+    height: 30%;
     margin: calc(min(1vh,1vw));
     background-color: var(--light-highlight);
     border-bottom-left-radius: 10px;
