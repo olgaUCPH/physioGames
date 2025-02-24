@@ -628,7 +628,7 @@ function consistencyCheck(){
   let bool = true;                                            //Boolean to check if one of the lines is wrong (avoid duplicate error messages)
   const kTtext = document.getElementById("kTtext");           //Get end window text element
   kTtext.innerHTML = "Your results are inconsistent.</br>";   //Initialize text
-  if (round_1(parseFloat(gridRectangles[0].textContent) + parseFloat(gridRectangles[3].textContent)) - parseFloat(gridRectangles[6].textContent) >= 0.1){
+  if (round_1(parseFloat(gridRectangles[0].textContent) + parseFloat(gridRectangles[3].textContent)) - parseFloat(gridRectangles[6].textContent) > 0.11){
     //If first column is inconsistent (volume does not sum)
     consistent = false;
     document.getElementById("volumeTrue").style.display = "none";         //Hide "correct" checkmark from first column
@@ -650,7 +650,7 @@ function consistencyCheck(){
     document.getElementById("concentrationFalse").style.display = "none"; //Hide "wrong" checkmark from second column
     document.getElementById("concentrationTrue").style.display = "block"; //Show "correct" checkmark from second column
   }
-  if (round_1(parseFloat(gridRectangles[2].textContent) + parseFloat(gridRectangles[5].textContent)) - parseFloat(gridRectangles[8].textContent >= 0.1)){
+  if (round_1(parseFloat(gridRectangles[2].textContent) + parseFloat(gridRectangles[5].textContent)) - parseFloat(gridRectangles[8].textContent > 0.1)){
     //If third column is inconsistent (mosmol does not sum)
     consistent = false;
     document.getElementById("totalTrue").style.display = "none";          //Hide "correct" checkmark from third column
@@ -710,11 +710,7 @@ function verifyGrid(){
     let allGood = true;                                                                 //Boolean that stays true if there are no mistakes
     setScore(currentScore + firstConsistent ? Math.max(6 - attempt, 1) * 10 : 0);       //If first time the table is consistent: add score (between 50 and 10 depending on attempt)
     firstConsistent = false;                                                            //Disable scoring for consistency
-    for (let i = 0; i<9; i++){
-      allGood = allGood && gridRectangles[i].textContent == answersRectangles[i];       //Check if rectangle values are correct
-      console.log(allGood);
-      ///allGood = allGood && true;
-    }
+    allGood = gridRectangles[6].textContent == answersRectangles[6] && gridRectangles[7].textContent == answersRectangles[7] && gridRectangles[8].textContent == answersRectangles[8];                  //Check if rectangle values are correct
     if (caseID == 0){                                                                   //Handle Case 0 differently, because there is no step 2
       returnW.style.animationDuration = '0s';                                           //Immediately display return window
       returnW.style.display = "flex";                                                   //Display return window
