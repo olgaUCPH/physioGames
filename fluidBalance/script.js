@@ -490,7 +490,7 @@ function case_3(){
   desc.appendChild(p);
   desc.appendChild(p2);
   //Generate short-hand case description for second part
-  document.getElementById("topDescription").innerHTML = `<b style='font-weight: 700'>Case 3 Summary</b>:  Jakob | M | ${weight} kg | ${beers} 1⁄2 L beers | ${crisps} g crisps, ${salt_concentration}% salt | NaCl:  ${mol_weight} g/mol`;
+  document.getElementById("topDescription").innerHTML = `<b style='font-weight: 700'>Case 3 Summary</b>:  Jakob | M | ${weight} kg | ${beers} x 1⁄2 L beers | ${crisps} g crisps, ${salt_concentration}% salt | NaCl:  ${mol_weight} g/mol`;
 
   //Generate reference values from case description
   const concentration_0 = 290;
@@ -710,7 +710,7 @@ function verifyGrid(){
     let allGood = true;                                                                 //Boolean that stays true if there are no mistakes
     setScore(currentScore + firstConsistent ? Math.max(6 - attempt, 1) * 10 : 0);       //If first time the table is consistent: add score (between 50 and 10 depending on attempt)
     firstConsistent = false;                                                            //Disable scoring for consistency
-    allGood = gridRectangles[6].textContent == answersRectangles[6] && gridRectangles[7].textContent == answersRectangles[7] && gridRectangles[8].textContent == answersRectangles[8];                  //Check if rectangle values are correct
+    allGood = gridRectangles[5].textContent == answersRectangles[5] && gridRectangles[6].textContent == answersRectangles[6] && gridRectangles[7].textContent == answersRectangles[7] && gridRectangles[8].textContent == answersRectangles[8];     //Check if rectangle values are correct
     if (caseID == 0){                                                                   //Handle Case 0 differently, because there is no step 2
       returnW.style.animationDuration = '0s';                                           //Immediately display return window
       returnW.style.display = "flex";                                                   //Display return window
