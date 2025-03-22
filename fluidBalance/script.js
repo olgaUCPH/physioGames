@@ -711,6 +711,8 @@ function verifyGrid(){
     setScore(currentScore + firstConsistent ? Math.max(6 - attempt, 1) * 10 : 0);       //If first time the table is consistent: add score (between 50 and 10 depending on attempt)
     firstConsistent = false;                                                            //Disable scoring for consistency
     allGood = gridRectangles[5].textContent == answersRectangles[5] && gridRectangles[6].textContent == answersRectangles[6] && gridRectangles[7].textContent == answersRectangles[7] && gridRectangles[8].textContent == answersRectangles[8];     //Check if rectangle values are correct
+    console.log(answersRectangles);
+    console.log(allGood);
     if (caseID == 0){                                                                   //Handle Case 0 differently, because there is no step 2
       returnW.style.animationDuration = '0s';                                           //Immediately display return window
       returnW.style.display = "flex";                                                   //Display return window
