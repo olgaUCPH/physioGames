@@ -53,9 +53,9 @@ let caseID = 0;                                                             //Us
 let attempt = 0;                                                            //Attempt number
 
 let ranges = [];                                                            //Contains all verification ranges
-ranges.push([[280,320],[280,320],[1100,1200],[150,250],[100,200],[250,350],[1100,1200],[1100,1200]]); //Case 1
-ranges.push([[280,320],[280,320],[550, 650], [100,200],[100,150],[50, 100],[20, 80],   [20,80]]);     //Case 2
-ranges.push([[280,320],[280,320],[600, 900], [300,350],[200,290],[280,320],[600,900],  [600,900]]);   //Case 3
+ranges.push([[280,300],[280,300],[1100,1200],[150,250],[100,200],[250,350],[1100,1200],[1100,1200]]); //Case 1
+ranges.push([[280,300],[280,300],[550, 650], [100,200],[100,150],[50, 100],[20, 80],   [20,80]]);     //Case 2
+ranges.push([[280,300],[280,300],[600, 900], [300,350],[300,320],[280,300],[600,900],  [600,900]]);   //Case 3
 
 let unscored = [true, true, true, true, true, true, true, true];            //Have the control points been scored ?
 let currentScore = 0;                                                       //Current score
