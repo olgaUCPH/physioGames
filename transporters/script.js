@@ -110,7 +110,7 @@ let highScore1 = 0;                                                   //Highscor
 let highScore2 = 0;                                                   //Highscore in table 2
 let attempt1 = 0;                                                     //Attempt number in table 1
 let attempt2 = 0;                                                     //Attempt number in table 2
-let maxScore = 150;                                                   //Maximum attainable score (table 1 by default)
+let maxScore = 300;                                                   //Maximum attainable score (table 1 by default)
 
 let bool_instruction = true;                                          //Display visual instruction boolean
 
@@ -366,9 +366,10 @@ function selectRectangle(rectangle){
 
 async function verifyGrid() {
   checkButton.removeEventListener('click',verifyGrid);                      //Disable double-click
-  attempt += 1;                                                             //Add attempt
+  attempt += 1;  
+  document.getElementById('currentAttempt').textContent = Math.min(attempt+1, 4);                                                            //Add attempt
   selectedRectangle = "none";                                               //Disable selected rectangle
-  if (attempt > 2){ 
+  if (attempt > 4){ 
     resetGrid();                                                            //If last attempt, reset grid
   }
   else{
@@ -376,7 +377,7 @@ async function verifyGrid() {
       for (const i of ids){
         rectangle = gridRectangles[i];                                      //Select current rectangle
         if (checkRectangle(i)){                                             //If all transporters are correct
-          if (!rectangle.classList.contains('correctRectangle')){currentScore += 5*(3-attempt);} //Add Score
+          if (!rectangle.classList.contains('correctRectangle')){currentScore += 5*(5-attempt);} //Add Score
           rectangle.style.borderColor = "darkGreen";                        //Visual change
           rectangle.style.backgroundColor = "darkGreen";
           rectangle.classList.add('correctRectangle');                      //Disable further modification of rectangle
@@ -384,6 +385,9 @@ async function verifyGrid() {
         else{
           rectangle.style.borderColor = attempt == 1 ? "goldenRod": "maroon";     //First attempt: wrong = yellow; Second: wrong = red
           rectangle.style.backgroundColor = attempt == 1 ? "khaki": "lightPink";  //Same thing
+
+          rectangle.style.borderColor = attempt == 2 ? "maroon": "goldenRod";     //First attempt: wrong = yellow; Second: wrong = red
+          rectangle.style.backgroundColor = attempt == 2 ? "lightPink": "khaki";  //Same thing
         }
       }
       await delay(200);
@@ -391,7 +395,7 @@ async function verifyGrid() {
     };
     checkButton.addEventListener('click',verifyGrid);                       //Re-enable verification
     if (currentScore == maxScore){attempt += 1};                            //If everything is correct on first attempt, skip second attempt
-    if (attempt == 2){
+    if (attempt == 4){
       highScore = currentScore > highScore ? currentScore : highScore;      //Update highscore if necessary
       document.getElementById('highScore').textContent = highScore;         //Display highscore
       currentTable == 1 ? localStorage.setItem('trans_highScore1', highScore):localStorage.setItem('trans_highScore2', highScore); //Save highscore
@@ -430,7 +434,8 @@ function hideGameOverWindow(){
 function showCorrection(){
   hideGameOverWindow();
   resetGrid();
-  attempt = 2;
+  //attempt = 2;
+  attempt = 4;
   gridRectangles.forEach((rectangle,i) => {
     validationGrid[i].forEach(source => createSmallShape(rectangle,{src: source},"fade"));
     rectangle.style.borderColor = 'darkGreen';
@@ -447,6 +452,7 @@ function resetGrid() {
     rectangle.classList.remove('correctRectangle');
   });
   attempt = 0;
+  document.getElementById('currentAttempt').textContent = (attempt+1);
   currentScore = 0;
   document.getElementById('currentScore').textContent = currentScore;
   checkButton.addEventListener('click',verifyGrid);
@@ -470,7 +476,7 @@ function switchTables(){
     currentScore = currentScore2;
     highScore1 = highScore;
     highScore = highScore2;
-    maxScore = 100;
+    maxScore = 200;
     document.getElementById('currentScore').textContent = currentScore;
     document.getElementById('highScore').textContent = highScore;
     idOrder = idOrder2;
