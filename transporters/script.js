@@ -72,7 +72,7 @@ validationGrid1.push(['assets/orangeSquare.png']);
 validationGrid1.push(['assets/purpleSquare.png']);
 validationGrid1.push(['assets/whitePill.png']);
 //K+
-validationGrid1.push(['assets/blackPill.png']);
+validationGrid1.push(['assets/grayPill.png', 'assets/blackPill.png']);
 validationGrid1.push(['assets/whitePill.png', 'assets/blackPill.png']);
 validationGrid1.push(['assets/orangeSquare.png','assets/whitePill.png','assets/blueCircle.png']);
 validationGrid1.push([]);
