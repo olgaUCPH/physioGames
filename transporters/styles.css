@@ -133,7 +133,7 @@ body {
 
 .scoreText{
     font-weight: 700;
-    font-size: 1em;
+    font-size: 0.9em;
     margin: calc(min(1vh,1vw));
     /*position: absolute;*/
 }
