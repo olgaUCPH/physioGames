@@ -97,6 +97,7 @@ let attempt = 0;                                                      //Attempt 
 let currentScore = 0;                                                 //Current score
 let highScore = 0;                                                    //High score
 let numberCorrectRectangles = 0                                       //Number rectangles correct
+let maxRectangles = 15;
 let maxScore = 300;                                                   //Maximum attainable score (table 1 by default)
 
 const idOrder1 = [[0],[1,5],[2,6,10],[3,7,11],[4,8,12],[9,13],[14]];  //For nice propagation of color effect when checking
@@ -366,7 +367,6 @@ function selectRectangle(rectangle){
 
 /// VERIFICATION & SCORING///////////////////////////////////////////////////////////////////////////////////
 
-
 async function verifyGrid() {
   checkButton.removeEventListener('click',verifyGrid);                      //Disable double-click
   attempt += 1;  
@@ -380,7 +380,11 @@ async function verifyGrid() {
       for (const i of ids){
         rectangle = gridRectangles[i];                                      //Select current rectangle
         if (checkRectangle(i)){                                             //If all transporters are correct
-          if (!rectangle.classList.contains('correctRectangle')){currentScore += 5*(5-attempt); numberCorrectRectangles += 1;} //Add Score
+          if (!rectangle.classList.contains('correctRectangle')){
+            currentScore += 5*(5-attempt);                                  //Add Score
+            numberCorrectRectangles += 1;                                   //Count number of correct rectangles
+            //console.log(numberCorrectRectangles);
+          } 
           rectangle.style.borderColor = "darkGreen";                        //Visual change
           rectangle.style.backgroundColor = "darkGreen";
           rectangle.classList.add('correctRectangle');                      //Disable further modification of rectangle
@@ -398,7 +402,7 @@ async function verifyGrid() {
     };
     checkButton.addEventListener('click',verifyGrid);                       //Re-enable verification
     if (currentScore == maxScore){attempt = 4};      //If everything is correct on first attempt, skip second attempt
-    if (numberCorrectRectangles == maxRectangles){attempt == 4};
+    if (numberCorrectRectangles == maxRectangles){attempt = 4};
     if (attempt == 4){
       highScore = currentScore > highScore ? currentScore : highScore;      //Update highscore if necessary
       document.getElementById('highScore').textContent = highScore;         //Display highscore
@@ -456,8 +460,9 @@ function resetGrid() {
     rectangle.classList.remove('correctRectangle');
   });
   attempt = 0;
-  document.getElementById('currentAttempt').textContent = (attempt+1);
+  numberCorrectRectangles = 0;
   currentScore = 0;
+  document.getElementById('currentAttempt').textContent = (attempt+1);
   document.getElementById('currentScore').textContent = currentScore;
   checkButton.addEventListener('click',verifyGrid);
 } //Remove all transporters from grid; reset attempts
