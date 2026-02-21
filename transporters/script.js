@@ -96,6 +96,8 @@ validationGrid2.push(['assets/cyanTriangle.png','assets/greenTriangle.png']);
 let attempt = 0;                                                      //Attempt number (for scoring)
 let currentScore = 0;                                                 //Current score
 let highScore = 0;                                                    //High score
+let numberCorrectRectangles = 0                                       //Number rectangles correct
+let maxScore = 300;                                                   //Maximum attainable score (table 1 by default)
 
 const idOrder1 = [[0],[1,5],[2,6,10],[3,7,11],[4,8,12],[9,13],[14]];  //For nice propagation of color effect when checking
 const idOrder2 = [[0],[1,5],[2,6],[3,7],[4,8],[9]];
@@ -110,7 +112,8 @@ let highScore1 = 0;                                                   //Highscor
 let highScore2 = 0;                                                   //Highscore in table 2
 let attempt1 = 0;                                                     //Attempt number in table 1
 let attempt2 = 0;                                                     //Attempt number in table 2
-let maxScore = 300;                                                   //Maximum attainable score (table 1 by default)
+let numberCorrectRectangles1 = 0;
+let numberCorrectRectangles2 = 0;
 
 let bool_instruction = true;                                          //Display visual instruction boolean
 
@@ -377,7 +380,7 @@ async function verifyGrid() {
       for (const i of ids){
         rectangle = gridRectangles[i];                                      //Select current rectangle
         if (checkRectangle(i)){                                             //If all transporters are correct
-          if (!rectangle.classList.contains('correctRectangle')){currentScore += 5*(5-attempt);} //Add Score
+          if (!rectangle.classList.contains('correctRectangle')){currentScore += 5*(5-attempt); numberCorrectRectangles += 1;} //Add Score
           rectangle.style.borderColor = "darkGreen";                        //Visual change
           rectangle.style.backgroundColor = "darkGreen";
           rectangle.classList.add('correctRectangle');                      //Disable further modification of rectangle
@@ -394,7 +397,8 @@ async function verifyGrid() {
       document.getElementById('currentScore').textContent = currentScore;   //Display Score
     };
     checkButton.addEventListener('click',verifyGrid);                       //Re-enable verification
-    if (currentScore == maxScore){attempt += 1};                            //If everything is correct on first attempt, skip second attempt
+    if (currentScore == maxScore){attempt = 4};      //If everything is correct on first attempt, skip second attempt
+    if (numberCorrectRectangles == maxRectangles){attempt == 4};
     if (attempt == 4){
       highScore = currentScore > highScore ? currentScore : highScore;      //Update highscore if necessary
       document.getElementById('highScore').textContent = highScore;         //Display highscore
@@ -476,7 +480,11 @@ function switchTables(){
     currentScore = currentScore2;
     highScore1 = highScore;
     highScore = highScore2;
+    numberCorrectRectangles1 = numberCorrectRectangles;
+    numberCorrectRectangles = numberCorrectRectangles2;
     maxScore = 200;
+    maxRectangles = 10;
+    document.getElementById('currentAttempt').textContent = (attempt+1);
     document.getElementById('currentScore').textContent = currentScore;
     document.getElementById('highScore').textContent = highScore;
     idOrder = idOrder2;
@@ -493,7 +501,11 @@ function switchTables(){
     currentScore = currentScore1;
     highScore2 = highScore;
     highScore = highScore1;
-    maxScore = 150;
+    numberCorrectRectangles2 = numberCorrectRectangles;
+    numberCorrectRectangles = numberCorrectRectangles1;
+    maxScore = 300;
+    maxRectangles = 15;
+    document.getElementById('currentAttempt').textContent = (attempt+1);
     document.getElementById('currentScore').textContent = currentScore;
     document.getElementById('highScore').textContent = highScore;
     idOrder = idOrder1;
