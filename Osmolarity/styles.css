@@ -638,6 +638,12 @@ body {
   animation-iteration-count: infinite;
 }
 
+#resetButton:hover{
+  animation: rotate;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+}
+
 @keyframes shake{
   10% {rotate: 20deg;}
   20%{rotate:-20deg;}
