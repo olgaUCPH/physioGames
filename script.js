@@ -7,7 +7,7 @@ document.getElementById("moreGames").classList.add(document.querySelectorAll(".g
 document.getElementById("colorButton").removeEventListener("click", colorChange);
 document.addEventListener("DOMContentLoaded", function() {
     let transP = (parseInt(localStorage.getItem('trans_highScore1')) || 0)+(parseInt(localStorage.getItem('trans_highScore2')) || 0);
-    document.getElementById("transportersPercent").textContent = Math.round(transP/250*100)+"%";
+    document.getElementById("transportersPercent").textContent = Math.round(transP/500*100)+"%";
     let RAAS1P = parseInt(localStorage.getItem('RAAS_highScore'))|| 0;
     document.getElementById("raasPercent").textContent = Math.round(RAAS1P/180*100)+"%";
     let RAAS2P = parseInt(localStorage.getItem('RAAS2_highScore'))|| 0;
